@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #0a1630;
+  overflow-x: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar {
+  background-color: #0d1f4e !important;
+}
+
+.nav-link:hover {
+  color: #4a90d9 !important;
+}
+
+.navbar-collapse {
+  background-color: #0d1f4e;
+  padding: 10px 0;
+}

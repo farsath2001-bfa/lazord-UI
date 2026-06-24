@@ -1,0 +1,191 @@
+{
+  "nav": {
+    "home": "Home",
+    "buy": "Buy",
+    "rent": "Rent",
+    "sell": "Sell",
+    "offplan": "Off Plan",
+    "commercial": "Commercial",
+    "about": "About",
+    "bookValuation": "Book a Valuation"
+  },
+  "hero": {
+    "badge": "Dubai's Premium Real Estate",
+    "headline1": "Discover Excellence in",
+    "headline2": "Dubai Real Estate",
+    "subtitle": "Exclusive high-value properties and development opportunities in Dubai's most prestigious locations. Your dream home awaits.",
+    "searchPlaceholder": "City, community or building...",
+    "searchBtn": "Search",
+    "tabs": {
+      "buy": "Buy",
+      "rent": "Rent",
+      "sell": "Sell",
+      "offplan": "Off Plan"
+    },
+    "stats": {
+      "properties": "Properties Listed",
+      "clients": "Happy Clients",
+      "experience": "Years Experience"
+    }
+  },
+  "featured": {
+    "badge": "Featured Listings",
+    "title1": "Handpicked Properties",
+    "title2": "Curated for You",
+    "viewAll": "View All Properties →",
+    "browseAll": "Browse All Properties",
+    "tabs": {
+      "all": "All",
+      "buy": "Buy",
+      "rent": "Rent",
+      "offplan": "Off Plan"
+    },
+    "portfolio": "Explore our full portfolio of",
+    "premiumProperties": "premium properties"
+  },
+  "why": {
+    "badge": "Why Lazord",
+    "title1": "Dubai's Most Trusted",
+    "title2": "Real Estate Partner",
+    "subtitle": "We combine local expertise with global reach to deliver exceptional property experiences in Dubai.",
+    "reasons": {
+      "exclusive": { "title": "Exclusive Listings", "desc": "Access to off-market and exclusive properties not available anywhere else in Dubai." },
+      "expertise": { "title": "Market Expertise", "desc": "Deep knowledge of Dubai's real estate market trends, ROI hotspots, and investment opportunities." },
+      "trusted": { "title": "Trusted & Licensed", "desc": "Fully licensed by RERA with a proven track record of transparent, secure transactions." },
+      "global": { "title": "Global Network", "desc": "Connecting international investors and buyers with Dubai's most prestigious properties." },
+      "support": { "title": "Dedicated Support", "desc": "Personal agent assigned to every client — available 7 days a week in your language." },
+      "fast": { "title": "Fast & Efficient", "desc": "Streamlined process from search to handover, saving you time at every step." }
+    }
+  },
+  "areas": {
+    "badge": "Prime Locations",
+    "title1": "Explore Dubai's Most",
+    "title2": "Prestigious Communities",
+    "subtitle": "From iconic waterfront towers to peaceful family communities — find your perfect Dubai neighbourhood.",
+    "properties": "Properties",
+    "exploreAll": "Explore All Areas →"
+  },
+  "services": {
+    "badge": "Our Services",
+    "title1": "Everything You Need",
+    "title2": "Under One Roof",
+    "subtitle": "From buying and renting to selling and investing — we cover every aspect of your Dubai real estate journey.",
+    "items": {
+      "buy": { "title": "Buy a Property", "desc": "Find your perfect home from our exclusive portfolio of apartments, villas, townhouses and penthouses across Dubai.", "link": "Browse to Buy" },
+      "rent": { "title": "Rent a Property", "desc": "Short-term or long-term rentals in Dubai's most sought-after communities. Move in ready, furnished or unfurnished.", "link": "Browse to Rent" },
+      "sell": { "title": "Sell Your Property", "desc": "Get the best market value for your property. Our expert agents handle everything from valuation to closing.", "link": "List Your Property" },
+      "offplan": { "title": "Off Plan Projects", "desc": "Invest early in Dubai's most exciting new developments with flexible payment plans and high ROI potential.", "link": "View Projects" },
+      "commercial": { "title": "Commercial", "desc": "Office spaces, retail units and commercial properties in Dubai's prime business districts and free zones.", "link": "View Commercial" },
+      "valuation": { "title": "Property Valuation", "desc": "Get a free, accurate valuation of your property from our certified RERA agents with deep market knowledge.", "link": "Book Free Valuation" }
+    }
+  },
+  "testimonials": {
+    "badge": "Client Stories",
+    "title1": "What Our Clients",
+    "title2": "Say About Us",
+    "subtitle": "Over 1,200 happy clients across 40+ nationalities trust Lazord for their Dubai real estate needs."
+  },
+  "cta": {
+    "badge": "Free Consultation",
+    "title1": "Ready to Find Your",
+    "title2": "Dream Property?",
+    "subtitle": "Book a free consultation with our expert agents today. We'll help you find the perfect property, navigate the buying process, and get the best deal in Dubai's market.",
+    "whatsapp": "Chat on WhatsApp",
+    "book": "Book Free Valuation",
+    "call": "+971 42 981 077",
+    "badges": {
+      "rera": "RERA Licensed Agency",
+      "secure": "Secure Transactions",
+      "nationalities": "40+ Nationalities Served",
+      "rating": "4.9/5 Client Rating"
+    }
+  },
+  "footer": {
+    "tagline": "Your trusted partner for premium real estate in Dubai and across the UAE.",
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "rights": "© 2026 LazordRealEstate L.L.C. All rights reserved.",
+    "links": {
+      "home": "Home",
+      "properties": "Properties",
+      "about": "About Us",
+      "contact": "Contact"
+    }
+  },
+  "properties": {
+    "title": "Find Your Perfect Property",
+    "found": "properties found in Dubai",
+    "search": "SEARCH",
+    "searchPlaceholder": "Location, community, building...",
+    "type": "TYPE",
+    "category": "CATEGORY",
+    "bedrooms": "BEDROOMS",
+    "sortBy": "SORT BY",
+    "activeFilters": "Active filters:",
+    "clearAll": "Clear all",
+    "noResults": "No properties found",
+    "noResultsDesc": "Try adjusting your filters or search terms",
+    "viewDetails": "View Details",
+    "paymentPlan": "Payment plan available",
+    "sort": {
+      "newest": "Newest First",
+      "priceAsc": "Price: Low→High",
+      "priceDesc": "Price: High→Low",
+      "areaDesc": "Area: Largest"
+    }
+  },
+  "contact": {
+    "badge": "Contact Us",
+    "title1": "Let's Start Your",
+    "title2": "Property Journey",
+    "subtitle": "Our expert agents are ready to help you buy, rent, sell or invest in Dubai real estate. Reach out and we'll get back to you within 2 hours.",
+    "form": {
+      "title": "Send Us a Message",
+      "subtitle": "Fill in the form and our team will contact you within 2 hours.",
+      "name": "FULL NAME",
+      "email": "EMAIL ADDRESS",
+      "phone": "PHONE NUMBER",
+      "service": "SERVICE NEEDED",
+      "message": "MESSAGE",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "successTitle": "Message Sent Successfully!",
+      "successDesc": "Thank you for reaching out. One of our expert agents will contact you within 2 hours.",
+      "sendAnother": "Send Another Message"
+    },
+    "whatsapp": {
+      "title": "Chat on WhatsApp",
+      "desc": "Get instant replies from our agents. Available 7 days a week from 9 AM to 9 PM.",
+      "btn": "Open WhatsApp →"
+    }
+  },
+  "about": {
+    "badge": "About Lazord",
+    "title1": "Dubai's Most Trusted",
+    "title2": "Real Estate Partner",
+    "subtitle": "Since 2003, Lazord Real Estate has been connecting buyers, investors and renters with Dubai's finest properties.",
+    "story": {
+      "badge": "Our Story",
+      "title1": "Two Decades of",
+      "title2": "Shaping Dubai Living",
+      "getInTouch": "Get in Touch →"
+    },
+    "values": {
+      "badge": "Our Values",
+      "title1": "What We",
+      "title2": "Stand For"
+    },
+    "team": {
+      "badge": "Our Team",
+      "title1": "Meet the",
+      "title2": "Experts Behind Lazord"
+    },
+    "cta": {
+      "title1": "Ready to Start Your",
+      "title2": "Dubai Property Journey?",
+      "subtitle": "Our team is ready to help you find, buy, rent or sell your property in Dubai.",
+      "browse": "Browse Properties",
+      "contact": "Contact Us"
+    }
+  }
+}

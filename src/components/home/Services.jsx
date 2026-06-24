@@ -1,0 +1,80 @@
+import { Link } from 'react-router-dom'
+import { Container, Row, Col } from 'react-bootstrap'
+import { useTranslation } from 'react-i18next'
+
+const Services = () => {
+  const { t } = useTranslation()
+
+  const services = [
+    { icon: '🏠', key: 'buy',        link: '/buy',        color: '#2d5fc4', bg: 'rgba(45,95,196,0.12)' },
+    { icon: '🔑', key: 'rent',       link: '/rent',       color: '#27ae60', bg: 'rgba(39,174,96,0.12)' },
+    { icon: '💼', key: 'sell',       link: '/sell',       color: '#e67e22', bg: 'rgba(230,126,34,0.12)' },
+    { icon: '📐', key: 'offplan',    link: '/properties', color: '#8e44ad', bg: 'rgba(142,68,173,0.12)' },
+    { icon: '🏢', key: 'commercial', link: '/commercial', color: '#16a085', bg: 'rgba(22,160,133,0.12)' },
+    { icon: '📊', key: 'valuation',  link: '/contact',    color: '#c0392b', bg: 'rgba(192,57,43,0.12)' },
+  ]
+
+  return (
+    <section style={{ backgroundColor: '#0a1630', padding: '90px 0' }}>
+      <Container>
+        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)',
+            borderRadius: '30px', padding: '5px 14px', marginBottom: '16px'
+          }}>
+            <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>
+              ✦ {t('services.badge')}
+            </span>
+          </div>
+          <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '300', marginBottom: '6px' }}>{t('services.title1')}</h2>
+          <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '800', marginBottom: '16px' }}>{t('services.title2')}</h2>
+          <p style={{ color: '#8aafd4', fontSize: '1rem', maxWidth: '500px', margin: '0 auto', lineHeight: '1.7' }}>{t('services.subtitle')}</p>
+        </div>
+
+        <Row className="g-4">
+          {services.map((service, i) => (
+            <Col key={i} lg={4} md={6}>
+              <div style={{
+                backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.2)',
+                borderRadius: '16px', padding: '32px 28px', height: '100%',
+                display: 'flex', flexDirection: 'column', transition: 'all 0.25s ease', position: 'relative', overflow: 'hidden'
+              }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = service.color; e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 20px 50px rgba(0,0,0,0.3)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(45,95,196,0.2)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+              >
+                <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', borderRadius: '50%', backgroundColor: service.color, opacity: 0.06, filter: 'blur(30px)' }} />
+                <div style={{
+                  width: '60px', height: '60px', borderRadius: '14px',
+                  backgroundColor: service.bg, border: `1px solid ${service.color}40`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.8rem', marginBottom: '20px'
+                }}>
+                  {service.icon}
+                </div>
+                <h4 style={{ color: '#ffffff', fontSize: '1.05rem', fontWeight: '700', marginBottom: '12px' }}>
+                  {t(`services.items.${service.key}.title`)}
+                </h4>
+                <p style={{ color: '#8aafd4', fontSize: '0.88rem', lineHeight: '1.7', flex: 1, marginBottom: '24px' }}>
+                  {t(`services.items.${service.key}.desc`)}
+                </p>
+                <Link to={service.link} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '6px',
+                  color: service.color, fontSize: '0.85rem', fontWeight: '700',
+                  textDecoration: 'none', transition: 'gap 0.2s ease'
+                }}
+                  onMouseEnter={e => e.currentTarget.style.gap = '10px'}
+                  onMouseLeave={e => e.currentTarget.style.gap = '6px'}
+                >
+                  {t(`services.items.${service.key}.link`)} →
+                </Link>
+              </div>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </section>
+  )
+}
+
+export default Services
