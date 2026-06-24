@@ -6,11 +6,13 @@ import Services from '../components/home/Services'
 import Testimonials from '../components/home/Testimonials'
 import CTABanner from '../components/home/CtaBanner'
 import Footer from '../components/common/Footer'
+import TrustBar from '../components/home/TrustBar'
 
 const Home = () => {
   return (
     <>
       <Hero />
+      <TrustBar />
       <FeaturedProperties />
       <WhyChooseUs />
       <FeaturedAreas />
