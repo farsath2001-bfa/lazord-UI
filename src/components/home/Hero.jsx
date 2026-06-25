@@ -38,8 +38,8 @@ const Hero = () => {
         background: 'linear-gradient(to right, rgba(5,15,40,0.92) 40%, rgba(5,15,40,0.5) 100%)',
         zIndex: 1
       }} />
-
-      <Container style={{ position: 'relative', zIndex: 2, padding: '60px 30px' }}>
+      
+     <Container style={{ position: 'relative', zIndex: 2, padding: '30px 30px 50px 30px' }}>
         <Row>
           <Col lg={8} xl={7}>
 
@@ -58,11 +58,11 @@ const Hero = () => {
             <h1 style={{ color: '#ffffff', fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', fontWeight: '300', lineHeight: '1.15', marginBottom: '10px', letterSpacing: '-0.5px' }}>
               {t('hero.headline1')}
             </h1>
-            <h1 style={{ color: '#4a90d9', fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)', fontWeight: '800', lineHeight: '1.1', marginBottom: '24px', letterSpacing: '-1px' }}>
+            <h1 style={{ color: '#4a90d9', fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)', fontWeight: '800', lineHeight: '1.1', marginBottom: '16px', letterSpacing: '-1px' }}>
               {t('hero.headline2')}
             </h1>
 
-            <p style={{ color: '#b0c4de', fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', lineHeight: '1.7', marginBottom: '36px', maxWidth: '520px' }}>
+            <p style={{ color: '#b0c4de', fontSize: 'clamp(0.95rem, 1.5vw, 1.1rem)', lineHeight: '1.7', marginBottom: '24px', maxWidth: '520px' }}>
               {t('hero.subtitle')}
             </p>
 
@@ -70,7 +70,7 @@ const Hero = () => {
             <div style={{
               backgroundColor: 'rgba(255,255,255,0.97)', borderRadius: '12px',
               padding: '6px', maxWidth: '600px',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.4)', marginBottom: '44px'
+              boxShadow: '0 20px 60px rgba(0,0,0,0.4)', marginBottom: '32px'
             }}>
               <div style={{ display: 'flex', gap: '4px', padding: '4px 4px 10px 4px', borderBottom: '1px solid #e8ecf2' }}>
                 {tabs.map(tab => (
