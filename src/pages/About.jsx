@@ -31,13 +31,13 @@ const team = [
     spec: 'Apartments & Rentals'
   },
   {
-    name: 'Gaby ',
+    name: 'Abdullah ',
     role: 'Client Relations Manager',
     exp: '14 Years Experience',
     avatar: 'G',
     color: '#8e44ad',
     langs: 'Arabic, English',
-    spec: 'Client Experience & CRM'
+    spec: 'Client Experience '
   },
   {
     name: 'Jardali',
@@ -45,16 +45,16 @@ const team = [
     exp: '11 Years Experience',
     avatar: 'J',
     color: '#16a085',
-    langs: 'English, Mandarin,Arabic',
+    langs: 'English, Brazilian,Arabic',
     spec: 'Commercial & Portfolio'
   },
   {
-    name: 'Wael',
+    name: 'Ahmed',
     role: 'Property Consultant',
     exp: '8 Years Experience',
-    avatar: 'W',
+    avatar: 'A',
     color: '#c0392b',
-    langs: 'Russian, English',
+    langs: 'Arabic, English',
     spec: 'Business Bay &  PlanetLand RealEstate'
   },
 ]

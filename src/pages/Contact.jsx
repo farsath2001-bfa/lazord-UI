@@ -56,7 +56,7 @@ const socialMedia = [
 ]
 
 const contactInfo = [
-  { icon: '📍', title: 'Office Address',   lines: ['Rigga Al Butteen', 'Dubai, UAE'],                                color: '#2d5fc4' },
+  { icon: '📍', title: 'Office Address',   lines: ['Office 803,','AlSalemiya Tower,','Rigga Al Butteen,', 'Dubai, UAE'],                                color: '#2d5fc4' },
   { icon: '📞', title: 'Phone & WhatsApp', lines: ['+971 42 981 077', '+971 50 000 0000'],                          color: '#25d366' },
   { icon: '✉️', title: 'Email Us',          lines: ['info@lazordrealestate.com', 'sales@lazordrealestate.com'],      color: '#e67e22' },
   { icon: '🕐', title: 'Working Hours',    lines: ['Mon – Sat: 9:00 AM – 7:00 PM', 'Sunday: 10:00 AM – 4:00 PM'],  color: '#8e44ad' },
@@ -230,7 +230,7 @@ const Contact = () => {
               <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>💬</div>
               <h3 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', marginBottom: '8px' }}>{t('contact.whatsapp.title')}</h3>
               <p style={{ color: '#8aafd4', fontSize: '0.88rem', lineHeight: '1.7', marginBottom: '18px' }}>{t('contact.whatsapp.desc')}</p>
-              <a href="https://wa.me/97142981077?text=Hello, I'm interested in a property from Lazord Real Estate." target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/971561119233?text=Hello, I'm interested in a property from Lazord Real Estate." target="_blank" rel="noopener noreferrer"
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: '#25d366', color: '#fff', padding: '13px 20px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.92rem', transition: 'background 0.2s ease' }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1ebe5d'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#25d366'}

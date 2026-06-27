@@ -47,11 +47,14 @@ import AdminProperties from './pages/admin/AdminProperties'
 import AdminLeads from './pages/admin/AdminLeads'
 import AdminRoute from './components/admin/AdminRoute'
 import { AdminProvider } from './context/AdminContext'
+import Agents from './pages/Agent'
+import WhatsAppButton from './components/common/WhatsappButton'
 
 function App() {
   return (
     <BrowserRouter>
       <AdminProvider>
+        <WhatsAppButton/>
         <Routes>
           {/* Public routes with Navbar + Footer */}
           <Route path="/" element={<><Navbar /><Home /><Footer /></>} />
@@ -68,6 +71,8 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/admin/properties" element={<AdminRoute><AdminProperties /></AdminRoute>} />
           <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
+          <Route path="/agents" element={<><Navbar /><Agents /><Footer /></>} />
+          
         </Routes>
       </AdminProvider>
     </BrowserRouter>
