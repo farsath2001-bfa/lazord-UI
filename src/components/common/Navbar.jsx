@@ -36,7 +36,10 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const isActive = (path) => location.pathname === path
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/'
+    return location.pathname + location.search === path || location.pathname === path.split('?')[0]
+  }
 
   const linkStyle = (path) => ({
     color: isActive(path) ? '#4a90d9' : '#ffffff',
@@ -50,14 +53,14 @@ const Navbar = () => {
   })
 
   const navLinks = [
-    { path: '/',           label: t('nav.home') },
-    { path: '/buy',        label: t('nav.buy') },
-    { path: '/rent',       label: t('nav.rent') },
-    { path: '/sell',       label: t('nav.sell') },
-    { path: '/properties', label: t('nav.offplan') },
-    { path: '/commercial', label: t('nav.commercial') },
-    { path: '/about',      label: t('nav.about') },
-    { path: '/agents',     label: t('nav.agents') },
+    { path: '/',                          label: t('nav.home') },
+    { path: '/properties?type=Buy',       label: t('nav.buy') },
+    { path: '/properties?type=Rent',      label: t('nav.rent') },
+    { path: '/properties?type=Sell',      label: t('nav.sell') },
+    { path: '/properties?type=Off Plan',  label: t('nav.offplan') },
+    { path: '/properties?type=Commercial',label: t('nav.commercial') },
+    { path: '/about',                     label: t('nav.about') },
+    { path: '/agents',                    label: t('nav.agents') },
   ]
 
   return (
@@ -162,8 +165,8 @@ const Navbar = () => {
                   boxShadow: '0 8px 24px rgba(0,0,0,0.4)'
                 }}>
                   {[
-                    { code: 'en', label: 'English',  flag: '🇬🇧', display: 'EN' },
-                    { code: 'ar', label: 'العربية',  flag: '🇦🇪', display: 'AR' },
+                    { code: 'en', label: 'English', flag: '🇬🇧', display: 'EN' },
+                    { code: 'ar', label: 'العربية', flag: '🇦🇪', display: 'AR' },
                   ].map((lang) => (
                     <div
                       key={lang.code}
