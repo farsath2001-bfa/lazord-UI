@@ -48,8 +48,8 @@ import AdminLeads from './pages/admin/AdminLeads'
 import AdminRoute from './components/admin/AdminRoute'
 import { AdminProvider } from './context/AdminContext'
 import Agents from './pages/Agent'
-import WhatsAppButton from './components/common/WhatsappButton'
-import FAQPage from './pages/FaqPage'
+import WhatsAppButton from './components/common/WhatsAppButton'
+import FAQPage from './pages/FAQPage'
 import NewsletterPage from './pages/NewsletterPage'
 
 
