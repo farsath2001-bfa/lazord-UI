@@ -1,4 +1,4 @@
-import Newsletter from '../components/home/Newsletter'
+import Newsletter from '../components/home/NewsLetter'
 
 const NewsletterPage = () => {
   return <Newsletter />
