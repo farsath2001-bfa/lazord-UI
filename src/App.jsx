@@ -50,7 +50,7 @@ import { AdminProvider } from './context/AdminContext'
 import Agents from './pages/Agent'
 import WhatsAppButton from './components/common/WhatsAppButton'
 import FAQPage from './pages/FaqPage'
-import NewsletterPage from './pages/NewsletterPage'
+import NewsletterPage from './pages/NewsLetterPage'
 
 
 function App() {
