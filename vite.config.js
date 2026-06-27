@@ -12,6 +12,16 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    chunkSizeWarningLimit: 1600,
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          bootstrap: ['react-bootstrap', 'bootstrap'],
+          i18n: ['react-i18next', 'i18next', 'i18next-browser-languagedetector'],
+          axios: ['axios'],
+        }
+      }
+    }
   }
 })
