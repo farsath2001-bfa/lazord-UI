@@ -1,9 +1,21 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
+import axios from 'axios'
 import PropertyCard from '../components/common/PropertyCard'
-import propertiesData from '../assets/data/Properties'
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+
+const propertyTypes = ['All', 'Buy', 'Rent', 'Off Plan']
+const categories    = ['All', 'Apartment', 'Villa', 'Penthouse', 'Townhouse', 'Studio']
+const bedOptions    = ['All', 'Studio', '1', '2', '3', '4', '5+']
+const sortOptions   = [
+  { label: 'Newest First',    value: 'newest' },
+  { label: 'Price: Low→High', value: 'price_asc' },
+  { label: 'Price: High→Low', value: 'price_desc' },
+  { label: 'Area: Largest',   value: 'area_desc' },
+]
 
 const Properties = () => {
   const [searchParams] = useSearchParams()
@@ -14,46 +26,36 @@ const Properties = () => {
   const [category, setCategory] = useState('All')
   const [beds, setBeds]         = useState('All')
   const [sort, setSort]         = useState('newest')
+  const [properties, setProperties] = useState([])
+  const [loading, setLoading]   = useState(true)
 
-  const propertyTypes = ['All', 'Buy', 'Rent', 'Off Plan']
-  const categories    = ['All', 'Apartment', 'Villa', 'Penthouse', 'Townhouse', 'Studio']
-  const bedOptions    = ['All', 'Studio', '1', '2', '3', '4', '5+']
-  const sortOptions   = [
-    { label: t('properties.sort.newest'),   value: 'newest' },
-    { label: t('properties.sort.priceAsc'), value: 'price_asc' },
-    { label: t('properties.sort.priceDesc'),value: 'price_desc' },
-    { label: t('properties.sort.areaDesc'), value: 'area_desc' },
-  ]
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        setLoading(true)
+        const params = {}
+        if (search)       params.search   = search
+        if (type !== 'All')     params.type     = type
+        if (category !== 'All') params.category = category
+        if (beds !== 'All')     params.beds     = beds
+        if (sort)               params.sort     = sort
 
-  const filtered = useMemo(() => {
-    let list = [...propertiesData]
-    if (search) {
-      const q = search.toLowerCase()
-      list = list.filter(p =>
-        p.title.toLowerCase().includes(q) ||
-        p.location.toLowerCase().includes(q) ||
-        p.community.toLowerCase().includes(q)
-      )
+        const res = await axios.get(`${API_URL}/api/properties`, { params })
+        setProperties(res.data.data || [])
+      } catch (err) {
+        console.error(err)
+        setProperties([])
+      } finally {
+        setLoading(false)
+      }
     }
-    if (type !== 'All')     list = list.filter(p => p.type === type)
-    if (category !== 'All') list = list.filter(p => p.category === category)
-    if (beds !== 'All') {
-      if (beds === 'Studio')   list = list.filter(p => p.bedrooms === 0)
-      else if (beds === '5+')  list = list.filter(p => p.bedrooms >= 5)
-      else list = list.filter(p => p.bedrooms === parseInt(beds))
-    }
-    if (sort === 'price_asc')  list.sort((a, b) => a.price - b.price)
-    if (sort === 'price_desc') list.sort((a, b) => b.price - a.price)
-    if (sort === 'area_desc')  list.sort((a, b) => b.area - a.area)
-    return list
+    fetchProperties()
   }, [search, type, category, beds, sort])
 
   const inputStyle = {
-    backgroundColor: '#0d1f4e',
-    border: '1px solid rgba(45,95,196,0.35)',
-    borderRadius: '8px', color: '#ffffff',
-    padding: '10px 14px', fontSize: '0.88rem',
-    outline: 'none', width: '100%', cursor: 'pointer'
+    backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)',
+    borderRadius: '8px', color: '#ffffff', padding: '10px 14px',
+    fontSize: '0.88rem', outline: 'none', width: '100%', cursor: 'pointer'
   }
 
   return (
@@ -66,7 +68,7 @@ const Properties = () => {
             <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>✦ {t('properties.title')}</span>
           </div>
           <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: '700', marginBottom: '8px' }}>{t('properties.title')}</h1>
-          <p style={{ color: '#8aafd4', fontSize: '0.95rem', margin: 0 }}>{filtered.length} {t('properties.found')}</p>
+          <p style={{ color: '#8aafd4', fontSize: '0.95rem', margin: 0 }}>{loading ? 'Loading...' : `${properties.length} ${t('properties.found')}`}</p>
         </Container>
       </div>
 
@@ -131,7 +133,12 @@ const Properties = () => {
         </div>
 
         {/* Results */}
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '80px 0' }}>
+            <div style={{ color: '#4a90d9', fontSize: '2.5rem', animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</div>
+            <p style={{ color: '#8aafd4', marginTop: '16px' }}>Loading properties...</p>
+          </div>
+        ) : properties.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 0' }}>
             <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🔍</div>
             <h3 style={{ color: '#ffffff', marginBottom: '10px' }}>{t('properties.noResults')}</h3>
@@ -139,14 +146,16 @@ const Properties = () => {
           </div>
         ) : (
           <Row className="g-4">
-            {filtered.map(property => (
-              <Col key={property.id} lg={4} md={6}>
+            {properties.map(property => (
+              <Col key={property._id} lg={4} md={6}>
                 <PropertyCard property={property} />
               </Col>
             ))}
           </Row>
         )}
       </Container>
+
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   )
 }

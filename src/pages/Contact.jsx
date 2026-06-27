@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
+import axios from 'axios'
 
 const services = ['Buy a Property', 'Rent a Property', 'Sell My Property', 'Off Plan Investment', 'Commercial Property', 'Free Valuation', 'General Inquiry']
 
@@ -69,11 +70,25 @@ const Contact = () => {
   const [loading, setLoading] = useState(false)
 
   const handleChange = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }))
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setTimeout(() => { setLoading(false); setSubmitted(true) }, 1200)
+  const handleSubmit = async (e) => {
+  e.preventDefault()
+  setLoading(true)
+  try {
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/leads`, {
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      service: form.service || 'General Inquiry',
+      message: form.message,
+      source: 'Contact Form'
+    })
+  } catch (err) {
+    console.error(err)
+  } finally {
+    setLoading(false)
+    setSubmitted(true)
   }
+}
 
   const inputStyle = {
     width: '100%', backgroundColor: '#060f26',
