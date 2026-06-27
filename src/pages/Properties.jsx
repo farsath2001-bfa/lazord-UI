@@ -7,7 +7,7 @@ import PropertyCard from '../components/common/PropertyCard'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
-const propertyTypes = ['All', 'Buy', 'Rent', 'Off Plan']
+const propertyTypes = ['All', 'Buy', 'Rent', 'Off Plan', 'Sell', 'Commercial']
 const categories    = ['All', 'Apartment', 'Villa', 'Penthouse', 'Townhouse', 'Studio']
 const bedOptions    = ['All', 'Studio', '1', '2', '3', '4', '5+']
 const sortOptions   = [
@@ -29,12 +29,20 @@ const Properties = () => {
   const [properties, setProperties] = useState([])
   const [loading, setLoading]   = useState(true)
 
+  // ✅ Re-read URL params when URL changes (navbar click fix)
+  useEffect(() => {
+    const urlType = searchParams.get('type') || 'All'
+    const urlSearch = searchParams.get('search') || ''
+    setType(urlType)
+    setSearch(urlSearch)
+  }, [searchParams])
+
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         setLoading(true)
         const params = {}
-        if (search)       params.search   = search
+        if (search)             params.search   = search
         if (type !== 'All')     params.type     = type
         if (category !== 'All') params.category = category
         if (beds !== 'All')     params.beds     = beds
@@ -65,10 +73,16 @@ const Properties = () => {
       <div style={{ backgroundColor: '#0d1f4e', borderBottom: '1px solid rgba(45,95,196,0.3)', padding: '48px 0 36px' }}>
         <Container>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '14px' }}>
-            <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>✦ {t('properties.title')}</span>
+            <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>
+              ✦ {type !== 'All' ? `${type} Properties` : t('properties.title')}
+            </span>
           </div>
-          <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: '700', marginBottom: '8px' }}>{t('properties.title')}</h1>
-          <p style={{ color: '#8aafd4', fontSize: '0.95rem', margin: 0 }}>{loading ? 'Loading...' : `${properties.length} ${t('properties.found')}`}</p>
+          <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: '700', marginBottom: '8px' }}>
+            {type !== 'All' ? `${type} Properties in Dubai` : t('properties.title')}
+          </h1>
+          <p style={{ color: '#8aafd4', fontSize: '0.95rem', margin: 0 }}>
+            {loading ? 'Loading...' : `${properties.length} ${t('properties.found')}`}
+          </p>
         </Container>
       </div>
 
