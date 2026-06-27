@@ -49,6 +49,7 @@ const Footer = () => {
     { label: t('footer.links.home'),       path: '/' },
     { label: t('footer.links.properties'), path: '/properties' },
     { label: 'Agents',                     path: '/agents' },
+    { label: 'FAQ',                        path: '/faq' },
     { label: t('footer.links.about'),      path: '/about' },
     { label: t('footer.links.contact'),    path: '/contact' },
   ]

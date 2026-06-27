@@ -49,6 +49,8 @@ import AdminRoute from './components/admin/AdminRoute'
 import { AdminProvider } from './context/AdminContext'
 import Agents from './pages/Agent'
 import WhatsAppButton from './components/common/WhatsappButton'
+import FAQPage from './pages/FaqPage'
+
 
 function App() {
   return (
@@ -72,6 +74,7 @@ function App() {
           <Route path="/admin/properties" element={<AdminRoute><AdminProperties /></AdminRoute>} />
           <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
           <Route path="/agents" element={<><Navbar /><Agents /><Footer /></>} />
+          <Route path="/faq" element={<><Navbar /><FAQPage /><Footer /></>} />
           
         </Routes>
       </AdminProvider>
