@@ -50,6 +50,7 @@ import { AdminProvider } from './context/AdminContext'
 import Agents from './pages/Agent'
 import WhatsAppButton from './components/common/WhatsappButton'
 import FAQPage from './pages/FaqPage'
+import NewsletterPage from './pages/NewsletterPage'
 
 
 function App() {
@@ -75,6 +76,7 @@ function App() {
           <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
           <Route path="/agents" element={<><Navbar /><Agents /><Footer /></>} />
           <Route path="/faq" element={<><Navbar /><FAQPage /><Footer /></>} />
+          <Route path="/newsletter" element={<><Navbar /><NewsletterPage /><Footer /></>} />
           
         </Routes>
       </AdminProvider>

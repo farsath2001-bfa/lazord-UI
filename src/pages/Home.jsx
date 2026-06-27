@@ -8,6 +8,7 @@ import CTABanner from '../components/home/CtaBanner'
 import Footer from '../components/common/Footer'
 import TrustBar from '../components/home/TrustBar'
 import FAQ from '../components/home/FAQ'
+import Newsletter from '../components/home/NewsLetter'
 
 const Home = () => {
   return (
@@ -19,7 +20,6 @@ const Home = () => {
       <FeaturedAreas />
       <Services />
       <Testimonials />
-     
       <CTABanner />
     </>
   )
