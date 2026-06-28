@@ -14,10 +14,10 @@ const Home = () => {
   return (
     <>
       <Hero />
-      <TrustBar />
       <FeaturedProperties />
       <WhyChooseUs />
       <FeaturedAreas />
+      <TrustBar />
       <Services />
       <Testimonials />
       <CTABanner />
