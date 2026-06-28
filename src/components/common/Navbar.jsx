@@ -78,18 +78,17 @@ const Navbar = () => {
       <Container fluid style={{ padding: '0 30px' }}>
 
         {/* Logo */}
-        <BsNavbar.Brand as={Link} to="/" dir="ltr" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '30px', textDecoration: 'none' }}>          <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '2px 4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <img src={logo} alt="Lazord Real Estate" style={{ height: '72px', width: 'auto', objectFit: 'contain', display: 'block' }} />
-        </div>
-         <div style={{ lineHeight: '1.2' }} dir="ltr">
-  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '0.5px' }}>
-    Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
+        <BsNavbar.Brand as={Link} to="/" dir="ltr" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '30px', textDecoration: 'none', direction: 'ltr', unicodeBidi: 'isolate' }}>
+  <img src={logo} alt="Lazord Real Estate" style={{ height: '72px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+  <div dir="ltr" style={{ lineHeight: '1.2', direction: 'ltr', unicodeBidi: 'isolate' }}>
+    <div dir="ltr" style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
+      Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
+    </div>
+    <div dir="ltr" style={{ color: '#8aafd4', fontSize: '0.65rem', letterSpacing: '2px', direction: 'ltr', unicodeBidi: 'embed', textAlign: 'left' }}>
+      لازورد للعقارات
+    </div>
   </div>
-  <div style={{ color: '#8aafd4', fontSize: '0.65rem', letterSpacing: '2.5px', textTransform: 'uppercase' }}>
-    لازورد للعقارات
-  </div>
-</div>
-        </BsNavbar.Brand>
+</BsNavbar.Brand>
 
         {/* Mobile Toggle */}
         <BsNavbar.Toggle
