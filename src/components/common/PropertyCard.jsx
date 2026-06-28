@@ -21,9 +21,9 @@ const formatPrice = (price, type) => {
 
 const PropertyCard = ({ property }) => {
   const {
-    id, title, type, category, price, location,
-    bedrooms, bathrooms, area, image, tag, roi, status
-  } = property
+  _id, title, type, category, price, location,
+  bedrooms, bathrooms, area, image, tag, roi, status
+} = property
 
   const tagStyle = tagColors[tag] || { bg: '#2d5fc4', color: '#fff' }
 
@@ -184,7 +184,7 @@ const PropertyCard = ({ property }) => {
           </div>
 
           <Link
-            to={`/property/${id}`}
+            to={`/property/${_id}`}
             style={{
               backgroundColor: '#2d5fc4',
               color: '#ffffff',
