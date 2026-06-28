@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
+import ParticleBackground from '../common/ParticleBackground'
+import CounterNumber from '../common/CounterNumber'
 
 const bgImages = [
-  'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80', // Dubai skyline
-  'https://plus.unsplash.com/premium_photo-1697729914552-368899dc4757?fm=jpg&q=60&w=3000&auto=format&fit=crop', // Dubai real estate 1
-  'https://images.unsplash.com/flagged/photo-1559717201-fbb671ff56b7?fm=jpg&q=60&w=3000&auto=format&fit=crop', // Dubai property
-  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80', // Dubai luxury villa
+  'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80',
+  'https://plus.unsplash.com/premium_photo-1697729914552-368899dc4757?fm=jpg&q=60&w=3000&auto=format&fit=crop',
+  'https://images.unsplash.com/flagged/photo-1559717201-fbb671ff56b7?fm=jpg&q=60&w=3000&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80',
 ]
 
 const Hero = () => {
@@ -25,7 +27,6 @@ const Hero = () => {
     { key: 'offplan', label: t('hero.tabs.offplan') },
   ]
 
-  // Auto slide every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setFade(false)
@@ -67,6 +68,9 @@ const Hero = () => {
         background: 'linear-gradient(to right, rgba(5,15,40,0.92) 40%, rgba(5,15,40,0.5) 100%)',
         zIndex: 1
       }} />
+
+      {/* ✅ Particle Background */}
+      <ParticleBackground />
 
       {/* Content */}
       <Container style={{ position: 'relative', zIndex: 2, padding: '30px 30px 50px 30px' }}>
@@ -141,17 +145,19 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Stats */}
+            {/* Stats with Counter */}
             <div style={{ display: 'flex', gap: '0', flexWrap: 'wrap' }}>
               {[
-                { number: '1,500+', label: t('hero.stats.properties') },
-                { number: '1,200+', label: t('hero.stats.clients') },
-                { number: '22+',    label: t('hero.stats.experience') },
+                { target: 1500, suffix: '+', label: t('hero.stats.properties') },
+                { target: 1200, suffix: '+', label: t('hero.stats.clients') },
+                { target: 22,   suffix: '+', label: t('hero.stats.experience') },
               ].map((stat, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
                   {i > 0 && <div style={{ width: '1px', height: '40px', backgroundColor: 'rgba(74,144,217,0.3)', margin: '0 28px' }} />}
                   <div>
-                    <div style={{ color: '#ffffff', fontSize: '2rem', fontWeight: '700', lineHeight: '1' }}>{stat.number}</div>
+                    <div style={{ color: '#ffffff', fontSize: '2rem', fontWeight: '700', lineHeight: '1' }}>
+                      <CounterNumber target={stat.target} suffix={stat.suffix} duration={2000} />
+                    </div>
                     <div style={{ color: '#8aafd4', fontSize: '0.8rem', letterSpacing: '0.5px', marginTop: '4px' }}>{stat.label}</div>
                   </div>
                 </div>

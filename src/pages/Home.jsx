@@ -13,10 +13,10 @@ const Home = () => {
   return (
     <>
       <div data-cursor="hero"><Hero /></div>
-      <div data-cursor="properties"><TrustBar /></div>
       <div data-cursor="properties"><FeaturedProperties /></div>
       <div data-cursor="whychoose"><WhyChooseUs /></div>
       <div data-cursor="areas"><FeaturedAreas /></div>
+      <div data-cursor="properties"><TrustBar /></div>
       <div data-cursor="services"><Services /></div>
       <div data-cursor="testimonials"><Testimonials /></div>
       <div data-cursor="contact"><FAQ /></div>

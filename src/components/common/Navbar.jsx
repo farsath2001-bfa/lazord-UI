@@ -83,13 +83,13 @@ const Navbar = () => {
             <img src={logo} alt="Lazord Real Estate" style={{ height: '48px', width: 'auto', objectFit: 'contain', display: 'block' }} />
           </div>
           <div style={{ lineHeight: '1.2' }}>
-            <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '0.5px' }}>
-              Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
-            </div>
-            <div style={{ color: '#8aafd4', fontSize: '0.65rem', letterSpacing: '2.5px', textTransform: 'uppercase' }}>
-              لازورد للعقارات
-            </div>
-          </div>
+  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
+    Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
+  </div>
+  <div style={{ color: '#8aafd4', fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', direction: 'rtl', unicodeBidi: 'isolate', textAlign: 'right' }}>
+    لازورد للعقارات
+  </div>
+</div>
         </BsNavbar.Brand>
 
         {/* Mobile Toggle */}

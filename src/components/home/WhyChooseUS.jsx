@@ -1,5 +1,6 @@
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
+import CounterNumber from '../common/CounterNumber'
 
 const IconKey = () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
 const IconChart = () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
@@ -12,10 +13,10 @@ const WhyChooseUs = () => {
   const { t } = useTranslation()
 
   const stats = [
-    { number: '1,500+',  label: t('hero.stats.properties'), icon: <IconChart /> },
-    { number: '1,200+',  label: t('hero.stats.clients'),    icon: <IconHeadset /> },
-    { number: '22+',     label: t('hero.stats.experience'), icon: <IconShield /> },
-    { number: 'AED 2B+', label: 'Deals Closed',             icon: <IconKey /> },
+    { number: <CounterNumber target={1500} suffix="+" duration={2000} />, label: t('hero.stats.properties'), icon: <IconChart /> },
+    { number: <CounterNumber target={1200} suffix="+" duration={2200} />, label: t('hero.stats.clients'),    icon: <IconHeadset /> },
+    { number: <CounterNumber target={22}   suffix="+" duration={1500} />, label: t('hero.stats.experience'), icon: <IconShield /> },
+    { number: <><CounterNumber target={2}  prefix="AED " suffix="B+" duration={1800} /></>, label: 'Deals Closed', icon: <IconKey /> },
   ]
 
   const reasons = [
