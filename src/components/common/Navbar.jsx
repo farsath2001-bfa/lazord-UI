@@ -78,25 +78,16 @@ const Navbar = () => {
       <Container fluid style={{ padding: '0 30px' }}>
 
         {/* Logo */}
-        <BsNavbar.Brand as={Link} to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '30px', textDecoration: 'none' }}>
-          <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '5px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <img src={logo} alt="Lazord Real Estate" style={{ height: '48px', width: 'auto', objectFit: 'contain', display: 'block' }} />
-          </div>
-          <div style={{ lineHeight: '1.2',textAlign: 'left',direction: 'ltr',           // ← Force left to right
-           unicodeBidi: 'isolate'      // ← Isolate from surrounding RTL
-}}>
-  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
+        <BsNavbar.Brand as={Link} to="/" dir="ltr" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '30px', textDecoration: 'none' }}>          <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '2px 4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img src={logo} alt="Lazord Real Estate" style={{ height: '72px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+        </div>
+         <div style={{ lineHeight: '1.2' }} dir="ltr">
+  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '0.5px' }}>
     Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
   </div>
-  <div style={{ 
-  color: '#8aafd4', 
-  fontSize: '0.6rem', 
-  letterSpacing: '2px',
-  direction: 'ltr',           // ← Keep LTR even for Arabic text
-  unicodeBidi: 'embed'        // ← Embed in LTR context
-}}>
-  لازورد للعقارات
-</div>
+  <div style={{ color: '#8aafd4', fontSize: '0.65rem', letterSpacing: '2.5px', textTransform: 'uppercase' }}>
+    لازورد للعقارات
+  </div>
 </div>
         </BsNavbar.Brand>
 
