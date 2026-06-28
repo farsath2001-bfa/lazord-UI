@@ -261,7 +261,7 @@ const Contact = () => {
                allowFullScreen=""  loading="lazy"/>
               <div style={{ padding: '16px 20px' }}>
                 <div style={{ color: '#ffffff', fontWeight: '600', fontSize: '0.9rem', marginBottom: '4px' }}>📍 Lazord Real Estate HQ</div>
-                <div style={{ color: '#8aafd4', fontSize: '0.82rem' }}>Rigga Al Butteen, Dubai, UAE</div>
+                <div style={{ color: '#8aafd4', fontSize: '0.82rem' }}>Office 803, Al Salemiyah Tower, Rigga Al Butteen, Dubai, UAE</div>
               </div>
             </div>
           </Col>
