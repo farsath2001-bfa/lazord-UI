@@ -60,7 +60,7 @@ const Navbar = () => {
     { path: '/properties?type=Off Plan',  label: t('nav.offplan') },
     { path: '/properties?type=Commercial',label: t('nav.commercial') },
     { path: '/about',                     label: t('nav.about') },
-    { path: '/agents',                    label: t('nav.agents') },
+    // { path: '/agents',                    label: t('nav.agents') },
   ]
 
   return (

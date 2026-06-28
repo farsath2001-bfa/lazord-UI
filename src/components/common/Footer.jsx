@@ -62,7 +62,19 @@ const Footer = () => {
 
           {/* Brand */}
           <Col md={4}>
-            <img src={logo} alt="Lazord Real Estate" style={{ height: '70px', marginBottom: '15px' }} />
+  <div dir="ltr" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', direction: 'ltr', unicodeBidi: 'isolate' }}>
+    <div style={{ border: '2px solid rgba(255,255,255,0.8)', borderRadius: '8px', padding: '3px 6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <img src={logo} alt="Lazord Real Estate" style={{ height: '64px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+    </div>
+    <div dir="ltr" style={{ lineHeight: '1.2', direction: 'ltr', unicodeBidi: 'isolate' }}>
+      <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '0.5px' }}>
+        Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
+      </div>
+      <div style={{ color: '#8aafd4', fontSize: '0.65rem', letterSpacing: '0px', direction: 'rtl', unicodeBidi: 'isolate', textAlign: 'right', lineHeight: '1', WebkitFontSmoothing: 'antialiased', display: 'block' }}>
+        لازورد للعقارات
+      </div>
+    </div>
+  </div>
             <p style={{ color: '#aab4cc', fontSize: '0.9rem', lineHeight: '1.7', marginBottom: '20px' }}>
               {t('footer.tagline')}
             </p>
@@ -124,15 +136,40 @@ const Footer = () => {
           </Col>
 
           {/* Contact */}
+          {/* Contact */}
           <Col md={4}>
             <h6 style={{ color: '#2d5fc4', marginBottom: '15px', letterSpacing: '1px', textTransform: 'uppercase' }}>
               {t('footer.contactUs')}
             </h6>
-            <ul className="list-unstyled" style={{ color: '#aab4cc', fontSize: '0.9rem' }}>
+            <ul className="list-unstyled" style={{ color: '#aab4cc', fontSize: '0.9rem', marginBottom: '16px' }}>
               <li className="mb-2">📍 Office 803, AlSalemiya Tower, Rigga Al Butteen, Dubai, UAE</li>
               <li className="mb-2">📞 +971 42 981 077</li>
               <li className="mb-2">✉️ info@lazordrealestate.com</li>
             </ul>
+
+            {/* Google Map */}
+            <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(45,95,196,0.35)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)' }}>
+              <iframe
+                title="Lazord Real Estate Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7216.7368119157045!2d55.3223574!3d25.258189599999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5cd10170bd0f%3A0x33c038729b931804!2sAl%20Salemiyah%20Tower%20(SBK)!5e0!3m2!1sen!2sae!4v1782656168293!5m2!1sen!2sae"
+                width="100%"
+                height="200"
+                style={{ border: 0, display: 'block' }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            
+             <a href="https://maps.google.com/?q=AlSalemiya+Tower+Rigga+Al+Butteen+Deira+Dubai"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-block', marginTop: '8px', color: '#4a90d9', fontSize: '0.78rem', textDecoration: 'none' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#ffffff'}
+              onMouseLeave={e => e.currentTarget.style.color = '#4a90d9'}
+            >
+              📍 Open in Google Maps →
+            </a>
           </Col>
 
         </Row>
