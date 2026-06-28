@@ -52,12 +52,14 @@ import WhatsAppButton from './components/common/WhatsAppButton'
 import FAQPage from './pages/FaqPage'
 import NewsletterPage from './pages/NewsletterPage'
 import LeadPopup from './components/common/LeadPopup'
+import CustomCursor from './components/common/CustomCursor'
 
 
 function App() {
   return (
     <BrowserRouter>
       <AdminProvider>
+        <CustomCursor/>
         <WhatsAppButton/>
         <LeadPopup />
         <Routes>
