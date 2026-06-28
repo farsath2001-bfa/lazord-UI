@@ -153,7 +153,7 @@ const PropertyCard = ({ property }) => {
           borderBottom: '1px solid rgba(45,95,196,0.2)'
         }}>
           {[
-            { icon: '🛏', value: bedrooms === 0 ? 'Studio' : `${bedrooms} Bed` },
+            { icon: '🛏️', value: bedrooms === 0 ? 'Studio' : `${bedrooms} Bed` },
             { icon: '🚿', value: `${bathrooms} Bath` },
             { icon: '📐', value: `${area.toLocaleString()} sqft` },
           ].map(stat => (
