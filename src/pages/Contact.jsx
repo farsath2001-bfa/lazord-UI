@@ -255,8 +255,10 @@ const Contact = () => {
             </div>
 
             <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
-              <iframe title="Lazord Office Location" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.2!2d55.3273!3d25.2698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDE2JzExLjMiTiA1NcKwMTknMzguMyJF!5e0!3m2!1sen!2sae!4v1234567890"
-                width="100%" height="260" style={{ border: 0, display: 'block', filter: 'invert(90%) hue-rotate(180deg)' }} allowFullScreen="" loading="lazy" />
+              <iframe title="Lazord Office Location"
+               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.3684066212977!2d55.31978247538382!3d25.2581895776718!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5cd10170bd0f%3A0x33c038729b931804!2sAl%20Salemiyah%20Tower%20(SBK)!5e0!3m2!1sen!2sae!4v1782630978993!5m2!1sen!2sae"
+               width="100%" height="260"style={{ border: 0, display: 'block', filter: 'invert(90%) hue-rotate(180deg)' }}
+               allowFullScreen=""  loading="lazy"/>
               <div style={{ padding: '16px 20px' }}>
                 <div style={{ color: '#ffffff', fontWeight: '600', fontSize: '0.9rem', marginBottom: '4px' }}>📍 Lazord Real Estate HQ</div>
                 <div style={{ color: '#8aafd4', fontSize: '0.82rem' }}>Rigga Al Butteen, Dubai, UAE</div>
