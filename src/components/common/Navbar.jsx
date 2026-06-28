@@ -82,13 +82,21 @@ const Navbar = () => {
           <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '5px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <img src={logo} alt="Lazord Real Estate" style={{ height: '48px', width: 'auto', objectFit: 'contain', display: 'block' }} />
           </div>
-          <div style={{ lineHeight: '1.2' }}>
+          <div style={{ lineHeight: '1.2',textAlign: 'left',direction: 'ltr',           // ← Force left to right
+           unicodeBidi: 'isolate'      // ← Isolate from surrounding RTL
+}}>
   <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
     Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
   </div>
-  <div style={{ color: '#8aafd4', fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', direction: 'rtl', unicodeBidi: 'isolate', textAlign: 'right' }}>
-    لازورد للعقارات
-  </div>
+  <div style={{ 
+  color: '#8aafd4', 
+  fontSize: '0.6rem', 
+  letterSpacing: '2px',
+  direction: 'ltr',           // ← Keep LTR even for Arabic text
+  unicodeBidi: 'embed'        // ← Embed in LTR context
+}}>
+  لازورد للعقارات
+</div>
 </div>
         </BsNavbar.Brand>
 
