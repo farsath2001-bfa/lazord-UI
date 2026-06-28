@@ -79,7 +79,9 @@ const Navbar = () => {
 
         {/* Logo */}
         <BsNavbar.Brand as={Link} to="/" dir="ltr" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '30px', textDecoration: 'none', direction: 'ltr', unicodeBidi: 'isolate' }}>
-  <img src={logo} alt="Lazord Real Estate" style={{ height: '72px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+<div style={{ border: '2px solid rgba(255,255,255,0.8)', borderRadius: '8px', padding: '3px 6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+  <img src={logo} alt="Lazord Real Estate" style={{ height: '64px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+</div>
   <div dir="ltr" style={{ lineHeight: '1.2', direction: 'ltr', unicodeBidi: 'isolate' }}>
     <div dir="ltr" style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
       Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
