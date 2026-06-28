@@ -125,19 +125,19 @@ const LeadPopup = () => {
           >×</button>
 
           {/* Logo — same as navbar */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '20px' }}>
-            <div style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '5px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={logo} alt="Lazord Real Estate" style={{ height: '40px', width: 'auto', objectFit: 'contain', display: 'block' }} />
-            </div>
-            <div style={{ lineHeight: '1.2', textAlign: 'left', direction: 'ltr', unicodeBidi: 'isolate' }}>
-  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
-    Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
+         <div dir="ltr" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '20px', direction: 'ltr', unicodeBidi: 'isolate' }}>
+  <div style={{ border: '2px solid rgba(255,255,255,0.8)', borderRadius: '8px', padding: '3px 6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <img src={logo} alt="Lazord Real Estate" style={{ height: '48px', width: 'auto', objectFit: 'contain', display: 'block' }} />
   </div>
-  <div style={{ color: '#8aafd4', fontSize: '0.6rem', letterSpacing: '2px', textTransform: 'uppercase', direction: 'ltr', unicodeBidi: 'embed' }}>
-    لازورد للعقارات
+  <div dir="ltr" style={{ lineHeight: '1.2', textAlign: 'left', direction: 'ltr', unicodeBidi: 'isolate' }}>
+    <div dir="ltr" style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
+      Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
+    </div>
+    <div dir="ltr" style={{ color: '#8aafd4', fontSize: '0.6rem', letterSpacing: '2px', textTransform: 'uppercase', direction: 'ltr', unicodeBidi: 'embed', textAlign: 'left' }}>
+      لازورد للعقارات
+    </div>
   </div>
 </div>
-          </div>
 
           {/* Divider */}
           <div style={{ width: '40px', height: '2px', backgroundColor: '#2d5fc4', margin: '0 auto 16px', borderRadius: '2px' }} />
