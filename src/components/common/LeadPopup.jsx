@@ -133,9 +133,19 @@ const LeadPopup = () => {
     <div dir="ltr" style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
       Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
     </div>
-    <div dir="ltr" style={{ color: '#8aafd4', fontSize: '0.6rem', letterSpacing: '2px', textTransform: 'uppercase', direction: 'ltr', unicodeBidi: 'embed', textAlign: 'left' }}>
-      لازورد للعقارات
-    </div>
+    <div style={{ 
+  color: '#8aafd4', 
+  fontSize: '0.6rem', 
+  letterSpacing: '0px',       // ← kill letterSpacing
+  direction: 'rtl',           // ← natural RTL
+  unicodeBidi: 'isolate',
+  textAlign: 'right',
+  lineHeight: '1',
+  WebkitFontSmoothing: 'antialiased',
+  display: 'block'
+}}>
+  لازورد للعقارات
+</div>
   </div>
 </div>
 
