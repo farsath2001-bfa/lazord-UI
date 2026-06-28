@@ -51,6 +51,7 @@ import Agents from './pages/Agent'
 import WhatsAppButton from './components/common/WhatsAppButton'
 import FAQPage from './pages/FaqPage'
 import NewsletterPage from './pages/NewsletterPage'
+import LeadPopup from './components/common/LeadPopup'
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
     <BrowserRouter>
       <AdminProvider>
         <WhatsAppButton/>
+        <LeadPopup />
         <Routes>
           {/* Public routes with Navbar + Footer */}
           <Route path="/" element={<><Navbar /><Home /><Footer /></>} />
