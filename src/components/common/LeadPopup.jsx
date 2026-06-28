@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import logo from '../../assets/image/lazordlogo.png'
+import logo from '../../assets/image/lazordlogoo.png'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 

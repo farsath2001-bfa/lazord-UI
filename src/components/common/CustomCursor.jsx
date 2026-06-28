@@ -1,18 +1,54 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+const SECTION_COLORS = {
+  default:    '#4a90d9',  // blue
+  hero:       '#4a90d9',  // blue
+  properties: '#27ae60',  // green
+  services:   '#e67e22',  // orange
+  whychoose:  '#8e44ad',  // purple
+  areas:      '#16a085',  // teal
+  testimonials:'#f1c40f', // yellow
+  contact:    '#e74c3c',  // red
+  footer:     '#ffffff',  // white
+}
 
 const CustomCursor = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [follower, setFollower] = useState({ x: 0, y: 0 })
+  const dotRef = useRef(null)
+  const ringRef = useRef(null)
+  const colorRef = useRef('#4a90d9')
   const [isHovering, setIsHovering] = useState(false)
   const [isClicking, setIsClicking] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [color, setColor] = useState('#4a90d9')
+
+  const pos = useRef({ x: 0, y: 0 })
+  const follower = useRef({ x: 0, y: 0 })
+  const rafRef = useRef(null)
 
   useEffect(() => {
-    let animFrame
-
     const onMouseMove = (e) => {
       setIsVisible(true)
-      setPosition({ x: e.clientX, y: e.clientY })
+      pos.current = { x: e.clientX, y: e.clientY }
+
+      // Dot moves instantly
+      if (dotRef.current) {
+        dotRef.current.style.left = `${e.clientX}px`
+        dotRef.current.style.top = `${e.clientY}px`
+      }
+
+      // Detect section color by data-cursor attribute
+      const el = document.elementFromPoint(e.clientX, e.clientY)
+      if (el) {
+        const section = el.closest('[data-cursor]')
+        const newColor = section
+          ? (SECTION_COLORS[section.getAttribute('data-cursor')] || SECTION_COLORS.default)
+          : SECTION_COLORS.default
+
+        if (newColor !== colorRef.current) {
+          colorRef.current = newColor
+          setColor(newColor)
+        }
+      }
     }
 
     const onMouseLeave = () => setIsVisible(false)
@@ -20,7 +56,6 @@ const CustomCursor = () => {
     const onMouseDown = () => setIsClicking(true)
     const onMouseUp = () => setIsClicking(false)
 
-    // Hover detection on interactive elements
     const onHoverStart = (e) => {
       if (e.target.closest('a, button, [role="button"], input, select, textarea, label')) {
         setIsHovering(true)
@@ -36,17 +71,19 @@ const CustomCursor = () => {
     document.addEventListener('mouseover', onHoverStart)
     document.addEventListener('mouseout', onHoverEnd)
 
-    // Smooth follower animation
-    let fx = 0, fy = 0
+    // Smooth follower ring using RAF directly on DOM
     const animate = () => {
-      setFollower(prev => {
-        fx += (position.x - fx) * 0.12
-        fy += (position.y - fy) * 0.12
-        return { x: fx, y: fy }
-      })
-      animFrame = requestAnimationFrame(animate)
+      follower.current.x += (pos.current.x - follower.current.x) * 0.18
+      follower.current.y += (pos.current.y - follower.current.y) * 0.18
+
+      if (ringRef.current) {
+        ringRef.current.style.left = `${follower.current.x}px`
+        ringRef.current.style.top = `${follower.current.y}px`
+      }
+
+      rafRef.current = requestAnimationFrame(animate)
     }
-    animFrame = requestAnimationFrame(animate)
+    rafRef.current = requestAnimationFrame(animate)
 
     return () => {
       document.removeEventListener('mousemove', onMouseMove)
@@ -56,50 +93,44 @@ const CustomCursor = () => {
       document.removeEventListener('mouseup', onMouseUp)
       document.removeEventListener('mouseover', onHoverStart)
       document.removeEventListener('mouseout', onHoverEnd)
-      cancelAnimationFrame(animFrame)
+      cancelAnimationFrame(rafRef.current)
     }
-  }, [position.x, position.y])
-
-  if (!isVisible) return null
+  }, [])
 
   return (
     <>
-      {/* Main dot cursor */}
-      <div style={{
+      {/* Dot — instant */}
+      <div ref={dotRef} style={{
         position: 'fixed',
-        left: position.x,
-        top: position.y,
         width: isClicking ? '6px' : '8px',
         height: isClicking ? '6px' : '8px',
-        backgroundColor: '#4a90d9',
+        backgroundColor: color,
         borderRadius: '50%',
         pointerEvents: 'none',
         zIndex: 999999,
         transform: 'translate(-50%, -50%)',
-        transition: 'width 0.15s ease, height 0.15s ease, background-color 0.2s ease',
-        boxShadow: '0 0 10px rgba(74,144,217,0.8), 0 0 20px rgba(74,144,217,0.4)',
+        opacity: isVisible ? 1 : 0,
+        transition: 'width 0.1s, height 0.1s, opacity 0.3s, background-color 0.4s ease',
+        boxShadow: `0 0 8px ${color}cc, 0 0 16px ${color}66`,
       }} />
 
-      {/* Follower ring */}
-      <div style={{
+      {/* Ring — smooth lag */}
+      <div ref={ringRef} style={{
         position: 'fixed',
-        left: follower.x,
-        top: follower.y,
-        width: isHovering ? '48px' : isClicking ? '28px' : '36px',
-        height: isHovering ? '48px' : isClicking ? '28px' : '36px',
-        border: `1.5px solid ${isHovering ? 'rgba(74,144,217,0.8)' : 'rgba(74,144,217,0.4)'}`,
+        width: isHovering ? '48px' : isClicking ? '24px' : '34px',
+        height: isHovering ? '48px' : isClicking ? '24px' : '34px',
+        border: `1.5px solid ${color}`,
         borderRadius: '50%',
         pointerEvents: 'none',
         zIndex: 999998,
         transform: 'translate(-50%, -50%)',
-        transition: 'width 0.3s ease, height 0.3s ease, border-color 0.3s ease',
-        backgroundColor: isHovering ? 'rgba(74,144,217,0.06)' : 'transparent',
-        boxShadow: isHovering ? '0 0 20px rgba(74,144,217,0.2)' : 'none',
+        opacity: isVisible ? (isHovering ? 0.9 : 0.5) : 0,
+        transition: 'width 0.25s ease, height 0.25s ease, border-color 0.4s ease, opacity 0.3s',
+        backgroundColor: isHovering ? `${color}15` : 'transparent',
+        boxShadow: isHovering ? `0 0 18px ${color}44` : 'none',
       }} />
 
-      <style>{`
-        * { cursor: none !important; }
-      `}</style>
+      <style>{`* { cursor: none !important; }`}</style>
     </>
   )
 }

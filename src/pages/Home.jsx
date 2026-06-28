@@ -5,7 +5,6 @@ import FeaturedAreas from '../components/home/FeaturedAreas'
 import Services from '../components/home/Services'
 import Testimonials from '../components/home/Testimonials'
 import CTABanner from '../components/home/CtaBanner'
-import Footer from '../components/common/Footer'
 import TrustBar from '../components/home/TrustBar'
 import FAQ from '../components/home/FAQ'
 import Newsletter from '../components/home/NewsLetter'
@@ -13,14 +12,16 @@ import Newsletter from '../components/home/NewsLetter'
 const Home = () => {
   return (
     <>
-      <Hero />
-      <FeaturedProperties />
-      <WhyChooseUs />
-      <FeaturedAreas />
-      <TrustBar />
-      <Services />
-      <Testimonials />
-      <CTABanner />
+      <div data-cursor="hero"><Hero /></div>
+      <div data-cursor="properties"><TrustBar /></div>
+      <div data-cursor="properties"><FeaturedProperties /></div>
+      <div data-cursor="whychoose"><WhyChooseUs /></div>
+      <div data-cursor="areas"><FeaturedAreas /></div>
+      <div data-cursor="services"><Services /></div>
+      <div data-cursor="testimonials"><Testimonials /></div>
+      <div data-cursor="contact"><FAQ /></div>
+      <div data-cursor="contact"><Newsletter /></div>
+      <div data-cursor="default"><CTABanner /></div>
     </>
   )
 }

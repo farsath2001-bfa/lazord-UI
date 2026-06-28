@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Container, Nav, Navbar as BsNavbar } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
-import logo from '../../assets/image/lazordlogo.png'
+import logo from '../../assets/image/lazordlogoo.png'
 
 const Navbar = () => {
   const [expanded, setExpanded] = useState(false)

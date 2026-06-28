@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
-import logo from '../../assets/image/lazordlogo.png'
+import logo from '../../assets/image/lazordlogoo.png'
 
 const socialMedia = [
   {
