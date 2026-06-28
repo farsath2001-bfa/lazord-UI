@@ -77,7 +77,7 @@ const LeadPopup = () => {
         position: 'fixed', inset: 0,
         backgroundColor: 'rgba(5,15,40,0.85)',
         zIndex: 99998,
-        backdropFilter: 'blur(6px)',
+        backdropFilter: 'blur(3px)',
         animation: 'fadeIn 0.3s ease'
       }} />
 
