@@ -11,11 +11,21 @@ const statusColor = {
   'Lost':        { bg: 'rgba(231,76,60,0.2)',   color: '#e74c3c' },
 }
 
+const sourceColor = {
+  'Website Popup':    { bg: 'rgba(142,68,173,0.2)',  color: '#8e44ad', icon: '🔔' },
+  'Contact Form':     { bg: 'rgba(45,95,196,0.2)',   color: '#4a90d9', icon: '📋' },
+  'Property Inquiry': { bg: 'rgba(39,174,96,0.2)',   color: '#27ae60', icon: '🏠' },
+  'WhatsApp':         { bg: 'rgba(37,211,102,0.2)',  color: '#25d366', icon: '💬' },
+  'Phone':            { bg: 'rgba(241,196,15,0.2)',  color: '#f1c40f', icon: '📞' },
+  'Walk In':          { bg: 'rgba(230,126,34,0.2)',  color: '#e67e22', icon: '🚶' },
+}
+
 const AdminLeads = () => {
   const { token } = useAdmin()
   const [leads, setLeads] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('All')
+  const [sourceFilter, setSourceFilter] = useState('All')
   const [message, setMessage] = useState('')
 
   const config = { headers: { Authorization: `Bearer ${token}` } }
@@ -57,7 +67,20 @@ const AdminLeads = () => {
   }
 
   const statuses = ['All', 'New', 'Contacted', 'In Progress', 'Closed', 'Lost']
-  const filtered = filter === 'All' ? leads : leads.filter(l => l.status === filter)
+  const sources = ['All', 'Website Popup', 'Contact Form', 'Property Inquiry', 'WhatsApp', 'Phone', 'Walk In']
+
+  const filtered = leads
+    .filter(l => filter === 'All' || l.status === filter)
+    .filter(l => sourceFilter === 'All' || l.source === sourceFilter)
+
+  // Stats
+  const stats = [
+    { label: 'Total Leads',     value: leads.length,                                          color: '#4a90d9' },
+    { label: 'New',             value: leads.filter(l => l.status === 'New').length,           color: '#4a90d9' },
+    { label: 'In Progress',     value: leads.filter(l => l.status === 'In Progress').length,   color: '#e67e22' },
+    { label: 'Popup Leads',     value: leads.filter(l => l.source === 'Website Popup').length, color: '#8e44ad' },
+    { label: 'Closed',          value: leads.filter(l => l.status === 'Closed').length,        color: '#27ae60' },
+  ]
 
   return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh' }}>
@@ -67,6 +90,21 @@ const AdminLeads = () => {
         <h1 style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: '700', marginBottom: '8px' }}>Leads</h1>
         <p style={{ color: '#8aafd4', marginBottom: '28px' }}>Manage customer inquiries</p>
 
+        {/* Stats */}
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
+          {stats.map((stat, i) => (
+            <div key={i} style={{
+              backgroundColor: '#0d1f4e',
+              border: `1px solid ${stat.color}30`,
+              borderRadius: '12px', padding: '16px 24px',
+              flex: '1', minWidth: '120px', textAlign: 'center'
+            }}>
+              <div style={{ color: stat.color, fontSize: '1.8rem', fontWeight: '800', lineHeight: '1' }}>{stat.value}</div>
+              <div style={{ color: '#8aafd4', fontSize: '0.75rem', marginTop: '4px' }}>{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
         {/* Message */}
         {message && (
           <div style={{ backgroundColor: message.includes('✅') ? 'rgba(39,174,96,0.15)' : 'rgba(231,76,60,0.15)', border: `1px solid ${message.includes('✅') ? 'rgba(39,174,96,0.3)' : 'rgba(231,76,60,0.3)'}`, borderRadius: '10px', padding: '12px 20px', color: message.includes('✅') ? '#27ae60' : '#e74c3c', marginBottom: '20px', fontWeight: '600' }}>
@@ -74,11 +112,12 @@ const AdminLeads = () => {
           </div>
         )}
 
-        {/* Status Filter Tabs */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+        {/* Status Filter */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
           {statuses.map(s => (
             <button key={s} onClick={() => setFilter(s)} style={{
-              padding: '8px 18px', borderRadius: '20px', border: filter === s ? '1.5px solid #4a90d9' : '1.5px solid rgba(45,95,196,0.3)',
+              padding: '7px 16px', borderRadius: '20px',
+              border: filter === s ? '1.5px solid #4a90d9' : '1.5px solid rgba(45,95,196,0.3)',
               backgroundColor: filter === s ? '#2d5fc4' : 'transparent',
               color: filter === s ? '#fff' : '#8aafd4',
               fontSize: '0.82rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s'
@@ -88,12 +127,35 @@ const AdminLeads = () => {
           ))}
         </div>
 
+        {/* Source Filter */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
+          {sources.map(s => {
+            const src = sourceColor[s]
+            return (
+              <button key={s} onClick={() => setSourceFilter(s)} style={{
+                padding: '6px 14px', borderRadius: '20px',
+                border: sourceFilter === s ? `1.5px solid ${src?.color || '#4a90d9'}` : '1.5px solid rgba(45,95,196,0.2)',
+                backgroundColor: sourceFilter === s ? (src?.bg || 'rgba(45,95,196,0.2)') : 'transparent',
+                color: sourceFilter === s ? (src?.color || '#4a90d9') : '#8aafd4',
+                fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s'
+              }}>
+                {src?.icon} {s} {s !== 'All' && `(${leads.filter(l => l.source === s).length})`}
+              </button>
+            )
+          })}
+        </div>
+
         {/* Leads Table */}
         <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)' }}>
+          <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <h2 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', margin: 0 }}>
               {filter === 'All' ? 'All Leads' : `${filter} Leads`} ({filtered.length})
             </h2>
+            {sourceFilter !== 'All' && (
+              <div style={{ backgroundColor: sourceColor[sourceFilter]?.bg, color: sourceColor[sourceFilter]?.color, border: `1px solid ${sourceColor[sourceFilter]?.color}40`, borderRadius: '20px', padding: '4px 12px', fontSize: '0.78rem', fontWeight: '700' }}>
+                {sourceColor[sourceFilter]?.icon} {sourceFilter}
+              </div>
+            )}
           </div>
 
           {loading ? (
@@ -105,7 +167,7 @@ const AdminLeads = () => {
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                   <tr style={{ backgroundColor: 'rgba(45,95,196,0.1)' }}>
-                    {['Name', 'Email', 'Phone', 'Service', 'Message', 'Status', 'Date', 'Actions'].map(h => (
+                    {['Name', 'Email', 'Phone', 'Source', 'Service', 'Message', 'Status', 'Date', 'Actions'].map(h => (
                       <th key={h} style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'left', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
                     ))}
                   </tr>
@@ -116,8 +178,21 @@ const AdminLeads = () => {
                       <td style={{ padding: '14px 16px', color: '#ffffff', fontSize: '0.88rem', fontWeight: '600', whiteSpace: 'nowrap' }}>{lead.name}</td>
                       <td style={{ padding: '14px 16px', color: '#8aafd4', fontSize: '0.82rem' }}>{lead.email}</td>
                       <td style={{ padding: '14px 16px', color: '#8aafd4', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{lead.phone}</td>
+                      <td style={{ padding: '14px 16px' }}>
+                        {lead.source ? (
+                          <span style={{
+                            backgroundColor: sourceColor[lead.source]?.bg || 'rgba(45,95,196,0.2)',
+                            color: sourceColor[lead.source]?.color || '#4a90d9',
+                            border: `1px solid ${sourceColor[lead.source]?.color || '#4a90d9'}40`,
+                            borderRadius: '20px', padding: '4px 10px',
+                            fontSize: '0.72rem', fontWeight: '700', whiteSpace: 'nowrap'
+                          }}>
+                            {sourceColor[lead.source]?.icon} {lead.source}
+                          </span>
+                        ) : '—'}
+                      </td>
                       <td style={{ padding: '14px 16px', color: '#8aafd4', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{lead.service}</td>
-                      <td style={{ padding: '14px 16px', color: '#8aafd4', fontSize: '0.82rem', maxWidth: '200px' }}>
+                      <td style={{ padding: '14px 16px', color: '#8aafd4', fontSize: '0.82rem', maxWidth: '180px' }}>
                         <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lead.message || '—'}</div>
                       </td>
                       <td style={{ padding: '14px 16px' }}>
