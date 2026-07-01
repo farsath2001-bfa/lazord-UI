@@ -38,21 +38,24 @@ const PropertyDetail = () => {
     fetchProperty()
   }, [id])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      await axios.post(`${API_URL}/api/leads`, {
-        ...inquiryForm,
-        service: 'General Inquiry',
-        source: 'Property Inquiry',
-        property: id,
-        message: inquiryForm.message || `Interested in: ${property?.title}`
-      })
-      setSubmitted(true)
-    } catch (err) {
-      setSubmitted(true) // show success anyway
-    }
+ const handleSubmit = async (e) => {
+  e.preventDefault()
+  try {
+    await axios.post(`${API_URL}/api/leads`, {
+      name: inquiryForm.name,
+      email: inquiryForm.email,
+      phone: inquiryForm.phone,
+      message: inquiryForm.message || `Interested in: ${property?.title}`,
+      service: 'General Inquiry',    // ✅ matches enum
+      source: 'Property Inquiry',    // ✅ exactly matches enum — shows in filter
+      property: id,                  // ✅ links to the property
+    })
+    setSubmitted(true)
+  } catch (err) {
+    console.error('Enquiry error:', err.response?.data)
+    setSubmitted(true)
   }
+}
 
   if (loading) return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
