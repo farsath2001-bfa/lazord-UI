@@ -212,7 +212,7 @@ const trackLead = async (source) => {
                   💬 WhatsApp Agent
                 </a>
                 <a 
-  href={`https://wa.me/97156119233?text=Hi, I'm interested in: ${property.title}`}
+  href={`https://wa.me/971561119233?text=Hi, I'm interested in: ${property.title}`}
   target="_blank" rel="noopener noreferrer"
   onClick={() => trackLead('WhatsApp')}   // ✅ add this
   style={{...}}
