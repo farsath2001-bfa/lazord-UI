@@ -57,20 +57,20 @@ const PropertyDetail = () => {
   }
 
   const trackLead = async (source) => {
-    try {
-      await axios.post(`${API_URL}/api/leads`, {
-        name: source === 'WhatsApp' ? 'WhatsApp Visitor' : 'Phone Visitor',
-        email: 'N/A',
-        phone: 'N/A',
-        message: `Contacted via ${source} for: ${property?.title}`,
-        service: 'General Inquiry',
-        source: source,
-        property: id,
-      })
-    } catch (err) {
-      console.error(err)
-    }
+  try {
+    await axios.post(`${API_URL}/api/leads`, {
+      name: source === 'WhatsApp' ? 'WhatsApp Visitor' : 'Phone Visitor',
+      email: `visitor@lazord.ae`,
+      phone: 'N/A',
+      message: `Contacted via ${source} for: ${property?.title}`,
+      service: 'General Inquiry',
+      source: source,
+      property: id,
+    })
+  } catch (err) {
+    console.error('trackLead error:', err.response?.data)
   }
+}
 
   if (loading) return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
