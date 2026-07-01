@@ -204,7 +204,7 @@ const trackLead = async (source) => {
                     💳 Flexible payment plans available
                   </div>
                 )}
-                <a href={`https://wa.me/97156119233?text=Hi, I'm interested in: ${property.title}`} target="_blank" rel="noopener noreferrer"
+                <a href={`https://wa.me/971561119233?text=Hi, I'm interested in: ${property.title}`} target="_blank" rel="noopener noreferrer"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: '#25d366', color: '#fff', padding: '13px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.9rem', marginBottom: '10px', transition: 'background 0.2s ease' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1ebe5d'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = '#25d366'}
@@ -212,7 +212,7 @@ const trackLead = async (source) => {
                   💬 WhatsApp Agent
                 </a>
                 <a 
-  href={`https://wa.me/+971561119233?text=Hi, I'm interested in: ${property.title}`}
+  href={`https://wa.me/971561119233?text=Hi, I'm interested in: ${property.title}`}
   target="_blank" rel="noopener noreferrer"
   onClick={() => trackLead('WhatsApp')}   // ✅ add this
   style={{...}}
