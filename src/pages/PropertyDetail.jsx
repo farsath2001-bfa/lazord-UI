@@ -43,7 +43,7 @@ const PropertyDetail = () => {
     try {
       await axios.post(`${API_URL}/api/leads`, {
         ...inquiryForm,
-        service: 'Property Inquiry',
+        service: 'General Inquiry',
         source: 'Property Inquiry',
         property: id,
         message: inquiryForm.message || `Interested in: ${property?.title}`
