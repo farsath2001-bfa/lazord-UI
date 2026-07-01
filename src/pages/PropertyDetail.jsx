@@ -26,7 +26,6 @@ const PropertyDetail = () => {
         setLoading(true)
         const res = await axios.get(`${API_URL}/api/properties/${id}`)
         setProperty(res.data.data)
-        // Fetch similar
         const simRes = await axios.get(`${API_URL}/api/properties`, { params: { type: res.data.data.type } })
         setSimilar((simRes.data.data || []).filter(p => p._id !== id).slice(0, 3))
       } catch (err) {
@@ -38,39 +37,41 @@ const PropertyDetail = () => {
     fetchProperty()
   }, [id])
 
- const handleSubmit = async (e) => {
-  e.preventDefault()
-  try {
-    await axios.post(`${API_URL}/api/leads`, {
-      name: inquiryForm.name,
-      email: inquiryForm.email,
-      phone: inquiryForm.phone,
-      message: inquiryForm.message || `Interested in: ${property?.title}`,
-      service: 'General Inquiry',    // ✅ matches enum
-      source: 'Property Inquiry',    // ✅ exactly matches enum — shows in filter
-      property: id,                  // ✅ links to the property
-    })
-    setSubmitted(true)
-  } catch (err) {
-    console.error('Enquiry error:', err.response?.data)
-    setSubmitted(true)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await axios.post(`${API_URL}/api/leads`, {
+        name: inquiryForm.name,
+        email: inquiryForm.email,
+        phone: inquiryForm.phone,
+        message: inquiryForm.message || `Interested in: ${property?.title}`,
+        service: 'General Inquiry',
+        source: 'Property Inquiry',
+        property: id,
+      })
+      setSubmitted(true)
+    } catch (err) {
+      console.error('Enquiry error:', err.response?.data)
+      setSubmitted(true)
+    }
   }
-}
-const trackLead = async (source) => {
-  try {
-    await axios.post(`${API_URL}/api/leads`, {
-      name: 'WhatsApp Visitor',
-      email: 'N/A',
-      phone: 'N/A',
-      message: `Contacted via ${source} for: ${property?.title}`,
-      service: 'General Inquiry',
-      source: source,   // 'WhatsApp' or 'Phone'
-      property: id,
-    })
-  } catch (err) {
-    console.error(err)  // silent — don't bother the user
+
+  const trackLead = async (source) => {
+    try {
+      await axios.post(`${API_URL}/api/leads`, {
+        name: source === 'WhatsApp' ? 'WhatsApp Visitor' : 'Phone Visitor',
+        email: 'N/A',
+        phone: 'N/A',
+        message: `Contacted via ${source} for: ${property?.title}`,
+        service: 'General Inquiry',
+        source: source,
+        property: id,
+      })
+    } catch (err) {
+      console.error(err)
+    }
   }
-}
+
   if (loading) return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center' }}>
@@ -194,39 +195,49 @@ const trackLead = async (source) => {
           {/* RIGHT */}
           <Col lg={4}>
             <div style={{ position: 'sticky', top: '100px' }}>
+
               {/* Price Card */}
               <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '16px', padding: '28px 24px', marginBottom: '16px' }}>
-                <div style={{ color: '#8aafd4', fontSize: '0.82rem', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{property.type === 'Rent' ? 'Annual Rent' : 'Asking Price'}</div>
-                <div style={{ color: '#ffffff', fontSize: '2rem', fontWeight: '800', marginBottom: '4px' }}>{formatPrice(property.price, property.type)}</div>
-                {property.roi && <div style={{ color: '#27ae60', fontSize: '0.85rem', fontWeight: '600', marginBottom: '20px' }}>Expected ROI: {property.roi}</div>}
+                <div style={{ color: '#8aafd4', fontSize: '0.82rem', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  {property.type === 'Rent' ? 'Annual Rent' : 'Asking Price'}
+                </div>
+                <div style={{ color: '#ffffff', fontSize: '2rem', fontWeight: '800', marginBottom: '4px' }}>
+                  {formatPrice(property.price, property.type)}
+                </div>
+                {property.roi && (
+                  <div style={{ color: '#27ae60', fontSize: '0.85rem', fontWeight: '600', marginBottom: '20px' }}>
+                    Expected ROI: {property.roi}
+                  </div>
+                )}
                 {property.status === 'Off Plan' && (
                   <div style={{ backgroundColor: 'rgba(142,68,173,0.15)', border: '1px solid rgba(142,68,173,0.3)', borderRadius: '8px', padding: '10px 14px', marginBottom: '20px', color: '#8e44ad', fontSize: '0.82rem' }}>
                     💳 Flexible payment plans available
                   </div>
                 )}
-                <a href={`https://wa.me/971561119233?text=Hi, I'm interested in: ${property.title}`} target="_blank" rel="noopener noreferrer"
+
+                {/* ✅ WhatsApp Button — tracks lead + correct number */}
+                <a
+                  href={`https://wa.me/971561119233?text=Hi, I'm interested in: ${encodeURIComponent(property.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackLead('WhatsApp')}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: '#25d366', color: '#fff', padding: '13px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.9rem', marginBottom: '10px', transition: 'background 0.2s ease' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1ebe5d'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = '#25d366'}
                 >
                   💬 WhatsApp Agent
                 </a>
-                <a 
-  href={`https://wa.me/971561119233?text=Hi, I'm interested in: ${property.title}`}
-  target="_blank" rel="noopener noreferrer"
-  onClick={() => trackLead('WhatsApp')}   // ✅ add this
-  style={{...}}
->
-  💬 WhatsApp Agent
-</a>
 
-<a 
-  href="tel:+97142981077"
-  onClick={() => trackLead('Phone')}   // ✅ add this
-  style={{...}}
->
-  📞 +971 42 981 077
-</a>
+                {/* ✅ Phone Button — tracks lead */}
+                <a
+                  href="tel:+97142981077"
+                  onClick={() => trackLead('Phone')}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'transparent', color: '#ffffff', padding: '13px', borderRadius: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.9rem', border: '1.5px solid rgba(255,255,255,0.2)', transition: 'all 0.2s ease' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#4a90d9'; e.currentTarget.style.color = '#4a90d9' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = '#ffffff' }}
+                >
+                  📞 +971 42 981 077
+                </a>
               </div>
 
               {/* Inquiry Form */}
@@ -241,9 +252,9 @@ const trackLead = async (source) => {
                 ) : (
                   <form onSubmit={handleSubmit}>
                     {[
-                      { key: 'name',  placeholder: 'Your Name',    type: 'text' },
+                      { key: 'name',  placeholder: 'Your Name',    type: 'text'  },
                       { key: 'email', placeholder: 'Email Address', type: 'email' },
-                      { key: 'phone', placeholder: 'Phone Number',  type: 'tel' },
+                      { key: 'phone', placeholder: 'Phone Number',  type: 'tel'   },
                     ].map(field => (
                       <input key={field.key} type={field.type} placeholder={field.placeholder} required
                         value={inquiryForm[field.key]}
@@ -251,12 +262,15 @@ const trackLead = async (source) => {
                         style={{ width: '100%', backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', color: '#ffffff', padding: '11px 14px', fontSize: '0.88rem', outline: 'none', marginBottom: '10px', boxSizing: 'border-box' }}
                       />
                     ))}
-                    <textarea placeholder={`I'm interested in: ${property.title}`} rows={3}
+                    <textarea
+                      placeholder={`I'm interested in: ${property.title}`}
+                      rows={3}
                       value={inquiryForm.message}
                       onChange={e => setInquiryForm(p => ({ ...p, message: e.target.value }))}
                       style={{ width: '100%', backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', color: '#ffffff', padding: '11px 14px', fontSize: '0.88rem', outline: 'none', marginBottom: '12px', resize: 'vertical', boxSizing: 'border-box' }}
                     />
-                    <button type="submit" style={{ width: '100%', backgroundColor: '#2d5fc4', color: '#fff', border: 'none', borderRadius: '8px', padding: '13px', fontSize: '0.92rem', fontWeight: '700', cursor: 'pointer', transition: 'background 0.2s ease' }}
+                    <button type="submit"
+                      style={{ width: '100%', backgroundColor: '#2d5fc4', color: '#fff', border: 'none', borderRadius: '8px', padding: '13px', fontSize: '0.92rem', fontWeight: '700', cursor: 'pointer', transition: 'background 0.2s ease' }}
                       onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1a3a7c'}
                       onMouseLeave={e => e.currentTarget.style.backgroundColor = '#2d5fc4'}
                     >
@@ -265,6 +279,7 @@ const trackLead = async (source) => {
                   </form>
                 )}
               </div>
+
             </div>
           </Col>
         </Row>
