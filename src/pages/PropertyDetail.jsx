@@ -56,7 +56,21 @@ const PropertyDetail = () => {
     setSubmitted(true)
   }
 }
-
+const trackLead = async (source) => {
+  try {
+    await axios.post(`${API_URL}/api/leads`, {
+      name: 'WhatsApp Visitor',
+      email: 'N/A',
+      phone: 'N/A',
+      message: `Contacted via ${source} for: ${property?.title}`,
+      service: 'General Inquiry',
+      source: source,   // 'WhatsApp' or 'Phone'
+      property: id,
+    })
+  } catch (err) {
+    console.error(err)  // silent — don't bother the user
+  }
+}
   if (loading) return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center' }}>
@@ -197,12 +211,22 @@ const PropertyDetail = () => {
                 >
                   💬 WhatsApp Agent
                 </a>
-                <a href="tel:+97142981077" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'transparent', color: '#ffffff', padding: '13px', borderRadius: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.9rem', border: '1.5px solid rgba(255,255,255,0.2)', transition: 'all 0.2s ease' }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#4a90d9'; e.currentTarget.style.color = '#4a90d9' }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = '#ffffff' }}
-                >
-                  📞 +971 42 981 077
-                </a>
+                <a 
+  href={`https://wa.me/97156119233?text=Hi, I'm interested in: ${property.title}`}
+  target="_blank" rel="noopener noreferrer"
+  onClick={() => trackLead('WhatsApp')}   // ✅ add this
+  style={{...}}
+>
+  💬 WhatsApp Agent
+</a>
+
+<a 
+  href="tel:+97142981077"
+  onClick={() => trackLead('Phone')}   // ✅ add this
+  style={{...}}
+>
+  📞 +971 42 981 077
+</a>
               </div>
 
               {/* Inquiry Form */}
