@@ -10,7 +10,7 @@ const IconHeadset = () => <svg width="22" height="22" viewBox="0 0 24 24" fill="
 const IconZap = () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
 
 // ─── Background image URL — replace with your own from postimages.org ───
-const BG_IMAGE = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80'
+const BG_IMAGE = 'https://images.unsplash.com/photo-1543579596-2c11997c7706?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cmVhbCUyMGVzdGF0ZSUyMGR1YmFpfGVufDB8fDB8fHww'
 
 const WhyChooseUs = () => {
   const { t } = useTranslation()
@@ -46,8 +46,7 @@ const WhyChooseUs = () => {
       {/* Dark overlay — makes text readable */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1,
-        background: 'linear-gradient(135deg, rgba(6,15,38,0.96) 0%, rgba(13,31,78,0.93) 50%, rgba(6,15,38,0.96) 100%)',
-      }} />
+        background: 'linear-gradient(135deg, rgba(6,15,38,0.75) 0%, rgba(13,31,78,0.70) 50%, rgba(6,15,38,0.75) 100%)',      }} />
 
       {/* Blue glow accents */}
       <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '500px', height: '500px', borderRadius: '50%', backgroundColor: '#2d5fc4', opacity: 0.06, filter: 'blur(120px)', zIndex: 1 }} />
