@@ -34,7 +34,7 @@ const CTABanner = () => {
             </Col>
             <Col lg={5}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                <a href="https://wa.me/97142981077" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/+971 56 111 9233 " target="_blank" rel="noopener noreferrer"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', backgroundColor: '#25d366', color: '#fff', padding: '16px 28px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: '700', textDecoration: 'none', transition: 'all 0.2s ease' }}
                   onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#1ebe5d'; e.currentTarget.style.transform = 'translateY(-2px)' }}
                   onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#25d366'; e.currentTarget.style.transform = 'translateY(0)' }}
@@ -47,7 +47,7 @@ const CTABanner = () => {
                 >
                   📅 {t('cta.book')}
                 </Link>
-                <a href="tel:+97142981077" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', backgroundColor: 'transparent', color: '#ffffff', padding: '16px 28px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: '600', textDecoration: 'none', border: '1.5px solid rgba(255,255,255,0.25)', transition: 'all 0.2s ease' }}
+                <a href="tel:+971 42 999 088 " style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', backgroundColor: 'transparent', color: '#ffffff', padding: '16px 28px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: '600', textDecoration: 'none', border: '1.5px solid rgba(255,255,255,0.25)', transition: 'all 0.2s ease' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = '#4a90d9'; e.currentTarget.style.color = '#4a90d9'; e.currentTarget.style.transform = 'translateY(-2px)' }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.transform = 'translateY(0)' }}
                 >

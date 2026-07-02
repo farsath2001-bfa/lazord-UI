@@ -230,13 +230,13 @@ const PropertyDetail = () => {
 
                 {/* ✅ Phone Button — tracks lead */}
                 <a
-                  href="tel:+97142981077"
+                  href="tel:++971 42 999 088 "
                   onClick={() => trackLead('Phone')}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'transparent', color: '#ffffff', padding: '13px', borderRadius: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.9rem', border: '1.5px solid rgba(255,255,255,0.2)', transition: 'all 0.2s ease' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = '#4a90d9'; e.currentTarget.style.color = '#4a90d9' }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = '#ffffff' }}
                 >
-                  📞 +971 42 981 077
+                  📞+971 42 999 088 
                 </a>
               </div>
 

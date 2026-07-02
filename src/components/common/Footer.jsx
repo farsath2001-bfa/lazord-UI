@@ -143,7 +143,7 @@ const Footer = () => {
             </h6>
             <ul className="list-unstyled" style={{ color: '#aab4cc', fontSize: '0.9rem', marginBottom: '16px' }}>
               <li className="mb-2">📍 Office 803, AlSalemiya Tower, Rigga Al Butteen, Dubai, UAE</li>
-              <li className="mb-2">📞 +971 42 981 077</li>
+              <li className="mb-2">📞+971 42 999 088 </li>
               <li className="mb-2">✉️ info@lazordrealestate.com</li>
             </ul>
 
