@@ -1,9 +1,52 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+
+// Fix leaflet default marker icon broken in Vite
+delete L.Icon.Default.prototype._getIconUrl
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl:       'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl:     'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+})
+
+// Dubai community coordinates map
+const DUBAI_LOCATIONS = {
+  'downtown dubai':       [25.1972, 55.2744],
+  'dubai marina':         [25.0805, 55.1403],
+  'palm jumeirah':        [25.1124, 55.1390],
+  'business bay':         [25.1850, 55.2650],
+  'jumeirah':             [25.2048, 55.2408],
+  'deira':                [25.2697, 55.3094],
+  'jbr':                  [25.0772, 55.1328],
+  'dubai creek harbour':  [25.2078, 55.3314],
+  'dubai hills':          [25.1089, 55.2342],
+  'arabian ranches':      [25.0494, 55.2694],
+  'jumeirah village':     [25.0583, 55.2103],
+  'jvc':                  [25.0583, 55.2103],
+  'mirdif':               [25.2269, 55.4148],
+  'al barsha':            [25.1109, 55.1986],
+  'silicon oasis':        [25.1178, 55.3817],
+  'international city':   [25.1653, 55.4127],
+  'sport city':           [25.0481, 55.2296],
+  'motor city':           [25.0432, 55.2206],
+  'discovery gardens':    [25.0344, 55.1483],
+  'al quoz':              [25.1384, 55.2228],
+}
+
+const getCoordinates = (location = '', community = '') => {
+  const search = `${location} ${community}`.toLowerCase()
+  for (const [key, coords] of Object.entries(DUBAI_LOCATIONS)) {
+    if (search.includes(key)) return coords
+  }
+  return [25.2048, 55.2708] // Default: Dubai center
+}
 
 const formatPrice = (price, type) => {
   if (type === 'Rent') return `AED ${price?.toLocaleString()} / year`
@@ -57,20 +100,20 @@ const PropertyDetail = () => {
   }
 
   const trackLead = async (source) => {
-  try {
-    await axios.post(`${API_URL}/api/leads`, {
-      name: source === 'WhatsApp' ? 'WhatsApp Visitor' : 'Phone Visitor',
-      email: `visitor@lazord.ae`,
-      phone: 'N/A',
-      message: `Contacted via ${source} for: ${property?.title}`,
-      service: 'General Inquiry',
-      source: source,
-      property: id,
-    })
-  } catch (err) {
-    console.error('trackLead error:', err.response?.data)
+    try {
+      await axios.post(`${API_URL}/api/leads`, {
+        name: source === 'WhatsApp' ? 'WhatsApp Visitor' : 'Phone Visitor',
+        email: 'visitor@lazord.ae',
+        phone: 'N/A',
+        message: `Contacted via ${source} for: ${property?.title}`,
+        service: 'General Inquiry',
+        source: source,
+        property: id,
+      })
+    } catch (err) {
+      console.error('trackLead error:', err.response?.data)
+    }
   }
-}
 
   if (loading) return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -93,6 +136,7 @@ const PropertyDetail = () => {
   )
 
   const infoBoxStyle = { backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '12px', padding: '16px 20px' }
+  const coords = getCoordinates(property.location, property.community)
 
   return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
@@ -115,6 +159,7 @@ const PropertyDetail = () => {
 
           {/* LEFT */}
           <Col lg={8}>
+
             {/* Main Image */}
             <div style={{ borderRadius: '16px', overflow: 'hidden', marginBottom: '12px', position: 'relative' }}>
               <img src={property.gallery?.[activeImg] || property.image} alt={property.title} style={{ width: '100%', height: '480px', objectFit: 'cover' }} />
@@ -179,7 +224,7 @@ const PropertyDetail = () => {
 
             {/* Developer */}
             {property.developer && (
-              <div style={infoBoxStyle}>
+              <div style={{ ...infoBoxStyle, marginBottom: '24px' }}>
                 <h3 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', marginBottom: '14px' }}>Developer</h3>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: 'rgba(45,95,196,0.2)', border: '1px solid rgba(74,144,217,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem' }}>🏗️</div>
@@ -190,6 +235,47 @@ const PropertyDetail = () => {
                 </div>
               </div>
             )}
+
+            {/* ── PROPERTY MAP ── */}
+            <div style={{ ...infoBoxStyle, marginBottom: '24px', padding: '20px' }}>
+              <h3 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', marginBottom: '6px' }}>📍 Property Location</h3>
+              <p style={{ color: '#8aafd4', fontSize: '0.82rem', marginBottom: '16px' }}>
+                {property.location}{property.community ? ` — ${property.community}` : ''}, Dubai, UAE
+              </p>
+              <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(45,95,196,0.3)', height: '360px' }}>
+                <MapContainer
+                  center={coords}
+                  zoom={14}
+                  style={{ height: '100%', width: '100%' }}
+                  scrollWheelZoom={false}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <Marker position={coords}>
+                    <Popup>
+                      <div style={{ textAlign: 'center', minWidth: '160px' }}>
+                        <strong style={{ display: 'block', marginBottom: '4px' }}>{property.title}</strong>
+                        <span style={{ color: '#666', fontSize: '0.85rem' }}>📍 {property.location}</span>
+                        <br />
+                        <strong style={{ color: '#2d5fc4', fontSize: '0.9rem' }}>{formatPrice(property.price, property.type)}</strong>
+                      </div>
+                    </Popup>
+                  </Marker>
+                </MapContainer>
+              </div>
+              {/* Open in Google Maps link */}
+              <a
+                href={`https://www.google.com/maps/search/${encodeURIComponent(`${property.location} ${property.community || ''} Dubai UAE`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '12px', color: '#4a90d9', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none' }}
+              >
+                🗺️ Open in Google Maps →
+              </a>
+            </div>
+
           </Col>
 
           {/* RIGHT */}
@@ -215,11 +301,9 @@ const PropertyDetail = () => {
                   </div>
                 )}
 
-                {/* ✅ WhatsApp Button — tracks lead + correct number */}
                 <a
                   href={`https://wa.me/971561119233?text=Hi, I'm interested in: ${encodeURIComponent(property.title)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target="_blank" rel="noopener noreferrer"
                   onClick={() => trackLead('WhatsApp')}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: '#25d366', color: '#fff', padding: '13px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.9rem', marginBottom: '10px', transition: 'background 0.2s ease' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1ebe5d'}
@@ -228,15 +312,14 @@ const PropertyDetail = () => {
                   💬 WhatsApp Agent
                 </a>
 
-                {/* ✅ Phone Button — tracks lead */}
                 <a
-                  href="tel:++971 42 999 088 "
+                  href="tel:+97142999088"
                   onClick={() => trackLead('Phone')}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'transparent', color: '#ffffff', padding: '13px', borderRadius: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.9rem', border: '1.5px solid rgba(255,255,255,0.2)', transition: 'all 0.2s ease' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = '#4a90d9'; e.currentTarget.style.color = '#4a90d9' }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = '#ffffff' }}
                 >
-                  📞+971 42 999 088 
+                  📞 +971 42 999 088
                 </a>
               </div>
 
@@ -311,7 +394,12 @@ const PropertyDetail = () => {
         )}
       </Container>
 
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .leaflet-container { background: #0d1f4e; }
+        .leaflet-popup-content-wrapper { border-radius: 10px; padding: 4px; }
+        .leaflet-popup-content { margin: 12px 16px; }
+      `}</style>
     </div>
   )
 }
