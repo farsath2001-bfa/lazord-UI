@@ -27,6 +27,7 @@ const AdminLeads = () => {
   const [filter, setFilter] = useState('All')
   const [sourceFilter, setSourceFilter] = useState('All')
   const [message, setMessage] = useState('')
+  const [deletingSource, setDeletingSource] = useState(null)
 
   const config = { headers: { Authorization: `Bearer ${token}` } }
 
@@ -66,20 +67,59 @@ const AdminLeads = () => {
     setTimeout(() => setMessage(''), 2000)
   }
 
+  // Delete ALL leads by source
+  const deleteAllBySource = async (source) => {
+    const count = leads.filter(l => l.source === source).length
+    if (count === 0) return
+    if (!window.confirm(`Delete ALL ${count} ${source} leads? This cannot be undone.`)) return
+    setDeletingSource(source)
+    try {
+      const toDelete = leads.filter(l => l.source === source)
+      await Promise.all(toDelete.map(l =>
+        axios.delete(`${import.meta.env.VITE_API_URL}/api/leads/${l._id}`, config)
+      ))
+      setMessage(`✅ Deleted all ${count} ${source} leads!`)
+      fetchLeads()
+    } catch (err) {
+      setMessage('❌ Delete failed')
+    } finally {
+      setDeletingSource(null)
+      setTimeout(() => setMessage(''), 3000)
+    }
+  }
+
+  // Delete ALL currently filtered leads
+  const deleteAllFiltered = async () => {
+    if (filtered.length === 0) return
+    if (!window.confirm(`Delete ALL ${filtered.length} leads currently shown? This cannot be undone.`)) return
+    setDeletingSource('all')
+    try {
+      await Promise.all(filtered.map(l =>
+        axios.delete(`${import.meta.env.VITE_API_URL}/api/leads/${l._id}`, config)
+      ))
+      setMessage(`✅ Deleted ${filtered.length} leads!`)
+      fetchLeads()
+    } catch (err) {
+      setMessage('❌ Delete failed')
+    } finally {
+      setDeletingSource(null)
+      setTimeout(() => setMessage(''), 3000)
+    }
+  }
+
   const statuses = ['All', 'New', 'Contacted', 'In Progress', 'Closed', 'Lost']
-  const sources = ['All', 'Website Popup', 'Contact Form', 'Property Inquiry', 'WhatsApp', 'Phone', 'Walk In']
+  const sources  = ['All', 'Website Popup', 'Contact Form', 'Property Inquiry', 'WhatsApp', 'Phone', 'Walk In']
 
   const filtered = leads
     .filter(l => filter === 'All' || l.status === filter)
     .filter(l => sourceFilter === 'All' || l.source === sourceFilter)
 
-  // Stats
   const stats = [
-    { label: 'Total Leads',     value: leads.length,                                          color: '#4a90d9' },
-    { label: 'New',             value: leads.filter(l => l.status === 'New').length,           color: '#4a90d9' },
-    { label: 'In Progress',     value: leads.filter(l => l.status === 'In Progress').length,   color: '#e67e22' },
-    { label: 'Popup Leads',     value: leads.filter(l => l.source === 'Website Popup').length, color: '#8e44ad' },
-    { label: 'Closed',          value: leads.filter(l => l.status === 'Closed').length,        color: '#27ae60' },
+    { label: 'Total Leads',  value: leads.length,                                          color: '#4a90d9' },
+    { label: 'New',          value: leads.filter(l => l.status === 'New').length,           color: '#4a90d9' },
+    { label: 'In Progress',  value: leads.filter(l => l.status === 'In Progress').length,   color: '#e67e22' },
+    { label: 'Popup Leads',  value: leads.filter(l => l.source === 'Website Popup').length, color: '#8e44ad' },
+    { label: 'Closed',       value: leads.filter(l => l.status === 'Closed').length,        color: '#27ae60' },
   ]
 
   return (
@@ -93,16 +133,50 @@ const AdminLeads = () => {
         {/* Stats */}
         <div style={{ display: 'flex', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
           {stats.map((stat, i) => (
-            <div key={i} style={{
-              backgroundColor: '#0d1f4e',
-              border: `1px solid ${stat.color}30`,
-              borderRadius: '12px', padding: '16px 24px',
-              flex: '1', minWidth: '120px', textAlign: 'center'
-            }}>
+            <div key={i} style={{ backgroundColor: '#0d1f4e', border: `1px solid ${stat.color}30`, borderRadius: '12px', padding: '16px 24px', flex: '1', minWidth: '120px', textAlign: 'center' }}>
               <div style={{ color: stat.color, fontSize: '1.8rem', fontWeight: '800', lineHeight: '1' }}>{stat.value}</div>
               <div style={{ color: '#8aafd4', fontSize: '0.75rem', marginTop: '4px' }}>{stat.label}</div>
             </div>
           ))}
+        </div>
+
+        {/* ── DELETE ALL BY SOURCE ── */}
+        <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(231,76,60,0.2)', borderRadius: '14px', padding: '20px 24px', marginBottom: '28px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+            <div>
+              <h3 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', margin: 0 }}>🗑️ Bulk Delete by Source</h3>
+              <p style={{ color: '#8aafd4', fontSize: '0.78rem', margin: '4px 0 0' }}>Delete all leads from a specific source in one click — useful for monthly cleanup</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            {['WhatsApp', 'Phone', 'Website Popup', 'Contact Form', 'Property Inquiry', 'Walk In'].map(src => {
+              const count = leads.filter(l => l.source === src).length
+              const sc = sourceColor[src]
+              const isDeleting = deletingSource === src
+              return (
+                <button key={src} onClick={() => deleteAllBySource(src)} disabled={count === 0 || isDeleting}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    backgroundColor: count === 0 ? 'rgba(45,95,196,0.05)' : 'rgba(231,76,60,0.1)',
+                    color: count === 0 ? '#4a4a6a' : '#e74c3c',
+                    border: `1px solid ${count === 0 ? 'rgba(45,95,196,0.15)' : 'rgba(231,76,60,0.3)'}`,
+                    borderRadius: '8px', padding: '8px 14px',
+                    fontSize: '0.8rem', fontWeight: '600',
+                    cursor: count === 0 ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s ease', opacity: count === 0 ? 0.5 : 1
+                  }}
+                  onMouseEnter={e => { if (count > 0) e.currentTarget.style.backgroundColor = 'rgba(231,76,60,0.2)' }}
+                  onMouseLeave={e => { if (count > 0) e.currentTarget.style.backgroundColor = 'rgba(231,76,60,0.1)' }}
+                >
+                  <span>{sc?.icon}</span>
+                  <span>{src}</span>
+                  <span style={{ backgroundColor: count === 0 ? 'rgba(45,95,196,0.2)' : 'rgba(231,76,60,0.2)', borderRadius: '10px', padding: '1px 7px', fontSize: '0.72rem', fontWeight: '800' }}>
+                    {isDeleting ? '...' : count}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         {/* Message */}
@@ -147,15 +221,23 @@ const AdminLeads = () => {
 
         {/* Leads Table */}
         <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
             <h2 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', margin: 0 }}>
-              {filter === 'All' ? 'All Leads' : `${filter} Leads`} ({filtered.length})
+              {filter === 'All' && sourceFilter === 'All' ? 'All Leads' : `Filtered Leads`} ({filtered.length})
             </h2>
-            {sourceFilter !== 'All' && (
-              <div style={{ backgroundColor: sourceColor[sourceFilter]?.bg, color: sourceColor[sourceFilter]?.color, border: `1px solid ${sourceColor[sourceFilter]?.color}40`, borderRadius: '20px', padding: '4px 12px', fontSize: '0.78rem', fontWeight: '700' }}>
-                {sourceColor[sourceFilter]?.icon} {sourceFilter}
-              </div>
-            )}
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              {sourceFilter !== 'All' && (
+                <div style={{ backgroundColor: sourceColor[sourceFilter]?.bg, color: sourceColor[sourceFilter]?.color, border: `1px solid ${sourceColor[sourceFilter]?.color}40`, borderRadius: '20px', padding: '4px 12px', fontSize: '0.78rem', fontWeight: '700' }}>
+                  {sourceColor[sourceFilter]?.icon} {sourceFilter}
+                </div>
+              )}
+              {filtered.length > 0 && (
+                <button onClick={deleteAllFiltered} disabled={deletingSource === 'all'}
+                  style={{ backgroundColor: 'rgba(231,76,60,0.15)', color: '#e74c3c', border: '1px solid rgba(231,76,60,0.3)', borderRadius: '8px', padding: '7px 14px', fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer' }}>
+                  {deletingSource === 'all' ? 'Deleting...' : `🗑️ Delete All Shown (${filtered.length})`}
+                </button>
+              )}
+            </div>
           </div>
 
           {loading ? (
@@ -180,13 +262,7 @@ const AdminLeads = () => {
                       <td style={{ padding: '14px 16px', color: '#8aafd4', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{lead.phone}</td>
                       <td style={{ padding: '14px 16px' }}>
                         {lead.source ? (
-                          <span style={{
-                            backgroundColor: sourceColor[lead.source]?.bg || 'rgba(45,95,196,0.2)',
-                            color: sourceColor[lead.source]?.color || '#4a90d9',
-                            border: `1px solid ${sourceColor[lead.source]?.color || '#4a90d9'}40`,
-                            borderRadius: '20px', padding: '4px 10px',
-                            fontSize: '0.72rem', fontWeight: '700', whiteSpace: 'nowrap'
-                          }}>
+                          <span style={{ backgroundColor: sourceColor[lead.source]?.bg || 'rgba(45,95,196,0.2)', color: sourceColor[lead.source]?.color || '#4a90d9', border: `1px solid ${sourceColor[lead.source]?.color || '#4a90d9'}40`, borderRadius: '20px', padding: '4px 10px', fontSize: '0.72rem', fontWeight: '700', whiteSpace: 'nowrap' }}>
                             {sourceColor[lead.source]?.icon} {lead.source}
                           </span>
                         ) : '—'}
@@ -196,16 +272,8 @@ const AdminLeads = () => {
                         <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lead.message || '—'}</div>
                       </td>
                       <td style={{ padding: '14px 16px' }}>
-                        <select
-                          value={lead.status}
-                          onChange={e => updateStatus(lead._id, e.target.value)}
-                          style={{
-                            backgroundColor: statusColor[lead.status]?.bg,
-                            color: statusColor[lead.status]?.color,
-                            border: `1px solid ${statusColor[lead.status]?.color}40`,
-                            borderRadius: '20px', padding: '4px 10px',
-                            fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', outline: 'none'
-                          }}
+                        <select value={lead.status} onChange={e => updateStatus(lead._id, e.target.value)}
+                          style={{ backgroundColor: statusColor[lead.status]?.bg, color: statusColor[lead.status]?.color, border: `1px solid ${statusColor[lead.status]?.color}40`, borderRadius: '20px', padding: '4px 10px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', outline: 'none' }}
                         >
                           {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => (
                             <option key={s} value={s} style={{ backgroundColor: '#0d1f4e', color: '#ffffff' }}>{s}</option>
@@ -217,7 +285,7 @@ const AdminLeads = () => {
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <button onClick={() => deleteLead(lead._id)} style={{ backgroundColor: 'rgba(231,76,60,0.15)', color: '#e74c3c', border: '1px solid rgba(231,76,60,0.3)', borderRadius: '6px', padding: '6px 12px', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer' }}>
-                          🗑️ Delete
+                          🗑️
                         </button>
                       </td>
                     </tr>
