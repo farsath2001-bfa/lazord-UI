@@ -22,6 +22,7 @@ import CustomCursor from './components/common/CustomCursor'
 import BackToTop from './components/common/BackToTop'
 import NotFound from './pages/NotFound'
 import PageLoader from './components/common/PageLoader'
+import LegalPage from './pages/LegalPage'
 
 function App() {
   const [loading, setLoading] = useState(() => {
@@ -61,6 +62,7 @@ function App() {
             <Route path="/faq" element={<><Navbar /><FAQPage /><Footer /></>} />
             <Route path="/newsletter" element={<><Navbar /><NewsletterPage /><Footer /></>} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/legal" element={<><Navbar /><LegalPage /><Footer /></>} />
           </Routes>
         </AdminProvider>
       </BrowserRouter>

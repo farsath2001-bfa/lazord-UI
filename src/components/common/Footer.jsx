@@ -53,6 +53,7 @@ const Footer = () => {
     {label: 'NewsLetter',                    path:'/newsletter'},
     { label: t('footer.links.about'),      path: '/about' },
     { label: t('footer.links.contact'),    path: '/contact' },
+    { label: 'Privacy & Terms', path: '/legal' },
   ]
 
   return (
