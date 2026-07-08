@@ -67,7 +67,6 @@ const AdminLeads = () => {
     setTimeout(() => setMessage(''), 2000)
   }
 
-  // Delete ALL leads by source
   const deleteAllBySource = async (source) => {
     const count = leads.filter(l => l.source === source).length
     if (count === 0) return
@@ -88,7 +87,6 @@ const AdminLeads = () => {
     }
   }
 
-  // Delete ALL currently filtered leads
   const deleteAllFiltered = async () => {
     if (filtered.length === 0) return
     if (!window.confirm(`Delete ALL ${filtered.length} leads currently shown? This cannot be undone.`)) return
@@ -105,6 +103,45 @@ const AdminLeads = () => {
       setDeletingSource(null)
       setTimeout(() => setMessage(''), 3000)
     }
+  }
+
+  // ── EXPORT TO CSV ──
+  const exportToCSV = (leadsToExport, filename = 'lazord-leads') => {
+    if (leadsToExport.length === 0) {
+      setMessage('❌ No leads to export')
+      setTimeout(() => setMessage(''), 2000)
+      return
+    }
+
+    const headers = ['Name', 'Email', 'Phone', 'Source', 'Service', 'Message', 'Status', 'Property', 'Date']
+
+    const rows = leadsToExport.map(l => [
+      l.name || '',
+      l.email || '',
+      l.phone || '',
+      l.source || '',
+      l.service || '',
+      (l.message || '').replace(/,/g, ' ').replace(/\n/g, ' '),
+      l.status || '',
+      l.property?.title || '',
+      new Date(l.createdAt).toLocaleDateString('en-GB'),
+    ])
+
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url  = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    const date = new Date().toISOString().split('T')[0]
+    link.href     = url
+    link.download = `${filename}-${date}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+
+    setMessage(`✅ Exported ${leadsToExport.length} leads to CSV!`)
+    setTimeout(() => setMessage(''), 3000)
   }
 
   const statuses = ['All', 'New', 'Contacted', 'In Progress', 'Closed', 'Lost']
@@ -127,11 +164,35 @@ const AdminLeads = () => {
       <AdminNavbar />
       <div style={{ padding: '40px 30px' }}>
 
-        <h1 style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: '700', marginBottom: '8px' }}>Leads</h1>
-        <p style={{ color: '#8aafd4', marginBottom: '28px' }}>Manage customer inquiries</p>
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <h1 style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: '700', margin: 0 }}>Leads</h1>
+            <p style={{ color: '#8aafd4', marginBottom: 0, marginTop: '4px' }}>Manage customer inquiries</p>
+          </div>
+          {/* ── Export Buttons ── */}
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <button onClick={() => exportToCSV(filtered, 'lazord-leads-filtered')}
+              disabled={filtered.length === 0}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(39,174,96,0.15)', color: '#27ae60', border: '1px solid rgba(39,174,96,0.3)', borderRadius: '10px', padding: '10px 18px', fontSize: '0.85rem', fontWeight: '700', cursor: filtered.length === 0 ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: filtered.length === 0 ? 0.5 : 1 }}
+              onMouseEnter={e => { if (filtered.length > 0) e.currentTarget.style.backgroundColor = 'rgba(39,174,96,0.25)' }}
+              onMouseLeave={e => { if (filtered.length > 0) e.currentTarget.style.backgroundColor = 'rgba(39,174,96,0.15)' }}
+            >
+              📥 Export Shown ({filtered.length})
+            </button>
+            <button onClick={() => exportToCSV(leads, 'lazord-leads-all')}
+              disabled={leads.length === 0}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(45,95,196,0.15)', color: '#4a90d9', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '10px', padding: '10px 18px', fontSize: '0.85rem', fontWeight: '700', cursor: leads.length === 0 ? 'not-allowed' : 'pointer', transition: 'all 0.2s' }}
+              onMouseEnter={e => { if (leads.length > 0) e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.25)' }}
+              onMouseLeave={e => { if (leads.length > 0) e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.15)' }}
+            >
+              📥 Export All ({leads.length})
+            </button>
+          </div>
+        </div>
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '28px', flexWrap: 'wrap', marginTop: '24px' }}>
           {stats.map((stat, i) => (
             <div key={i} style={{ backgroundColor: '#0d1f4e', border: `1px solid ${stat.color}30`, borderRadius: '12px', padding: '16px 24px', flex: '1', minWidth: '120px', textAlign: 'center' }}>
               <div style={{ color: stat.color, fontSize: '1.8rem', fontWeight: '800', lineHeight: '1' }}>{stat.value}</div>
@@ -140,12 +201,12 @@ const AdminLeads = () => {
           ))}
         </div>
 
-        {/* ── DELETE ALL BY SOURCE ── */}
+        {/* Bulk Delete by Source */}
         <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(231,76,60,0.2)', borderRadius: '14px', padding: '20px 24px', marginBottom: '28px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
             <div>
               <h3 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', margin: 0 }}>🗑️ Bulk Delete by Source</h3>
-              <p style={{ color: '#8aafd4', fontSize: '0.78rem', margin: '4px 0 0' }}>Delete all leads from a specific source in one click — useful for monthly cleanup</p>
+              <p style={{ color: '#8aafd4', fontSize: '0.78rem', margin: '4px 0 0' }}>Delete all leads from a specific source — useful for monthly cleanup. Export first as backup!</p>
             </div>
           </div>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
@@ -155,16 +216,7 @@ const AdminLeads = () => {
               const isDeleting = deletingSource === src
               return (
                 <button key={src} onClick={() => deleteAllBySource(src)} disabled={count === 0 || isDeleting}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    backgroundColor: count === 0 ? 'rgba(45,95,196,0.05)' : 'rgba(231,76,60,0.1)',
-                    color: count === 0 ? '#4a4a6a' : '#e74c3c',
-                    border: `1px solid ${count === 0 ? 'rgba(45,95,196,0.15)' : 'rgba(231,76,60,0.3)'}`,
-                    borderRadius: '8px', padding: '8px 14px',
-                    fontSize: '0.8rem', fontWeight: '600',
-                    cursor: count === 0 ? 'not-allowed' : 'pointer',
-                    transition: 'all 0.2s ease', opacity: count === 0 ? 0.5 : 1
-                  }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: count === 0 ? 'rgba(45,95,196,0.05)' : 'rgba(231,76,60,0.1)', color: count === 0 ? '#4a4a6a' : '#e74c3c', border: `1px solid ${count === 0 ? 'rgba(45,95,196,0.15)' : 'rgba(231,76,60,0.3)'}`, borderRadius: '8px', padding: '8px 14px', fontSize: '0.8rem', fontWeight: '600', cursor: count === 0 ? 'not-allowed' : 'pointer', transition: 'all 0.2s ease', opacity: count === 0 ? 0.5 : 1 }}
                   onMouseEnter={e => { if (count > 0) e.currentTarget.style.backgroundColor = 'rgba(231,76,60,0.2)' }}
                   onMouseLeave={e => { if (count > 0) e.currentTarget.style.backgroundColor = 'rgba(231,76,60,0.1)' }}
                 >
@@ -189,13 +241,7 @@ const AdminLeads = () => {
         {/* Status Filter */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
           {statuses.map(s => (
-            <button key={s} onClick={() => setFilter(s)} style={{
-              padding: '7px 16px', borderRadius: '20px',
-              border: filter === s ? '1.5px solid #4a90d9' : '1.5px solid rgba(45,95,196,0.3)',
-              backgroundColor: filter === s ? '#2d5fc4' : 'transparent',
-              color: filter === s ? '#fff' : '#8aafd4',
-              fontSize: '0.82rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s'
-            }}>
+            <button key={s} onClick={() => setFilter(s)} style={{ padding: '7px 16px', borderRadius: '20px', border: filter === s ? '1.5px solid #4a90d9' : '1.5px solid rgba(45,95,196,0.3)', backgroundColor: filter === s ? '#2d5fc4' : 'transparent', color: filter === s ? '#fff' : '#8aafd4', fontSize: '0.82rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}>
               {s} {s !== 'All' && `(${leads.filter(l => l.status === s).length})`}
             </button>
           ))}
@@ -206,13 +252,7 @@ const AdminLeads = () => {
           {sources.map(s => {
             const src = sourceColor[s]
             return (
-              <button key={s} onClick={() => setSourceFilter(s)} style={{
-                padding: '6px 14px', borderRadius: '20px',
-                border: sourceFilter === s ? `1.5px solid ${src?.color || '#4a90d9'}` : '1.5px solid rgba(45,95,196,0.2)',
-                backgroundColor: sourceFilter === s ? (src?.bg || 'rgba(45,95,196,0.2)') : 'transparent',
-                color: sourceFilter === s ? (src?.color || '#4a90d9') : '#8aafd4',
-                fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s'
-              }}>
+              <button key={s} onClick={() => setSourceFilter(s)} style={{ padding: '6px 14px', borderRadius: '20px', border: sourceFilter === s ? `1.5px solid ${src?.color || '#4a90d9'}` : '1.5px solid rgba(45,95,196,0.2)', backgroundColor: sourceFilter === s ? (src?.bg || 'rgba(45,95,196,0.2)') : 'transparent', color: sourceFilter === s ? (src?.color || '#4a90d9') : '#8aafd4', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}>
                 {src?.icon} {s} {s !== 'All' && `(${leads.filter(l => l.source === s).length})`}
               </button>
             )
@@ -223,7 +263,7 @@ const AdminLeads = () => {
         <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
           <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
             <h2 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', margin: 0 }}>
-              {filter === 'All' && sourceFilter === 'All' ? 'All Leads' : `Filtered Leads`} ({filtered.length})
+              {filter === 'All' && sourceFilter === 'All' ? 'All Leads' : 'Filtered Leads'} ({filtered.length})
             </h2>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               {sourceFilter !== 'All' && (
@@ -273,8 +313,7 @@ const AdminLeads = () => {
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <select value={lead.status} onChange={e => updateStatus(lead._id, e.target.value)}
-                          style={{ backgroundColor: statusColor[lead.status]?.bg, color: statusColor[lead.status]?.color, border: `1px solid ${statusColor[lead.status]?.color}40`, borderRadius: '20px', padding: '4px 10px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', outline: 'none' }}
-                        >
+                          style={{ backgroundColor: statusColor[lead.status]?.bg, color: statusColor[lead.status]?.color, border: `1px solid ${statusColor[lead.status]?.color}40`, borderRadius: '20px', padding: '4px 10px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', outline: 'none' }}>
                           {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => (
                             <option key={s} value={s} style={{ backgroundColor: '#0d1f4e', color: '#ffffff' }}>{s}</option>
                           ))}
