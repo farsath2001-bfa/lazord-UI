@@ -7,15 +7,17 @@ import Services from '../components/home/Services'
 import Testimonials from '../components/home/Testimonials'
 import CTABanner from '../components/home/CtaBanner'
 import Newsletter from '../components/home/NewsLetter'
+import ProcessSection from '../components/home/ProcessSection'
 
 const Home = () => {
-  const propertiesRef  = useScrollReveal({ direction: 'up', delay: 0,   duration: 700 })
-  const whyChooseRef   = useScrollReveal({ direction: 'up', delay: 0,   duration: 700 })
-  const areasRef       = useScrollReveal({ direction: 'up', delay: 0,   duration: 700 })
-  const servicesRef    = useScrollReveal({ direction: 'up', delay: 0,   duration: 700 })
-  const testimonialsRef = useScrollReveal({ direction: 'up', delay: 0,  duration: 700 })
-  const newsletterRef  = useScrollReveal({ direction: 'up', delay: 0,   duration: 700 })
-  const ctaRef         = useScrollReveal({ direction: 'up', delay: 0,   duration: 700 })
+  const propertiesRef  = useScrollReveal({ direction: 'up', delay: 0, duration: 700 })
+  const whyChooseRef   = useScrollReveal({ direction: 'up', delay: 0, duration: 700 })
+  const processRef     = useScrollReveal({ direction: 'up', delay: 0, duration: 700 })
+  const areasRef       = useScrollReveal({ direction: 'up', delay: 0, duration: 700 })
+  const servicesRef    = useScrollReveal({ direction: 'up', delay: 0, duration: 700 })
+  const testimonialsRef = useScrollReveal({ direction: 'up', delay: 0, duration: 700 })
+  const newsletterRef  = useScrollReveal({ direction: 'up', delay: 0, duration: 700 })
+  const ctaRef         = useScrollReveal({ direction: 'up', delay: 0, duration: 700 })
 
   return (
     <>
@@ -30,6 +32,11 @@ const Home = () => {
 
       <div data-cursor="whychoose" ref={whyChooseRef}>
         <WhyChooseUs />
+      </div>
+
+      {/* Process + Service Guarantee */}
+      <div data-cursor="process" ref={processRef}>
+        <ProcessSection />
       </div>
 
       <div data-cursor="areas" ref={areasRef}>
