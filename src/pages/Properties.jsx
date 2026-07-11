@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import PropertyCard from '../components/common/PropertyCard'
+import FeaturedAreas from '../components/home/FeaturedAreas'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -87,7 +88,10 @@ const Properties = () => {
         </Container>
       </div>
 
-      <Container style={{ paddingTop: '28px' }}>
+      {/* ── Featured Areas — Browse by Community ── */}
+      <FeaturedAreas />
+
+      <Container style={{ paddingTop: '12px' }}>
 
         {/* Mobile Filter Toggle */}
         <div className="d-lg-none" style={{ marginBottom: '16px' }}>
@@ -98,7 +102,7 @@ const Properties = () => {
           </button>
         </div>
 
-        {/* Filter Bar — desktop always visible, mobile collapsible */}
+        {/* Filter Bar */}
         <div className={filtersOpen ? 'd-block' : 'd-none d-lg-block'}>
           <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '14px', padding: '20px', marginBottom: '24px' }}>
             <Row className="g-3 align-items-end">
@@ -135,7 +139,6 @@ const Properties = () => {
               </Col>
             </Row>
 
-            {/* Active Filters */}
             {hasActiveFilters && (
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(45,95,196,0.2)' }}>
                 <span style={{ color: '#8aafd4', fontSize: '0.8rem', alignSelf: 'center' }}>{t('properties.activeFilters')}</span>
