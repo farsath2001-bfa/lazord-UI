@@ -23,6 +23,8 @@ import BackToTop from './components/common/BackToTop'
 import NotFound from './pages/NotFound'
 import PageLoader from './components/common/PageLoader'
 import LegalPage from './pages/LegalPage'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 function App() {
   const [loading, setLoading] = useState(() => {
@@ -33,11 +35,19 @@ function App() {
     sessionStorage.setItem('lazord_loaded', 'true')
     setLoading(false)
   }
+  const ScrollToTop = () => {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
 
   return (
     <>
       {loading && <PageLoader onComplete={handleLoaderComplete} />}
       <BrowserRouter>
+      <ScrollToTop />
         <AdminProvider>
           <CustomCursor />
           <WhatsAppButton />
