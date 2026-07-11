@@ -64,16 +64,17 @@ const Navbar = () => {
 
           {/* Logo */}
           <BsNavbar.Brand as={Link} to="/" dir="ltr" onClick={() => setExpanded(false)}
-            style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-            <div style={{ border: '2px solid rgba(255,255,255,0.8)', borderRadius: '8px', padding: '2px 5px', display: 'flex', alignItems: 'center' }}>
-              <img src={logo} alt="Lazord" style={{ height: '44px', width: 'auto', objectFit: 'contain' }} />
-            </div>
-            <div dir="ltr" style={{ lineHeight: '1.2' }}>
-              <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem' }}>Lazord<span style={{ color: '#4a90d9' }}>RE</span></div>
-              <div style={{ color: '#8aafd4', fontSize: '0.6rem', direction: 'rtl', textAlign: 'right' }}>لازورد للعقارات</div>
-            </div>
-          </BsNavbar.Brand>
-
+  style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+  <img
+    src={logo}
+    alt="Lazord Real Estate"
+    style={{ height: '70px', width: 'auto', filter: 'brightness(0) invert(1)', objectFit: 'contain' }}
+  />
+  <div dir="ltr" style={{ lineHeight: '1.2' }}>
+    <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '1px' }}>LAZORD</div>
+     <div style={{ color: '#4a90d9', fontSize: '0.72rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Real Estate</div>
+  </div>
+</BsNavbar.Brand>
           {/* Mobile right */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} className="d-lg-none">
             <div style={{ position: 'relative' }} ref={langRef}>
