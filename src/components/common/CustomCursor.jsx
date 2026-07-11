@@ -1,136 +1,111 @@
 import { useEffect, useRef, useState } from 'react'
 
-const SECTION_COLORS = {
-  default:    '#4a90d9',  // blue
-  hero:       '#4a90d9',  // blue
-  properties: '#27ae60',  // green
-  services:   '#e67e22',  // orange
-  whychoose:  '#8e44ad',  // purple
-  areas:      '#16a085',  // teal
-  testimonials:'#f1c40f', // yellow
-  contact:    '#e74c3c',  // red
-  footer:     '#ffffff',  // white
-}
-
 const CustomCursor = () => {
-  const dotRef = useRef(null)
-  const ringRef = useRef(null)
-  const colorRef = useRef('#4a90d9')
-  const [isHovering, setIsHovering] = useState(false)
-  const [isClicking, setIsClicking] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-  const [color, setColor] = useState('#4a90d9')
-
-  const pos = useRef({ x: 0, y: 0 })
-  const follower = useRef({ x: 0, y: 0 })
-  const rafRef = useRef(null)
+  const cursorRef  = useRef(null)
+  const trailerRef = useRef(null)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    // ── Disable on touch/mobile devices ──
+    const isTouchDevice = () =>
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.matchMedia('(pointer: coarse)').matches
+
+    if (isTouchDevice()) return // exit early — no cursor on mobile
+
+    const cursor  = cursorRef.current
+    const trailer = trailerRef.current
+    if (!cursor || !trailer) return
+
+    let mouseX = 0, mouseY = 0
+    let trailerX = 0, trailerY = 0
+
     const onMouseMove = (e) => {
-      setIsVisible(true)
-      pos.current = { x: e.clientX, y: e.clientY }
-
-      // Dot moves instantly
-      if (dotRef.current) {
-        dotRef.current.style.left = `${e.clientX}px`
-        dotRef.current.style.top = `${e.clientY}px`
-      }
-
-      // Detect section color by data-cursor attribute
-      const el = document.elementFromPoint(e.clientX, e.clientY)
-      if (el) {
-        const section = el.closest('[data-cursor]')
-        const newColor = section
-          ? (SECTION_COLORS[section.getAttribute('data-cursor')] || SECTION_COLORS.default)
-          : SECTION_COLORS.default
-
-        if (newColor !== colorRef.current) {
-          colorRef.current = newColor
-          setColor(newColor)
-        }
-      }
+      mouseX = e.clientX
+      mouseY = e.clientY
+      setVisible(true)
+      cursor.style.left  = `${mouseX}px`
+      cursor.style.top   = `${mouseY}px`
     }
 
-    const onMouseLeave = () => setIsVisible(false)
-    const onMouseEnter = () => setIsVisible(true)
-    const onMouseDown = () => setIsClicking(true)
-    const onMouseUp = () => setIsClicking(false)
+    const onMouseLeave = () => setVisible(false)
+    const onMouseEnter = () => setVisible(true)
 
-    const onHoverStart = (e) => {
-      if (e.target.closest('a, button, [role="button"], input, select, textarea, label')) {
-        setIsHovering(true)
-      }
+    const animate = () => {
+      trailerX += (mouseX - trailerX) * 0.12
+      trailerY += (mouseY - trailerY) * 0.12
+      trailer.style.left = `${trailerX}px`
+      trailer.style.top  = `${trailerY}px`
+      requestAnimationFrame(animate)
     }
-    const onHoverEnd = () => setIsHovering(false)
+
+    const handleHover = () => {
+      cursor.style.transform  = 'translate(-50%, -50%) scale(1.8)'
+      trailer.style.transform = 'translate(-50%, -50%) scale(1.5)'
+      cursor.style.backgroundColor  = 'rgba(74,144,217,0.8)'
+      trailer.style.borderColor = '#4a90d9'
+    }
+
+    const handleUnhover = () => {
+      cursor.style.transform  = 'translate(-50%, -50%) scale(1)'
+      trailer.style.transform = 'translate(-50%, -50%) scale(1)'
+      cursor.style.backgroundColor  = '#4a90d9'
+      trailer.style.borderColor = 'rgba(74,144,217,0.5)'
+    }
 
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseleave', onMouseLeave)
     document.addEventListener('mouseenter', onMouseEnter)
-    document.addEventListener('mousedown', onMouseDown)
-    document.addEventListener('mouseup', onMouseUp)
-    document.addEventListener('mouseover', onHoverStart)
-    document.addEventListener('mouseout', onHoverEnd)
 
-    // Smooth follower ring using RAF directly on DOM
-    const animate = () => {
-      follower.current.x += (pos.current.x - follower.current.x) * 0.18
-      follower.current.y += (pos.current.y - follower.current.y) * 0.18
+    const interactives = document.querySelectorAll('a, button, [data-cursor]')
+    interactives.forEach(el => {
+      el.addEventListener('mouseenter', handleHover)
+      el.addEventListener('mouseleave', handleUnhover)
+    })
 
-      if (ringRef.current) {
-        ringRef.current.style.left = `${follower.current.x}px`
-        ringRef.current.style.top = `${follower.current.y}px`
-      }
-
-      rafRef.current = requestAnimationFrame(animate)
-    }
-    rafRef.current = requestAnimationFrame(animate)
+    const raf = requestAnimationFrame(animate)
 
     return () => {
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseleave', onMouseLeave)
       document.removeEventListener('mouseenter', onMouseEnter)
-      document.removeEventListener('mousedown', onMouseDown)
-      document.removeEventListener('mouseup', onMouseUp)
-      document.removeEventListener('mouseover', onHoverStart)
-      document.removeEventListener('mouseout', onHoverEnd)
-      cancelAnimationFrame(rafRef.current)
+      interactives.forEach(el => {
+        el.removeEventListener('mouseenter', handleHover)
+        el.removeEventListener('mouseleave', handleUnhover)
+      })
+      cancelAnimationFrame(raf)
     }
   }, [])
 
+  // Don't render anything on touch devices
+  if (typeof window !== 'undefined' &&
+    ('ontouchstart' in window || navigator.maxTouchPoints > 0 ||
+     window.matchMedia('(pointer: coarse)').matches)) {
+    return null
+  }
+
   return (
     <>
-      {/* Dot — instant */}
-      <div ref={dotRef} style={{
-        position: 'fixed',
-        width: isClicking ? '6px' : '8px',
-        height: isClicking ? '6px' : '8px',
-        backgroundColor: color,
-        borderRadius: '50%',
-        pointerEvents: 'none',
-        zIndex: 999999,
+      {/* Main dot */}
+      <div ref={cursorRef} style={{
+        position: 'fixed', pointerEvents: 'none', zIndex: 99999,
+        width: '10px', height: '10px', borderRadius: '50%',
+        backgroundColor: '#4a90d9',
         transform: 'translate(-50%, -50%)',
-        opacity: isVisible ? 1 : 0,
-        transition: 'width 0.1s, height 0.1s, opacity 0.3s, background-color 0.4s ease',
-        boxShadow: `0 0 8px ${color}cc, 0 0 16px ${color}66`,
+        transition: 'transform 0.15s ease, background-color 0.15s ease',
+        opacity: visible ? 1 : 0,
+        mixBlendMode: 'difference',
       }} />
-
-      {/* Ring — smooth lag */}
-      <div ref={ringRef} style={{
-        position: 'fixed',
-        width: isHovering ? '48px' : isClicking ? '24px' : '34px',
-        height: isHovering ? '48px' : isClicking ? '24px' : '34px',
-        border: `1.5px solid ${color}`,
-        borderRadius: '50%',
-        pointerEvents: 'none',
-        zIndex: 999998,
+      {/* Trailing ring */}
+      <div ref={trailerRef} style={{
+        position: 'fixed', pointerEvents: 'none', zIndex: 99998,
+        width: '36px', height: '36px', borderRadius: '50%',
+        border: '1.5px solid rgba(74,144,217,0.5)',
         transform: 'translate(-50%, -50%)',
-        opacity: isVisible ? (isHovering ? 0.9 : 0.5) : 0,
-        transition: 'width 0.25s ease, height 0.25s ease, border-color 0.4s ease, opacity 0.3s',
-        backgroundColor: isHovering ? `${color}15` : 'transparent',
-        boxShadow: isHovering ? `0 0 18px ${color}44` : 'none',
+        transition: 'transform 0.2s ease, border-color 0.2s ease',
+        opacity: visible ? 1 : 0,
       }} />
-
-      <style>{`* { cursor: none !important; }`}</style>
     </>
   )
 }

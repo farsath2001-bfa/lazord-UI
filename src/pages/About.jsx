@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import useScrollReveal from '../hooks/useScrollReveal'
 import Services from '../components/home/Services'
+import Testimonials from '../components/home/Testimonials'
 
 // ─── 3 IMAGE URLS — replace with your own from postimages.org ───
 const IMAGE_STORY    = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80'
@@ -36,6 +37,7 @@ const About = () => {
   const servicesRef    = useScrollReveal({ direction: 'up',    delay: 0, duration: 700 })
   const valuesRef      = useScrollReveal({ direction: 'up',    delay: 0, duration: 700 })
   const whyImgRef      = useScrollReveal({ direction: 'right', delay: 0, duration: 700 })
+  const testimonialsRef = useScrollReveal({ direction: 'up',   delay: 0, duration: 700 })
   const teamRef        = useScrollReveal({ direction: 'up',    delay: 0, duration: 700 })
   const ctaRef         = useScrollReveal({ direction: 'up',    delay: 0, duration: 700 })
 
@@ -239,6 +241,16 @@ const About = () => {
             </div>
           </Col>
         </Row>
+
+        {/* Testimonials */}
+        <div ref={testimonialsRef} style={{ marginBottom: '80px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <div style={badgeStyle}><span style={badgeTextStyle}>✦ Client Stories</span></div>
+            <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: '300', marginBottom: '6px' }}>What Our</h2>
+            <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: '800' }}>Clients Say</h2>
+          </div>
+          <Testimonials />
+        </div>
 
         {/* Team */}
         <div ref={teamRef} style={{ marginBottom: '80px' }}>
