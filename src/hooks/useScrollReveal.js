@@ -30,7 +30,7 @@ const useScrollReveal = (options = {}) => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          el.style.transform = 'translate(0)'
+          el.style.transform = 'none'
           el.style.opacity = '1'
           observer.unobserve(el)
         }
