@@ -59,7 +59,7 @@ const Hero = () => {
 
       <ParticleBackground />
 
-      <Container style={{ position: 'relative', zIndex: 2, padding: '40px 20px 60px' }}>
+      <Container style={{ position: 'relative', zIndex: 2, padding: '40px 20px 20px' }}>
         <Row className="align-items-center">
 
           {/* LEFT — Content */}

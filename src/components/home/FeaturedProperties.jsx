@@ -35,7 +35,7 @@ const FeaturedProperties = () => {
   }, [activeTab])
 
   return (
-    <section style={{ backgroundColor: '#060f26', padding: '90px 0' }}>
+    <section style={{ backgroundColor: '#060f26', padding: '40px 0 80px' }}>
       <Container>
         <div style={{ marginBottom: '50px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '16px' }}>

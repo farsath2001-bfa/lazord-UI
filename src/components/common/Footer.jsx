@@ -17,7 +17,7 @@ const socialMedia = [
 const Footer = () => {
   const { t } = useTranslation()
   const [email, setEmail] = useState('')
-  const [subStatus, setSubStatus] = useState('') // '' | 'loading' | 'done' | 'error'
+  const [subStatus, setSubStatus] = useState('')
 
   const handleSubscribe = async (e) => {
     e.preventDefault()
@@ -26,11 +26,10 @@ const Footer = () => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/leads`, {
         name: 'Newsletter Subscriber',
-        email,
-        phone: 'N/A',
+        email, phone: 'N/A',
         service: 'General Inquiry',
         source: 'Website Popup',
-        message: `Newsletter subscription from footer: ${email}`
+        message: `Newsletter subscription: ${email}`
       })
       setSubStatus('done')
       setEmail('')
@@ -53,7 +52,7 @@ const Footer = () => {
   return (
     <footer style={{ backgroundColor: '#0a1630', borderTop: '2px solid #2d5fc4', color: '#ffffff' }}>
 
-      {/* ── Newsletter Bar ── */}
+      {/* Newsletter Bar */}
       <div style={{ backgroundColor: '#0d1f4e', borderBottom: '1px solid rgba(45,95,196,0.2)', padding: '32px 0' }}>
         <Container>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
@@ -62,18 +61,12 @@ const Footer = () => {
               <p style={{ color: '#8aafd4', fontSize: '0.85rem', margin: '4px 0 0' }}>Get the latest listings, market insights and investment tips.</p>
             </div>
             <form onSubmit={handleSubscribe} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              <input
-                type="email" required
-                placeholder="Enter your email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                style={{ backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.4)', borderRadius: '8px', color: '#ffffff', padding: '11px 16px', fontSize: '0.88rem', outline: 'none', minWidth: '240px' }}
-              />
+              <input type="email" required placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)}
+                style={{ backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.4)', borderRadius: '8px', color: '#ffffff', padding: '11px 16px', fontSize: '0.88rem', outline: 'none', minWidth: '240px' }} />
               <button type="submit" disabled={subStatus === 'loading'}
                 style={{ backgroundColor: '#2d5fc4', color: '#fff', border: 'none', borderRadius: '8px', padding: '11px 22px', fontSize: '0.88rem', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'background 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1a3a7c'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#2d5fc4'}
-              >
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#2d5fc4'}>
                 {subStatus === 'loading' ? 'Subscribing...' : subStatus === 'done' ? '✅ Subscribed!' : subStatus === 'error' ? '❌ Try again' : 'Subscribe'}
               </button>
             </form>
@@ -81,21 +74,20 @@ const Footer = () => {
         </Container>
       </div>
 
-      {/* ── Main Footer ── */}
+      {/* Main Footer */}
       <Container className="py-5">
         <Row className="g-4">
 
-          {/* Brand */}
+          {/* Brand — updated logo style */}
           <Col lg={4} md={12}>
-            <div dir="ltr" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <div style={{ border: '2px solid rgba(255,255,255,0.8)', borderRadius: '8px', padding: '3px 6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <img src={logo} alt="Lazord Real Estate" style={{ height: '52px', width: 'auto', objectFit: 'contain' }} />
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', marginBottom: '16px' }}>
+              <img src={logo} alt="Lazord Real Estate"
+                style={{ height: '60px', width: 'auto', filter: 'brightness(0) invert(1)', objectFit: 'contain' }} />
+              <div style={{ lineHeight: '1.2' }}>
+                <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', letterSpacing: '1px' }}>LAZORD</div>
+                <div style={{ color: '#4a90d9', fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Real Estate</div>
               </div>
-              <div dir="ltr" style={{ lineHeight: '1.2' }}>
-                <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem' }}>Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span></div>
-                <div style={{ color: '#8aafd4', fontSize: '0.62rem', direction: 'rtl', textAlign: 'right', lineHeight: '1', marginTop: '2px' }}>لازورد للعقارات</div>
-              </div>
-            </div>
+            </Link>
             <p style={{ color: '#aab4cc', fontSize: '0.88rem', lineHeight: '1.7', marginBottom: '18px' }}>{t('footer.tagline')}</p>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {socialMedia.map((social, i) => (
@@ -145,7 +137,6 @@ const Footer = () => {
               📍 Open in Google Maps →
             </a>
           </Col>
-
         </Row>
 
         <hr style={{ borderColor: '#1a3a7c', marginTop: '30px' }} />
