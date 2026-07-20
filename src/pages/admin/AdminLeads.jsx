@@ -31,9 +31,9 @@ const AdminLeads = () => {
   const [deletingSource, setDeletingSource] = useState(null)
   const [selectedLead, setSelectedLead] = useState(null)
 
-  const config = { headers: { Authorization: `Bearer ${token}` } }
-
   const fetchLeads = async () => {
+    if (!token) { setLoading(false); return }
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/leads`, config)
       setLeads(res.data.data)
@@ -41,9 +41,10 @@ const AdminLeads = () => {
     finally { setLoading(false) }
   }
 
-  useEffect(() => { fetchLeads() }, [])
+  useEffect(() => { fetchLeads() }, [token])
 
   const updateStatus = async (id, status) => {
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       await axios.put(`${import.meta.env.VITE_API_URL}/api/leads/${id}`, { status }, config)
       setLeads(prev => prev.map(l => l._id === id ? { ...l, status } : l))
@@ -55,6 +56,7 @@ const AdminLeads = () => {
 
   const deleteLead = async (id) => {
     if (!window.confirm('Delete this lead?')) return
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/api/leads/${id}`, config)
       setLeads(prev => prev.filter(l => l._id !== id))

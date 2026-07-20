@@ -27,8 +27,6 @@ const AdminProperties = () => {
   const [selectedEnquiry, setSelectedEnquiry] = useState(null)
   const [search, setSearch] = useState('')
 
-  const config = { headers: { Authorization: `Bearer ${token}` } }
-
   const fetchProperties = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/properties`)
@@ -38,7 +36,9 @@ const AdminProperties = () => {
   }
 
   const fetchEnquiries = async () => {
+    if (!token) { setEnquiriesLoading(false); return }
     setEnquiriesLoading(true)
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/leads`, config)
       setEnquiries(res.data.data || res.data)
@@ -47,11 +47,12 @@ const AdminProperties = () => {
   }
 
   useEffect(() => { fetchProperties() }, [])
-  useEffect(() => { if (activeTab === 'enquiries') fetchEnquiries() }, [activeTab])
+  useEffect(() => { if (activeTab === 'enquiries') fetchEnquiries() }, [activeTab, token])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSaving(true)
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       const payload = {
         ...form,
@@ -85,6 +86,7 @@ const AdminProperties = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this property?')) return
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/api/properties/${id}`, config)
       setMessage('✅ Property deleted!')
@@ -94,6 +96,7 @@ const AdminProperties = () => {
   }
 
   const handleEnquiryStatusChange = async (id, newStatus) => {
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       await axios.put(`${import.meta.env.VITE_API_URL}/api/leads/${id}`, { status: newStatus }, config)
       setEnquiries(prev => prev.map(e => e._id === id ? { ...e, status: newStatus } : e))
@@ -103,6 +106,7 @@ const AdminProperties = () => {
 
   const handleEnquiryDelete = async (id) => {
     if (!window.confirm('Delete this enquiry?')) return
+    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/api/leads/${id}`, config)
       setEnquiries(prev => prev.filter(e => e._id !== id))
