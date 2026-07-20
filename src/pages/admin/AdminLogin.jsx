@@ -21,7 +21,7 @@ const AdminLogin = () => {
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
       email, password
     })
-    login(res.data.data, res.data.token)
+    login(res.data.data, res.data.data.token)
     navigate('/admin/dashboard')
   } catch (err) {
     setError(err.response?.data?.message || 'Invalid email or password')
