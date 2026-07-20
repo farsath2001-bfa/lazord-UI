@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import AdminNavbar from '../../components/admin/AdminNavbar'
@@ -13,6 +13,26 @@ L.Icon.Default.mergeOptions({
   iconUrl:       'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   shadowUrl:     'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 })
+
+// Custom colored markers by type
+const createColoredIcon = (color) => L.divIcon({
+  className: '',
+  html: `<div style="
+    width: 28px; height: 28px; border-radius: 50% 50% 50% 0;
+    background: ${color}; border: 3px solid #fff;
+    transform: rotate(-45deg);
+    box-shadow: 0 4px 12px ${color}80;
+  "></div>`,
+  iconSize: [28, 28],
+  iconAnchor: [14, 28],
+  popupAnchor: [0, -30],
+})
+
+const markerColors = {
+  'Buy':      '#2d5fc4',
+  'Rent':     '#27ae60',
+  'Off Plan': '#8e44ad',
+}
 
 const DUBAI_LOCATIONS = {
   'downtown dubai':      [25.1972, 55.2744],
@@ -35,6 +55,7 @@ const DUBAI_LOCATIONS = {
   'discovery gardens':   [25.0344, 55.1483],
   'al quoz':             [25.1384, 55.2228],
   'bur dubai':           [25.2532, 55.2972],
+  'difc':                [25.2116, 55.2796],
 }
 
 const getCoords = (location = '', community = '') => {
@@ -131,31 +152,27 @@ const AdminDashboard = () => {
             <h1 style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: '700', margin: 0 }}>Dashboard</h1>
             <p style={{ color: '#8aafd4', margin: '4px 0 0', fontSize: '0.88rem' }}>📅 {today}</p>
           </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <Link to="/admin/properties"
-              style={{ backgroundColor: '#2d5fc4', color: '#fff', textDecoration: 'none', borderRadius: '8px', padding: '9px 18px', fontSize: '0.85rem', fontWeight: '700' }}>
-              + Add Property
-            </Link>
-          </div>
+          <Link to="/admin/properties"
+            style={{ backgroundColor: '#2d5fc4', color: '#fff', textDecoration: 'none', borderRadius: '8px', padding: '9px 18px', fontSize: '0.85rem', fontWeight: '700' }}>
+            + Add Property
+          </Link>
         </div>
 
-        {/* Stat Cards — 6 compact cards */}
+        {/* Stat Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '28px' }}>
           {statCards.map((card, i) => (
             <Link key={i} to={card.link} style={{ textDecoration: 'none' }}>
-              <div style={{ backgroundColor: '#0d1f4e', border: `1px solid ${card.color}30`, borderRadius: '14px', padding: '20px 20px', transition: 'all 0.25s ease', cursor: 'pointer' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = card.color; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${card.color}20` }}
+              <div style={{ backgroundColor: '#0d1f4e', border: `1px solid ${card.color}30`, borderRadius: '14px', padding: '20px', transition: 'all 0.25s ease' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = card.color; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${card.color}25` }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = `${card.color}30`; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
                   <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: `${card.color}20`, border: `1px solid ${card.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
                     {card.icon}
                   </div>
-                  <div style={{ color: card.color, fontSize: '0.65rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'right' }}>
-                    View →
-                  </div>
+                  <span style={{ color: card.color, fontSize: '0.65rem', fontWeight: '700', textTransform: 'uppercase' }}>View →</span>
                 </div>
                 <div style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: '800', lineHeight: '1', marginBottom: '4px' }}>
-                  {loading ? '—' : stats[Object.keys(stats)[i]] !== undefined ? card.value : '—'}
+                  {loading ? '—' : card.value}
                 </div>
                 <div style={{ color: '#8aafd4', fontSize: '0.78rem' }}>{card.label}</div>
               </div>
@@ -163,51 +180,71 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        {/* Properties Map */}
+        {/* ── DARK MAP with colored markers ── */}
         <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden', marginBottom: '28px' }}>
           <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <div>
               <h2 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>🗺️ Properties Map</h2>
-              <p style={{ color: '#8aafd4', fontSize: '0.78rem', margin: '2px 0 0' }}>{filteredProperties.length} properties shown</p>
+              <p style={{ color: '#8aafd4', fontSize: '0.78rem', margin: '2px 0 0' }}>{filteredProperties.length} properties shown across Dubai</p>
             </div>
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {['All', 'Buy', 'Rent', 'Off Plan'].map(f => (
                 <button key={f} onClick={() => setMapFilter(f)}
-                  style={{ backgroundColor: mapFilter === f ? '#2d5fc4' : 'rgba(45,95,196,0.15)', color: mapFilter === f ? '#fff' : '#8aafd4', border: `1px solid ${mapFilter === f ? '#2d5fc4' : 'rgba(45,95,196,0.3)'}`, borderRadius: '20px', padding: '5px 14px', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s ease' }}>
+                  style={{ backgroundColor: mapFilter === f ? (markerColors[f] || '#2d5fc4') : 'rgba(45,95,196,0.15)', color: '#fff', border: 'none', borderRadius: '20px', padding: '5px 14px', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s ease', opacity: mapFilter === f ? 1 : 0.6 }}>
                   {f}
                 </button>
               ))}
             </div>
           </div>
-          <div style={{ height: '400px' }}>
+
+          <div style={{ height: '420px', position: 'relative' }}>
             {loading ? (
-              <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8aafd4' }}>Loading map...</div>
+              <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8aafd4', backgroundColor: '#060f26' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '2rem', animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</div>
+                  <p style={{ marginTop: '8px', fontSize: '0.85rem' }}>Loading map...</p>
+                </div>
+              </div>
             ) : (
               <MapContainer center={[25.1972, 55.2744]} zoom={11} style={{ height: '100%', width: '100%' }} scrollWheelZoom={false}>
-                <TileLayer attribution='&copy; OpenStreetMap' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                {filteredProperties.map(p => (
-                  <Marker key={p._id} position={getCoords(p.location, p.community)}>
-                    <Popup>
-                      <div style={{ minWidth: '160px' }}>
-                        {p.image && <img src={p.image} alt={p.title} style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px' }} />}
-                        <strong style={{ display: 'block', fontSize: '0.85rem', marginBottom: '3px' }}>{p.title}</strong>
-                        <span style={{ color: '#666', fontSize: '0.78rem', display: 'block', marginBottom: '3px' }}>📍 {p.location}</span>
-                        <span style={{ color: '#2d5fc4', fontWeight: '700', fontSize: '0.85rem' }}>{formatPrice(p.price, p.type)}</span>
-                      </div>
-                    </Popup>
-                  </Marker>
-                ))}
+                {/* Dark map tile */}
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                />
+                {filteredProperties.map(p => {
+                  const coords = getCoords(p.location, p.community)
+                  const color = markerColors[p.type] || '#4a90d9'
+                  return (
+                    <Marker key={p._id} position={coords} icon={createColoredIcon(color)}>
+                      <Popup>
+                        <div style={{ minWidth: '180px' }}>
+                          {p.image && <img src={p.image} alt={p.title} style={{ width: '100%', height: '90px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px' }} />}
+                          <strong style={{ display: 'block', fontSize: '0.88rem', marginBottom: '4px' }}>{p.title}</strong>
+                          <span style={{ color: '#666', fontSize: '0.78rem', display: 'block', marginBottom: '4px' }}>📍 {p.location}</span>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ color, fontWeight: '700', fontSize: '0.88rem' }}>{formatPrice(p.price, p.type)}</span>
+                            <span style={{ backgroundColor: color + '20', color, padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: '700' }}>{p.type}</span>
+                          </div>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  )
+                })}
               </MapContainer>
             )}
           </div>
-          <div style={{ padding: '12px 24px', borderTop: '1px solid rgba(45,95,196,0.2)', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-            {[['Buy', '#2d5fc4'], ['Rent', '#27ae60'], ['Off Plan', '#8e44ad']].map(([label, color]) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: color }} />
-                <span style={{ color: '#8aafd4', fontSize: '0.75rem' }}>{label}</span>
+
+          {/* Legend */}
+          <div style={{ padding: '12px 24px', borderTop: '1px solid rgba(45,95,196,0.2)', display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
+            {Object.entries(markerColors).map(([type, color]) => (
+              <div key={type} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: color, boxShadow: `0 0 6px ${color}` }} />
+                <span style={{ color: '#8aafd4', fontSize: '0.75rem' }}>{type}</span>
+                <span style={{ color: '#4a4a6a', fontSize: '0.72rem' }}>({properties.filter(p => p.type === type).length})</span>
               </div>
             ))}
-            <span style={{ color: '#4a4a6a', fontSize: '0.75rem', marginLeft: 'auto' }}>Click a marker to see details</span>
+            <span style={{ color: '#4a4a6a', fontSize: '0.75rem', marginLeft: 'auto' }}>Click marker for details</span>
           </div>
         </div>
 
@@ -221,8 +258,7 @@ const AdminDashboard = () => {
             <div style={{ padding: '40px', textAlign: 'center', color: '#8aafd4' }}>Loading...</div>
           ) : recentLeads.length === 0 ? (
             <div style={{ padding: '40px', textAlign: 'center', color: '#8aafd4' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '8px' }}>📭</div>
-              No leads yet
+              <div style={{ fontSize: '2rem', marginBottom: '8px' }}>📭</div>No leads yet
             </div>
           ) : (
             <div style={{ overflowX: 'auto' }}>
@@ -241,7 +277,6 @@ const AdminDashboard = () => {
                       onMouseLeave={e => e.currentTarget.style.backgroundColor = i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)'}>
                       <td style={{ padding: '12px 16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          {/* Avatar initial */}
                           <div style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.85rem', flexShrink: 0 }}>
                             {lead.name?.charAt(0).toUpperCase()}
                           </div>
@@ -279,9 +314,11 @@ const AdminDashboard = () => {
 
       </div>
       <style>{`
-        .leaflet-container { background: #0d1f4e; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .leaflet-container { background: #060f26 !important; }
         .leaflet-popup-content-wrapper { border-radius: 10px; }
         .leaflet-popup-content { margin: 12px 14px; }
+        .leaflet-tile-pane { filter: brightness(0.85); }
       `}</style>
     </div>
   )
