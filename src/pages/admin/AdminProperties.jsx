@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AdminNavbar from '../../components/admin/AdminNavbar'
 import { useAdmin } from '../../context/AdminContext'
+import PropertyPDFButton from '../../components/common/PropertyPDFButton'
 
 const emptyForm = {
   title: '', type: 'Buy', category: 'Apartment', price: '',
@@ -360,6 +361,7 @@ const AdminProperties = () => {
                                 onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(74,144,217,0.15)'}>
                                 ✏️ Edit
                               </button>
+                              <PropertyPDFButton property={p} />
                               <button onClick={() => handleDelete(p._id)} style={{ backgroundColor: 'rgba(231,76,60,0.15)', color: '#e74c3c', border: '1px solid rgba(231,76,60,0.3)', borderRadius: '6px', padding: '6px 14px', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}
                                 onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(231,76,60,0.3)'}
                                 onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(231,76,60,0.15)'}>
