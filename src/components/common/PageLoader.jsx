@@ -36,7 +36,7 @@ const PageLoader = ({ onComplete }) => {
         textAlign: 'center', marginBottom: '28px'
       }}>
         <img src={logo} alt="Lazord Real Estate"
-          style={{ width: '150px', height: 'auto', marginBottom: '20px', filter: 'brightness(0) invert(1)' }} />
+          style={{ width: '150px', height: 'auto', marginBottom: '20px' }} />
       </div>
 
       {/* Brand name */}
@@ -46,12 +46,12 @@ const PageLoader = ({ onComplete }) => {
         transition: 'opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s',
         textAlign: 'center'
       }}>
-        <div style={{ color: '#ffffff', fontSize: '1.4rem', fontWeight: '300', letterSpacing: '6px', textTransform: 'uppercase', marginBottom: '6px' }}>
+        {/* <div style={{ color: '#ffffff', fontSize: '1.4rem', fontWeight: '300', letterSpacing: '6px', textTransform: 'uppercase', marginBottom: '6px' }}>
           لازورد
         </div>
         <div style={{ color: '#4a90d9', fontSize: '0.7rem', fontWeight: '600', letterSpacing: '5px', textTransform: 'uppercase', marginBottom: '24px' }}>
           Real Estate
-        </div>
+        </div> */}
 
         {/* Animated line */}
         <div style={{ width: '120px', height: '1px', backgroundColor: 'rgba(74,144,217,0.2)', margin: '0 auto 20px', position: 'relative', overflow: 'hidden' }}>
