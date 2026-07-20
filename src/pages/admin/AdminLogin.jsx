@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAdmin } from '../../context/AdminContext'
+import axios from 'axios'
 import logo from '../../assets/image/lazordlogoo.png'
 
 const AdminLogin = () => {
@@ -13,18 +14,21 @@ const AdminLogin = () => {
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    try {
-      await login(email, password)
-      navigate('/admin/dashboard')
-    } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password')
-    } finally {
-      setLoading(false)
-    }
+  e.preventDefault()
+  setLoading(true)
+  setError('')
+  try {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+      email, password
+    })
+    login(res.data.data, res.data.token)
+    navigate('/admin/dashboard')
+  } catch (err) {
+    setError(err.response?.data?.message || 'Invalid email or password')
+  } finally {
+    setLoading(false)
   }
+}
 
   return (
     <div style={{
