@@ -156,8 +156,8 @@ const PropertyPDFButton = ({ property }) => {
   <!-- Header -->
   <div class="header">
     <div class="logo">
-      <h1>LAZORD <span>RE</span></h1>
-      <p>لازورد للعقارات · DUBAI REAL ESTATE</p>
+      <h1>LAZORD <span>REALESTATE</span></h1>
+      <p>لازورد للعقارات </p>
     </div>
     <div class="header-contact">
       <p>📞 +971 42 999 088 · +971 56 111 9233</p>
