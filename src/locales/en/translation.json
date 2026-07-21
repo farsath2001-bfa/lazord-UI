@@ -7,14 +7,16 @@
     "offplan": "Off Plan",
     "commercial": "Commercial",
     "about": "About",
-    "bookValuation": "Book a Valuation",
-    "agents":  "Agents"
+    "contact": "Contact",
+    "bookValuation": "Book Valuation",
+    "properties": "Properties",
+    "agents": "Agents"
   },
   "hero": {
-    "badge": "Dubai's Premium Real Estate",
+    "badge": "Dubai's Premium Properties",
     "headline1": "Discover Excellence in",
     "headline2": "Dubai Real Estate",
-    "subtitle": "Exclusive high-value properties and development opportunities in Dubai's most prestigious locations. Your dream home awaits.",
+    "subtitle": "Exclusive high-value properties and development opportunities in Dubai's most prestigious locations. Your dream home is waiting.",
     "searchPlaceholder": "City, community or building...",
     "searchBtn": "Search",
     "tabs": {
@@ -30,163 +32,194 @@
     }
   },
   "featured": {
-    "badge": "Featured Listings",
+    "badge": "Handpicked Listings",
     "title1": "Handpicked Properties",
-    "title2": "Curated for You",
-    "viewAll": "View All Properties →",
-    "browseAll": "Browse All Properties",
-    "tabs": {
-      "all": "All",
-      "buy": "Buy",
-      "rent": "Rent",
-      "offplan": "Off Plan"
-    },
-    "portfolio": "Explore our full portfolio of",
-    "premiumProperties": "premium properties"
+    "title2": "Just for You",
+    "viewAll": "View All Properties"
   },
   "why": {
     "badge": "Why Lazord",
-    "title1": "Dubai's Most Trusted",
-    "title2": "Real Estate Partner",
-    "subtitle": "We combine local expertise with global reach to deliver exceptional property experiences in Dubai.",
+    "title1": "Why Choose",
+    "title2": "Lazord Real Estate",
+    "subtitle": "We deliver the best real estate services in Dubai with over 18 years of expertise",
     "reasons": {
-      "exclusive": { "title": "Exclusive Listings", "desc": "Access to off-market and exclusive properties not available anywhere else in Dubai." },
-      "expertise": { "title": "Market Expertise", "desc": "Deep knowledge of Dubai's real estate market trends, ROI hotspots, and investment opportunities." },
-      "trusted": { "title": "Trusted & Licensed", "desc": "Fully licensed by RERA with a proven track record of transparent, secure transactions." },
-      "global": { "title": "Global Network", "desc": "Connecting international investors and buyers with Dubai's most prestigious properties." },
-      "support": { "title": "Dedicated Support", "desc": "Personal agent assigned to every client — available 7 days a week in your language." },
-      "fast": { "title": "Fast & Efficient", "desc": "Streamlined process from search to handover, saving you time at every step." }
+      "exclusive": {
+        "title": "Exclusive Listings",
+        "desc": "Access Dubai's finest properties before they hit the market, including off-market opportunities."
+      },
+      "expertise": {
+        "title": "Market Expertise",
+        "desc": "Over 18 years in the Dubai real estate market, ensuring smart investment decisions."
+      },
+      "trusted": {
+        "title": "Trusted Agent",
+        "desc": "Fully licensed by RERA and the Dubai Department of Economic Development."
+      },
+      "global": {
+        "title": "Global Vision",
+        "desc": "Connecting international investors with Dubai's best property opportunities from 40+ nationalities."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "desc": "Our team is always available to answer your queries and assist at every step."
+      },
+      "fast": {
+        "title": "Fast Deal Closing",
+        "desc": "We ensure fast and efficient processing of all transactions with full legal compliance."
+      }
     }
   },
+  "properties": {
+    "title": "Dubai Properties",
+    "found": "Properties Found",
+    "search": "Search",
+    "searchPlaceholder": "Search property, location...",
+    "type": "Type",
+    "category": "Category",
+    "bedrooms": "Bedrooms",
+    "sortBy": "Sort By",
+    "activeFilters": "Active Filters:",
+    "clearAll": "Clear All",
+    "noResults": "No Properties Found",
+    "noResultsDesc": "Try adjusting your search or filters"
+  },
   "areas": {
-    "badge": "Prime Locations",
-    "title1": "Explore Dubai's Most",
-    "title2": "Prestigious Communities",
-    "subtitle": "From iconic waterfront towers to peaceful family communities — find your perfect Dubai neighbourhood.",
-    "properties": "Properties",
-    "exploreAll": "Explore All Areas →"
+    "badge": "Dubai Communities",
+    "title1": "Browse by",
+    "title2": "Area",
+    "viewAll": "View All"
   },
   "services": {
     "badge": "Our Services",
-    "title1": "Everything You Need",
-    "title2": "Under One Roof",
-    "subtitle": "From buying and renting to selling and investing — we cover every aspect of your Dubai real estate journey.",
+    "title1": "What We",
+    "title2": "Offer You",
     "items": {
-      "buy": { "title": "Buy a Property", "desc": "Find your perfect home from our exclusive portfolio of apartments, villas, townhouses and penthouses across Dubai.", "link": "Browse to Buy" },
-      "rent": { "title": "Rent a Property", "desc": "Short-term or long-term rentals in Dubai's most sought-after communities. Move in ready, furnished or unfurnished.", "link": "Browse to Rent" },
-      "sell": { "title": "Sell Your Property", "desc": "Get the best market value for your property. Our expert agents handle everything from valuation to closing.", "link": "List Your Property" },
-      "offplan": { "title": "Off Plan Projects", "desc": "Invest early in Dubai's most exciting new developments with flexible payment plans and high ROI potential.", "link": "View Projects" },
-      "commercial": { "title": "Commercial", "desc": "Office spaces, retail units and commercial properties in Dubai's prime business districts and free zones.", "link": "View Commercial" },
-      "valuation": { "title": "Property Valuation", "desc": "Get a free, accurate valuation of your property from our certified RERA agents with deep market knowledge.", "link": "Book Free Valuation" }
+      "buy": {
+        "title": "Buy Property",
+        "desc": "We help you find your dream property from over 1,500 listings across Dubai."
+      },
+      "sell": {
+        "title": "Sell Your Property",
+        "desc": "We ensure the best price for your property through advanced marketing strategies."
+      },
+      "rent": {
+        "title": "Rent Property",
+        "desc": "Whether tenant or landlord, we provide the best rental solutions in Dubai."
+      },
+      "invest": {
+        "title": "Property Investment",
+        "desc": "Specialized investment consultancy to help you build a profitable real estate portfolio."
+      },
+      "offplan": {
+        "title": "Off Plan Projects",
+        "desc": "Get the best prices on new projects with flexible payment plans."
+      },
+      "valuation": {
+        "title": "Free Valuation",
+        "desc": "Get an accurate valuation of your property from our certified market experts."
+      }
     }
   },
   "testimonials": {
-    "badge": "Client Stories",
-    "title1": "What Our Clients",
-    "title2": "Say About Us",
-    "subtitle": "Over 1,200 happy clients across 40+ nationalities trust Lazord for their Dubai real estate needs."
+    "badge": "Client Reviews",
+    "title1": "What Our",
+    "title2": "Clients Say"
   },
   "cta": {
     "badge": "Free Consultation",
     "title1": "Ready to Find Your",
     "title2": "Dream Property?",
-    "subtitle": "Book a free consultation with our expert agents today. We'll help you find the perfect property, navigate the buying process, and get the best deal in Dubai's market.",
+    "desc": "Book a free consultation with our experts today. We'll help you find the perfect property and negotiate the best price in the Dubai market.",
     "whatsapp": "Chat on WhatsApp",
-    "book": "Book Free Valuation",
-    "call": "+971 42 999 088",
-    "badges": {
+    "valuation": "Book Free Valuation",
+    "phone": "+971 42 999 088",
+    "features": {
       "rera": "RERA Licensed Agency",
       "secure": "Secure Transactions",
-      "nationalities": "40+ Nationalities Served",
-      "rating": "4.9/5 Client Rating"
-    }
-  },
-  "footer": {
-    "tagline": "Your trusted partner for premium real estate in Dubai and across the UAE.",
-    "quickLinks": "Quick Links",
-    "contactUs": "Contact Us",
-    "rights": "© 2026 LazordRealEstate L.L.C. Design and Develop By Farsath.",
-    "links": {
-      "home": "Home",
-      "properties": "Properties",
-      "about": "About Us",
-      "contact": "Contact"
-    }
-  },
-  "properties": {
-    "title": "Find Your Perfect Property",
-    "found": "properties found in Dubai",
-    "search": "SEARCH",
-    "searchPlaceholder": "Location, community, building...",
-    "type": "TYPE",
-    "category": "CATEGORY",
-    "bedrooms": "BEDROOMS",
-    "sortBy": "SORT BY",
-    "activeFilters": "Active filters:",
-    "clearAll": "Clear all",
-    "noResults": "No properties found",
-    "noResultsDesc": "Try adjusting your filters or search terms",
-    "viewDetails": "View Details",
-    "paymentPlan": "Payment plan available",
-    "sort": {
-      "newest": "Newest First",
-      "priceAsc": "Price: Low→High",
-      "priceDesc": "Price: High→Low",
-      "areaDesc": "Area: Largest"
+      "nationalities": "Serving 40+ Nationalities",
+      "rating": "Client Rating 4.9/5"
     }
   },
   "contact": {
     "badge": "Contact Us",
-    "title1": "Let's Start Your",
-    "title2": "Property Journey",
-    "subtitle": "Our expert agents are ready to help you buy, rent, sell or invest in Dubai real estate. Reach out and we'll get back to you within 2 hours.",
+    "title1": "We Are Here",
+    "title2": "To Help You",
+    "subtitle": "Our specialized team is ready to answer all your real estate queries. Contact us today.",
     "form": {
       "title": "Send Us a Message",
-      "subtitle": "Fill in the form and our team will contact you within 2 hours.",
-      "name": "FULL NAME",
-      "email": "EMAIL ADDRESS",
-      "phone": "PHONE NUMBER",
-      "service": "SERVICE NEEDED",
-      "message": "MESSAGE",
+      "subtitle": "One of our specialist agents will contact you within 24 hours",
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "service": "Service Required",
+      "message": "Your Message",
       "send": "Send Message",
       "sending": "Sending...",
-      "successTitle": "Message Sent Successfully!",
-      "successDesc": "Thank you for reaching out. One of our expert agents will contact you within 2 hours.",
+      "successTitle": "Message Sent!",
+      "successDesc": "One of our agents will be in touch soon.",
       "sendAnother": "Send Another Message"
     },
     "whatsapp": {
       "title": "Chat on WhatsApp",
-      "desc": "Get instant replies from our agents. Available 7 days a week from 9 AM to 9 PM.",
-      "btn": "Open WhatsApp →"
+      "desc": "For a quick response contact us directly on WhatsApp. Our team is available Monday to Saturday 9am to 7pm.",
+      "btn": "💬 Start WhatsApp Chat"
     }
   },
   "about": {
     "badge": "About Lazord",
     "title1": "Dubai's Most Trusted",
-    "title2": "Real Estate Partner",
-    "subtitle": "Since 2003, Lazord Real Estate has been connecting buyers, investors and renters with Dubai's finest properties.",
-    "story": {
-      "badge": "Our Story",
-      "title1": "Two Decades of",
-      "title2": "Shaping Dubai Living",
-      "getInTouch": "Get in Touch →"
+    "title2": "Real Estate Partner Since 2007"
+  },
+  "footer": {
+    "tagline": "Your trusted partner in Dubai and UAE real estate.",
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "rights": "© 2026 Lazord Real Estate LLC. All rights reserved.",
+    "links": {
+      "home": "Home",
+      "properties": "Properties",
+      "about": "About",
+      "contact": "Contact"
     },
-    "values": {
-      "badge": "Our Values",
-      "title1": "What We",
-      "title2": "Stand For"
+    "legal": "Privacy & Terms"
+  },
+  "process": {
+    "badge": "How It Works",
+    "title1": "Our Seamless",
+    "title2": "Property Process",
+    "subtitle": "From first consultation to key handover — we guide you through every step of your Dubai property journey.",
+    "steps": {
+      "consultation": {
+        "title": "Free Consultation",
+        "desc": "Meet with our RERA-licensed agents to discuss your goals, budget and preferred communities across Dubai."
+      },
+      "search": {
+        "title": "Property Search",
+        "desc": "We shortlist the best matching properties from our 1,500+ listings and exclusive off-market opportunities."
+      },
+      "viewing": {
+        "title": "Viewing & Offer",
+        "desc": "Schedule viewings at your convenience. Our agents negotiate the best price and terms on your behalf."
+      },
+      "close": {
+        "title": "Close the Deal",
+        "desc": "We handle all paperwork, DLD registration, NOC and handover — a fully guided, stress-free process."
+      }
     },
-    "team": {
-      "badge": "Our Team",
-      "title1": "Meet the",
-      "title2": "Experts Behind Lazord"
-    },
-    "cta": {
-      "title1": "Ready to Start Your",
-      "title2": "Dubai Property Journey?",
-      "subtitle": "Our team is ready to help you find, buy, rent or sell your property in Dubai.",
-      "browse": "Browse Properties",
-      "contact": "Contact Us"
+    "guarantee": {
+      "badge": "Our Promise",
+      "title1": "The Lazord",
+      "title2": "Service Guarantee",
+      "desc": "When you work with Lazord Real Estate, you get more than a broker — you get a trusted partner committed to your success in the Dubai property market.",
+      "cta": "Get Started Today",
+      "items": {
+        "rera": "RERA Licensed & DED Certified",
+        "valuation": "Free Property Valuation",
+        "fees": "No Hidden Fees — Ever",
+        "docs": "Verified Documentation",
+        "team": "Multilingual Team (Arabic, English)",
+        "support": "Post-Sale Support & Guidance"
+      }
     }
   }
 }

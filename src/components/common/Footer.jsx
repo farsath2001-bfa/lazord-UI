@@ -40,13 +40,13 @@ const Footer = () => {
   }
 
   const quickLinks = [
-    { label: t('footer.links.home'),       path: '/' },
-    { label: t('footer.links.properties'), path: '/properties' },
-    { label: 'Agents',                     path: '/agents' },
-    { label: 'FAQ',                        path: '/faq' },
-    { label: t('footer.links.about'),      path: '/about' },
-    { label: t('footer.links.contact'),    path: '/contact' },
-    { label: 'Privacy & Terms',            path: '/legal' },
+    { label: t('nav.home'),       path: '/' },
+    { label: t('nav.properties'), path: '/properties' },
+    { label: t('nav.about'),      path: '/about' },
+    { label: t('nav.contact'),    path: '/contact' },
+    { label: 'FAQ',               path: '/faq' },
+    { label: t('nav.agents') || 'Agents', path: '/agents' },
+    { label: t('footer.legal') || 'Privacy & Terms', path: '/legal' },
   ]
 
   return (

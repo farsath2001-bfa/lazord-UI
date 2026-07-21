@@ -46,14 +46,20 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const isPropertyActive = location.pathname === '/properties'
+
   const propertyLinks = [
-    { path: '/properties?type=Buy',        label: '🏠 Buy Property',    desc: 'Find your dream home' },
-    { path: '/properties?type=Rent',       label: '🔑 Rent Property',   desc: 'Short & long term rentals' },
-    { path: '/properties?type=Off Plan',   label: '🏗️ Off Plan',        desc: 'New development projects' },
-    { path: '/properties?type=Commercial', label: '🏢 Commercial',      desc: 'Offices & retail spaces' },
+    { path: '/properties?type=Buy',        label: `🏠 ${t('nav.buy')}`,         desc: t('services.items.buy.desc') },
+    { path: '/properties?type=Rent',       label: `🔑 ${t('nav.rent')}`,        desc: t('services.items.rent.desc') },
+    { path: '/properties?type=Off Plan',   label: `🏗️ ${t('nav.offplan')}`,     desc: t('services.items.offplan.desc') },
+    { path: '/properties?type=Commercial', label: `🏢 ${t('nav.commercial')}`,  desc: t('services.items.invest.desc') },
   ]
 
-  const isPropertyActive = location.pathname === '/properties'
+  const mainLinks = [
+    { path: '/',       label: t('nav.home') },
+    { path: '/about',  label: t('nav.about') },
+    { path: '/contact', label: t('nav.contact') },
+  ]
 
   return (
     <>
@@ -64,17 +70,15 @@ const Navbar = () => {
 
           {/* Logo */}
           <BsNavbar.Brand as={Link} to="/" dir="ltr" onClick={() => setExpanded(false)}
-  style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-  <img
-    src={logo}
-    alt="Lazord Real Estate"
-    style={{ height: '70px', width: 'auto', filter: 'brightness(0) invert(1)', objectFit: 'contain' }}
-  />
-  <div dir="ltr" style={{ lineHeight: '1.2' }}>
-    <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '1px' }}>LAZORD</div>
-     <div style={{ color: '#4a90d9', fontSize: '0.72rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Real Estate</div>
-  </div>
-</BsNavbar.Brand>
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+            <img src={logo} alt="Lazord Real Estate"
+              style={{ height: '70px', width: 'auto', filter: 'brightness(0) invert(1)', objectFit: 'contain' }} />
+            <div dir="ltr" style={{ lineHeight: '1.2' }}>
+              <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '1px' }}>LAZORD</div>
+              <div style={{ color: '#4a90d9', fontSize: '0.72rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Real Estate</div>
+            </div>
+          </BsNavbar.Brand>
+
           {/* Mobile right */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} className="d-lg-none">
             <div style={{ position: 'relative' }} ref={langRef}>
@@ -98,52 +102,50 @@ const Navbar = () => {
           <BsNavbar.Collapse id="main-navbar">
             <Nav className="mx-auto align-items-center">
 
-
               {/* Home link */}
-<Nav.Link as={Link} to="/" onClick={() => setExpanded(false)}
-  style={{ color: location.pathname === '/' ? '#4a90d9' : '#ffffff', fontWeight: location.pathname === '/' ? '600' : '400', fontSize: '0.85rem', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '10px 12px', borderBottom: location.pathname === '/' ? '2px solid #4a90d9' : '2px solid transparent', transition: 'all 0.2s ease' }}>
-  {t('nav.home')}
-</Nav.Link>
+              <Nav.Link as={Link} to="/" onClick={() => setExpanded(false)}
+                style={{ color: location.pathname === '/' ? '#4a90d9' : '#ffffff', fontWeight: location.pathname === '/' ? '600' : '400', fontSize: '0.85rem', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '10px 12px', borderBottom: location.pathname === '/' ? '2px solid #4a90d9' : '2px solid transparent', transition: 'all 0.2s ease' }}>
+                {t('nav.home')}
+              </Nav.Link>
 
-              {/* Properties Dropdown */}
+              {/* Properties Dropdown — desktop */}
               <div style={{ position: 'relative' }} ref={propRef} className="d-none d-lg-block">
                 <div onClick={() => setPropOpen(!propOpen)}
-                  style={{ color: isPropertyActive ? '#4a90d9' : '#ffffff', fontWeight: '500', fontSize: '0.85rem', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '10px 12px', borderBottom: isPropertyActive ? '2px solid #4a90d9' : '2px solid transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s ease', userSelect: 'none' }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#4a90d9' }}
-                  onMouseLeave={e => { if (!propOpen) e.currentTarget.style.color = isPropertyActive ? '#4a90d9' : '#ffffff' }}
-                >
-                  Properties
+                  style={{ color: isPropertyActive ? '#4a90d9' : '#ffffff', fontWeight: '400', fontSize: '0.85rem', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '10px 12px', borderBottom: isPropertyActive ? '2px solid #4a90d9' : '2px solid transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s ease', userSelect: 'none' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#4a90d9'}
+                  onMouseLeave={e => { if (!propOpen) e.currentTarget.style.color = isPropertyActive ? '#4a90d9' : '#ffffff' }}>
+                  {t('nav.properties')}
                   <span style={{ fontSize: '0.6rem', transition: 'transform 0.2s', display: 'inline-block', transform: propOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                 </div>
 
-                {/* Mega Dropdown */}
                 {propOpen && (
                   <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.4)', borderRadius: '14px', padding: '16px', zIndex: 9999, minWidth: '340px', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', marginTop: '8px' }}>
-                    <div style={{ color: '#8aafd4', fontSize: '0.7rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid rgba(45,95,196,0.2)' }}>Browse Properties</div>
+                    <div style={{ color: '#8aafd4', fontSize: '0.7rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid rgba(45,95,196,0.2)' }}>
+                      {t('featured.badge')}
+                    </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                       {propertyLinks.map(link => (
-                        <Link key={link.path} to={link.path} onClick={() => setPropOpen(false)}
+                        <Link key={link.path} to={link.path} onClick={() => { setPropOpen(false); setExpanded(false) }}
                           style={{ display: 'block', backgroundColor: 'rgba(45,95,196,0.1)', border: '1px solid rgba(45,95,196,0.2)', borderRadius: '10px', padding: '12px 14px', textDecoration: 'none', transition: 'all 0.2s ease' }}
                           onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.25)'; e.currentTarget.style.borderColor = '#4a90d9' }}
-                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)'; e.currentTarget.style.borderColor = 'rgba(45,95,196,0.2)' }}
-                        >
+                          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)'; e.currentTarget.style.borderColor = 'rgba(45,95,196,0.2)' }}>
                           <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.85rem', marginBottom: '3px' }}>{link.label}</div>
                           <div style={{ color: '#8aafd4', fontSize: '0.72rem' }}>{link.desc}</div>
                         </Link>
                       ))}
                     </div>
-                    <Link to="/properties" onClick={() => setPropOpen(false)}
+                    <Link to="/properties" onClick={() => { setPropOpen(false); setExpanded(false) }}
                       style={{ display: 'block', textAlign: 'center', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(45,95,196,0.2)', color: '#4a90d9', textDecoration: 'none', fontSize: '0.82rem', fontWeight: '600' }}
                       onMouseEnter={e => e.currentTarget.style.color = '#ffffff'}
                       onMouseLeave={e => e.currentTarget.style.color = '#4a90d9'}>
-                      View All Properties →
+                      {t('featured.viewAll')} →
                     </Link>
                   </div>
                 )}
               </div>
 
-              {/* Other links */}
-              {[{ path: '/about', label: t('nav.about') }, { path: '/contact', label: t('footer.links.contact') }].map(link => (
+              {/* About + Contact */}
+              {mainLinks.filter(l => l.path !== '/').map(link => (
                 <Nav.Link key={link.path} as={Link} to={link.path} onClick={() => setExpanded(false)}
                   style={{ color: location.pathname === link.path ? '#4a90d9' : '#ffffff', fontWeight: location.pathname === link.path ? '600' : '400', fontSize: '0.85rem', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '10px 12px', borderBottom: location.pathname === link.path ? '2px solid #4a90d9' : '2px solid transparent', transition: 'all 0.2s ease' }}>
                   {link.label}
@@ -152,7 +154,7 @@ const Navbar = () => {
 
               {/* Mobile property links */}
               <div className="d-lg-none" style={{ width: '100%' }}>
-                <div style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '1px', textTransform: 'uppercase', padding: '8px 12px 4px' }}>Properties</div>
+                <div style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '1px', textTransform: 'uppercase', padding: '8px 12px 4px' }}>{t('nav.properties')}</div>
                 {propertyLinks.map(link => (
                   <Nav.Link key={link.path} as={Link} to={link.path} onClick={() => setExpanded(false)}
                     style={{ color: '#ffffff', fontSize: '0.85rem', padding: '8px 20px' }}>
