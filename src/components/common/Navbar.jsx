@@ -213,8 +213,8 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* Mobile bottom — always LTR */}
-            <div className="d-lg-none" dir="ltr" style={{ padding: '16px 0 8px', borderTop: '1px solid rgba(45,95,196,0.2)', marginTop: '8px' }}>
+            {/* Mobile bottom — always LTR for phone/button */}
+            <div className="d-lg-none" style={{ padding: '16px 0 8px', borderTop: '1px solid rgba(45,95,196,0.2)', marginTop: '8px' }}>
               <a href="tel:+97142999088" dir="ltr"
                 style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#ffffff', textDecoration: 'none', padding: '10px 4px', marginBottom: '8px', fontSize: '0.9rem' }}>
                 📞 <span style={{ fontWeight: '700' }}>+971 42 999 088</span>
@@ -223,6 +223,15 @@ const Navbar = () => {
                 style={{ display: 'block', backgroundColor: '#2d5fc4', color: '#ffffff', borderRadius: '8px', padding: '12px 16px', fontSize: '0.88rem', fontWeight: '700', textDecoration: 'none', textAlign: 'center' }}>
                 📅 {t('nav.bookValuation')}
               </Link>
+              {/* Mobile language switcher */}
+              <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                {[{ code: 'en', label: 'English', flag: '🇬🇧' }, { code: 'ar', label: 'العربية', flag: '🇦🇪' }].map(lang => (
+                  <button key={lang.code} onClick={() => { switchLanguage(lang.code); setExpanded(false) }}
+                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: i18n.language === lang.code ? '#2d5fc4' : 'rgba(45,95,196,0.15)', color: '#ffffff', border: `1px solid ${i18n.language === lang.code ? '#2d5fc4' : 'rgba(45,95,196,0.3)'}`, borderRadius: '8px', padding: '10px 12px', fontSize: '0.85rem', fontWeight: '600', cursor: 'pointer' }}>
+                    <span>{lang.flag}</span> <span>{lang.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </BsNavbar.Collapse>
         </Container>

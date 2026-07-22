@@ -1,0 +1,26 @@
+/* ── RTL Mobile Fix ── */
+[dir="rtl"] .navbar-collapse {
+  text-align: right;
+}
+
+[dir="rtl"] .navbar-nav {
+  align-items: flex-end;
+}
+
+[dir="rtl"] .nav-link {
+  text-align: right;
+}
+
+/* Keep phone numbers and prices LTR always */
+[dir="rtl"] a[href^="tel:"],
+[dir="rtl"] a[href^="mailto:"],
+[dir="rtl"] .ltr-always {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+/* Fix Bootstrap collapse in RTL */
+[dir="rtl"] .navbar-toggler {
+  margin-left: 0;
+  margin-right: auto;
+}
