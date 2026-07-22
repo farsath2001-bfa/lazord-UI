@@ -19,6 +19,7 @@ const Navbar = () => {
 
   const switchLanguage = (code) => {
     i18n.changeLanguage(code)
+    localStorage.setItem('i18nextLng', code)
     document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr'
     document.documentElement.lang = code
     setLangOpen(false)

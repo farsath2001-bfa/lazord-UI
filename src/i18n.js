@@ -15,6 +15,18 @@ i18n
     },
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
+    // ── Fix language detection ──
+    detection: {
+      // Look for saved language in localStorage first
+      order: ['localStorage', 'navigator'],
+      // Save selected language to localStorage
+      caches: ['localStorage'],
+      lookupLocalStorage: 'i18nextLng',
+    },
+    // Only use exact language codes
+    load: 'languageOnly',
+    supportedLngs: ['en', 'ar'],
+    nonExplicitSupportedLngs: false,
   })
 
 export default i18n
