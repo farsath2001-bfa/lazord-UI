@@ -10,6 +10,7 @@ const Navbar = () => {
   const [propOpen, setPropOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const langRef = useRef(null)
+  const mobileLangRef = useRef(null)
   const propRef = useRef(null)
   const location = useLocation()
   const { t, i18n } = useTranslation()
@@ -34,6 +35,7 @@ const Navbar = () => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (langRef.current && !langRef.current.contains(e.target)) setLangOpen(false)
+      if (mobileLangRef.current && !mobileLangRef.current.contains(e.target)) setLangOpen(false)
       if (propRef.current && !propRef.current.contains(e.target)) setPropOpen(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -57,6 +59,11 @@ const Navbar = () => {
     { path: '/properties?type=Commercial', label: `🏢 ${t('nav.commercial')}`, desc: t('services.items.invest.desc') },
   ]
 
+  const langOptions = [
+    { code: 'en', label: 'English',  flag: '🇬🇧', display: 'EN' },
+    { code: 'ar', label: 'العربية', flag: '🇦🇪', display: 'AR' },
+  ]
+
   return (
     <>
       <BsNavbar expanded={expanded} expand="lg" sticky="top"
@@ -75,16 +82,39 @@ const Navbar = () => {
             </div>
           </BsNavbar.Brand>
 
-          {/* Mobile right — always LTR */}
+          {/* Mobile right — globe + hamburger */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} dir="ltr" className="d-lg-none">
-            <BsNavbar.Toggle aria-controls="main-navbar" onClick={() => setExpanded(!expanded)}
+
+            {/* Mobile Globe Button */}
+            <div style={{ position: 'relative', zIndex: 1050 }} ref={mobileLangRef}>
+              <button
+                onClick={(e) => { e.stopPropagation(); setLangOpen(!langOpen) }}
+                style={{ width: '38px', height: '38px', borderRadius: '50%', border: '1.5px solid #4a90d9', backgroundColor: 'rgba(45,95,196,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.3rem', background: 'none' }}>
+                🌐
+              </button>
+              {langOpen && (
+                <div dir="ltr" style={{ position: 'absolute', top: '46px', right: '0', backgroundColor: '#0d1f4e', border: '1px solid #2d5fc4', borderRadius: '10px', overflow: 'hidden', zIndex: 9999, minWidth: '160px', boxShadow: '0 8px 24px rgba(0,0,0,0.6)' }}>
+                  {langOptions.map(lang => (
+                    <button key={lang.code}
+                      onClick={(e) => { e.stopPropagation(); switchLanguage(lang.code) }}
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '13px 16px', cursor: 'pointer', color: currentLang === lang.display ? '#4a90d9' : '#ffffff', backgroundColor: currentLang === lang.display ? 'rgba(45,95,196,0.25)' : 'transparent', fontSize: '0.9rem', border: 'none', borderBottom: '1px solid rgba(45,95,196,0.2)', textAlign: 'left' }}>
+                      <span style={{ fontSize: '1.3rem' }}>{lang.flag}</span>
+                      <span style={{ flex: 1 }}>{lang.label}</span>
+                      {currentLang === lang.display && <span style={{ color: '#4a90d9', fontWeight: '800' }}>✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Hamburger */}
+            <BsNavbar.Toggle aria-controls="main-navbar" onClick={() => { setExpanded(!expanded); setLangOpen(false) }}
               style={{ borderColor: '#2d5fc4', padding: '5px 10px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid #2d5fc4', borderRadius: '6px' }}>
               <span style={{ color: '#4a90d9', fontSize: '1.2rem', display: 'block', lineHeight: 1 }}>{expanded ? '✕' : '☰'}</span>
             </BsNavbar.Toggle>
           </div>
 
-          <BsNavbar.Collapse id="main-navbar" style={{ position: 'relative', zIndex: 1001 }}>
-            {/* Nav links */}
+          <BsNavbar.Collapse id="main-navbar">
             <Nav className="mx-auto align-items-center">
 
               {/* Home */}
@@ -182,7 +212,7 @@ const Navbar = () => {
                 </div>
                 {langOpen && (
                   <div dir="ltr" style={{ position: 'absolute', top: '46px', right: '0', backgroundColor: '#0d1f4e', border: '1px solid #2d5fc4', borderRadius: '8px', overflow: 'hidden', zIndex: 9999, minWidth: '160px', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
-                    {[{ code: 'en', label: 'English', flag: '🇬🇧', display: 'EN' }, { code: 'ar', label: 'العربية', flag: '🇦🇪', display: 'AR' }].map(lang => (
+                    {langOptions.map(lang => (
                       <div key={lang.code} onClick={() => switchLanguage(lang.code)}
                         style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', cursor: 'pointer', color: currentLang === lang.display ? '#4a90d9' : '#ffffff', backgroundColor: currentLang === lang.display ? 'rgba(45,95,196,0.2)' : 'transparent', fontSize: '0.88rem', borderBottom: '1px solid rgba(45,95,196,0.2)' }}
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.25)'}
@@ -198,41 +228,23 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* Mobile bottom section */}
-            <div className="d-lg-none" style={{ padding: '16px 0 8px', borderTop: '1px solid rgba(45,95,196,0.2)', marginTop: '8px', position: 'relative', zIndex: 1002 }}>
-
-              {/* Phone */}
+            {/* Mobile bottom */}
+            <div className="d-lg-none" style={{ padding: '16px 0 8px', borderTop: '1px solid rgba(45,95,196,0.2)', marginTop: '8px' }}>
               <a href="tel:+97142999088" dir="ltr"
                 style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#ffffff', textDecoration: 'none', padding: '10px 4px', marginBottom: '8px', fontSize: '0.9rem' }}>
                 📞 <span style={{ fontWeight: '700' }}>+971 42 999 088</span>
               </a>
-
-              {/* Book Valuation */}
               <Link to="/contact" onClick={() => setExpanded(false)}
-                style={{ display: 'block', backgroundColor: '#2d5fc4', color: '#ffffff', borderRadius: '8px', padding: '12px 16px', fontSize: '0.88rem', fontWeight: '700', textDecoration: 'none', textAlign: 'center', marginBottom: '10px' }}>
+                style={{ display: 'block', backgroundColor: '#2d5fc4', color: '#ffffff', borderRadius: '8px', padding: '12px 16px', fontSize: '0.88rem', fontWeight: '700', textDecoration: 'none', textAlign: 'center' }}>
                 📅 {t('nav.bookValuation')}
               </Link>
-
-              {/* Mobile Language Switcher — large tap targets */}
-              <div style={{ display: 'flex', gap: '8px', position: 'relative', zIndex: 1002 }}>
-                <button
-                  onClick={(e) => { e.stopPropagation(); switchLanguage('en') }}
-                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: i18n.language === 'en' ? '#2d5fc4' : 'rgba(45,95,196,0.15)', color: '#ffffff', border: `1.5px solid ${i18n.language === 'en' ? '#2d5fc4' : 'rgba(45,95,196,0.3)'}`, borderRadius: '8px', padding: '12px', fontSize: '0.88rem', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' }}>
-                  🇬🇧 English
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); switchLanguage('ar') }}
-                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: i18n.language === 'ar' ? '#2d5fc4' : 'rgba(45,95,196,0.15)', color: '#ffffff', border: `1.5px solid ${i18n.language === 'ar' ? '#2d5fc4' : 'rgba(45,95,196,0.3)'}`, borderRadius: '8px', padding: '12px', fontSize: '0.88rem', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' }}>
-                  🇦🇪 العربية
-                </button>
-              </div>
             </div>
 
           </BsNavbar.Collapse>
         </Container>
       </BsNavbar>
 
-      {/* Overlay — lower zIndex than navbar collapse */}
+      {/* Overlay */}
       {expanded && (
         <div onClick={() => setExpanded(false)}
           style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 998, top: '70px' }} />
