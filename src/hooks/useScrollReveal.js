@@ -11,11 +11,10 @@ const useScrollReveal = (options = {}) => {
       delay = 0,
       duration = 600,
       distance = '30px',
-      direction = 'up',   // 'up' | 'down' | 'left' | 'right'
+      direction = 'up',
       opacity = true,
     } = options
 
-    // Set initial styles
     const transforms = {
       up:    `translateY(${distance})`,
       down:  `translateY(-${distance})`,
@@ -23,9 +22,15 @@ const useScrollReveal = (options = {}) => {
       right: `translateX(-${distance})`,
     }
 
-    el.style.transition = `transform ${duration}ms ease ${delay}ms, opacity ${duration}ms ease ${delay}ms`
+    // ── Set initial hidden state immediately ──
     el.style.transform = transforms[direction]
     el.style.opacity = opacity ? '0' : '1'
+    el.style.visibility = 'visible'
+
+    // ── Add transition after a frame so initial state doesn't animate in ──
+    requestAnimationFrame(() => {
+      el.style.transition = `transform ${duration}ms ease ${delay}ms, opacity ${duration}ms ease ${delay}ms`
+    })
 
     const observer = new IntersectionObserver(
       ([entry]) => {

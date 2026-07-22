@@ -10,7 +10,8 @@
     "contact": "Contact",
     "bookValuation": "Book Valuation",
     "properties": "Properties",
-    "agents": "Agents"
+    "agents": "Agents",
+    "callUs": "Call Us"
   },
   "hero": {
     "badge": "Dubai's Premium Properties",
@@ -174,7 +175,7 @@
     "tagline": "Your trusted partner in Dubai and UAE real estate.",
     "quickLinks": "Quick Links",
     "contactUs": "Contact Us",
-    "rights": "© 2026 Lazord Real Estate LLC. All rights reserved.",
+    "rights": "© 2026 Lazord Real Estate LLC. Design And Develop By Farsath.",
     "links": {
       "home": "Home",
       "properties": "Properties",
