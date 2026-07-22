@@ -54,7 +54,7 @@ const areas = [
 
 const FeaturedAreas = () => {
   return (
-    <section style={{ backgroundColor: '#060f26', padding: '90px 0' }}>
+    <section style={{ backgroundColor: '#060f26',  padding: '32px 0 60px' }}>
       <Container>
 
         {/* Header */}

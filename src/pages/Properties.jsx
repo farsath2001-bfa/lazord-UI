@@ -32,7 +32,7 @@ const Properties = () => {
   const [filtersOpen, setFiltersOpen] = useState(false)
 
   useEffect(() => {
-    const urlType = searchParams.get('type') || 'All'
+    const urlType   = searchParams.get('type') || 'All'
     const urlSearch = searchParams.get('search') || ''
     setType(urlType)
     setSearch(urlSearch)
@@ -71,68 +71,70 @@ const Properties = () => {
   return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
 
-      {/* Header */}
-      <div style={{ backgroundColor: '#0d1f4e', borderBottom: '1px solid rgba(45,95,196,0.3)', padding: '40px 0 28px' }}>
+      {/* Header — compact, no extra padding */}
+      <div style={{ backgroundColor: '#0d1f4e', borderBottom: '1px solid rgba(45,95,196,0.3)', padding: '32px 0 24px' }}>
         <Container>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '14px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '10px' }}>
             <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>
               ✦ {type !== 'All' ? `${type} Properties` : t('properties.title')}
             </span>
           </div>
-          <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.5rem, 3vw, 2.6rem)', fontWeight: '700', marginBottom: '8px' }}>
-            {type !== 'All' ? `${type} Properties in Dubai` : t('properties.title')}
-          </h1>
-          <p style={{ color: '#8aafd4', fontSize: '0.95rem', margin: 0 }}>
-            {loading ? 'Loading...' : `${properties.length} ${t('properties.found')}`}
-          </p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '12px' }}>
+            <div>
+              <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: '700', marginBottom: '4px' }}>
+                {type !== 'All' ? `${type} Properties in Dubai` : t('properties.title')}
+              </h1>
+              <p style={{ color: '#8aafd4', fontSize: '0.88rem', margin: 0 }}>
+                {loading ? 'Loading...' : `${properties.length} ${t('properties.found')}`}
+              </p>
+            </div>
+            {/* Mobile filter toggle */}
+            <button className="d-lg-none" onClick={() => setFiltersOpen(!filtersOpen)}
+              style={{ backgroundColor: hasActiveFilters ? 'rgba(45,95,196,0.3)' : '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)', borderRadius: '8px', color: '#ffffff', padding: '9px 16px', fontSize: '0.85rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              🔍 {hasActiveFilters ? 'Filters Active' : 'Filters'} {filtersOpen ? '▲' : '▼'}
+            </button>
+          </div>
         </Container>
       </div>
 
-      {/* ── Featured Areas — Browse by Community ── */}
+      {/* Featured Areas — directly below header, no gap */}
       <FeaturedAreas />
 
-      <Container style={{ paddingTop: '12px' }}>
-
-        {/* Mobile Filter Toggle */}
-        <div className="d-lg-none" style={{ marginBottom: '16px' }}>
-          <button onClick={() => setFiltersOpen(!filtersOpen)}
-            style={{ width: '100%', backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)', borderRadius: '10px', color: '#ffffff', padding: '12px 16px', fontSize: '0.9rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span>🔍 {hasActiveFilters ? 'Filters Active' : 'Filter Properties'}</span>
-            <span style={{ color: '#4a90d9' }}>{filtersOpen ? '▲' : '▼'}</span>
-          </button>
-        </div>
+      <Container style={{ paddingTop: '8px' }}>
 
         {/* Filter Bar */}
         <div className={filtersOpen ? 'd-block' : 'd-none d-lg-block'}>
           <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '14px', padding: '20px', marginBottom: '24px' }}>
             <Row className="g-3 align-items-end">
               <Col lg={4} xs={12}>
-                <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>{t('properties.search')}</label>
+                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.search')}</label>
                 <div style={{ position: 'relative' }}>
                   <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1rem' }}>🔍</span>
-                  <input type="text" placeholder={t('properties.searchPlaceholder')} value={search} onChange={e => setSearch(e.target.value)} style={{ ...inputStyle, paddingLeft: '36px' }} />
+                  <input type="text" placeholder={t('properties.searchPlaceholder')} value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    style={{ ...inputStyle, paddingLeft: '36px' }} />
                 </div>
               </Col>
               <Col lg={2} xs={6}>
-                <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>{t('properties.type')}</label>
+                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.type')}</label>
                 <select value={type} onChange={e => setType(e.target.value)} style={inputStyle}>
                   {propertyTypes.map(t2 => <option key={t2} value={t2}>{t2}</option>)}
                 </select>
               </Col>
               <Col lg={2} xs={6}>
-                <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>{t('properties.category')}</label>
+                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.category')}</label>
                 <select value={category} onChange={e => setCategory(e.target.value)} style={inputStyle}>
                   {categories.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </Col>
               <Col lg={2} xs={6}>
-                <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>{t('properties.bedrooms')}</label>
+                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.bedrooms')}</label>
                 <select value={beds} onChange={e => setBeds(e.target.value)} style={inputStyle}>
                   {bedOptions.map(b => <option key={b} value={b}>{b === 'All' ? 'Any' : b}</option>)}
                 </select>
               </Col>
               <Col lg={2} xs={6}>
-                <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>{t('properties.sortBy')}</label>
+                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.sortBy')}</label>
                 <select value={sort} onChange={e => setSort(e.target.value)} style={inputStyle}>
                   {sortOptions.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                 </select>
