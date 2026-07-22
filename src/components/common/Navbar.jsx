@@ -3,29 +3,17 @@ import { Link, useLocation } from 'react-router-dom'
 import { Container, Nav, Navbar as BsNavbar } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import logo from '../../assets/image/lazordlogoo.png'
+import LangSwitcher from './LangSwitcher'
 
 const Navbar = () => {
   const [expanded, setExpanded] = useState(false)
-  const [langOpen, setLangOpen] = useState(false)
   const [propOpen, setPropOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const langRef = useRef(null)
-  const mobileLangRef = useRef(null)
   const propRef = useRef(null)
   const location = useLocation()
   const { t, i18n } = useTranslation()
 
-  const currentLang = i18n.language === 'ar' ? 'AR' : 'EN'
   const isRTL = i18n.language === 'ar'
-
-  const switchLanguage = (code) => {
-    i18n.changeLanguage(code)
-    localStorage.setItem('i18nextLng', code)
-    document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = code
-    setLangOpen(false)
-    setExpanded(false)
-  }
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr'
@@ -34,8 +22,6 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (langRef.current && !langRef.current.contains(e.target)) setLangOpen(false)
-      if (mobileLangRef.current && !mobileLangRef.current.contains(e.target)) setLangOpen(false)
       if (propRef.current && !propRef.current.contains(e.target)) setPropOpen(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -59,11 +45,6 @@ const Navbar = () => {
     { path: '/properties?type=Commercial', label: `🏢 ${t('nav.commercial')}`, desc: t('services.items.invest.desc') },
   ]
 
-  const langOptions = [
-    { code: 'en', label: 'English',  flag: '🇬🇧', display: 'EN' },
-    { code: 'ar', label: 'العربية', flag: '🇦🇪', display: 'AR' },
-  ]
-
   return (
     <>
       <BsNavbar expanded={expanded} expand="lg" sticky="top"
@@ -82,33 +63,11 @@ const Navbar = () => {
             </div>
           </BsNavbar.Brand>
 
-          {/* Mobile right — globe + hamburger */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} dir="ltr" className="d-lg-none">
-
-            {/* Mobile Globe Button */}
-            <div style={{ position: 'relative', zIndex: 1050 }} ref={mobileLangRef}>
-              <button
-                onClick={(e) => { e.stopPropagation(); setLangOpen(!langOpen) }}
-                style={{ width: '38px', height: '38px', borderRadius: '50%', border: '1.5px solid #4a90d9', backgroundColor: 'rgba(45,95,196,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.3rem', background: 'none' }}>
-                🌐
-              </button>
-              {langOpen && (
-                <div dir="ltr" style={{ position: 'absolute', top: '46px', right: '0', backgroundColor: '#0d1f4e', border: '1px solid #2d5fc4', borderRadius: '10px', overflow: 'hidden', zIndex: 9999, minWidth: '160px', boxShadow: '0 8px 24px rgba(0,0,0,0.6)' }}>
-                  {langOptions.map(lang => (
-                    <button key={lang.code}
-                      onClick={(e) => { e.stopPropagation(); switchLanguage(lang.code) }}
-                      style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '10px', padding: '13px 16px', cursor: 'pointer', color: currentLang === lang.display ? '#4a90d9' : '#ffffff', backgroundColor: currentLang === lang.display ? 'rgba(45,95,196,0.25)' : 'transparent', fontSize: '0.9rem', border: 'none', borderBottom: '1px solid rgba(45,95,196,0.2)', textAlign: 'left' }}>
-                      <span style={{ fontSize: '1.3rem' }}>{lang.flag}</span>
-                      <span style={{ flex: 1 }}>{lang.label}</span>
-                      {currentLang === lang.display && <span style={{ color: '#4a90d9', fontWeight: '800' }}>✓</span>}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Hamburger */}
-            <BsNavbar.Toggle aria-controls="main-navbar" onClick={() => { setExpanded(!expanded); setLangOpen(false) }}
+          {/* Mobile right — LangSwitcher + Hamburger */}
+          <div className="d-lg-none" style={{ display: 'flex', alignItems: 'center', gap: '10px' }} dir="ltr">
+            <LangSwitcher isMobile={true} />
+            <BsNavbar.Toggle aria-controls="main-navbar"
+              onClick={() => setExpanded(!expanded)}
               style={{ borderColor: '#2d5fc4', padding: '5px 10px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid #2d5fc4', borderRadius: '6px' }}>
               <span style={{ color: '#4a90d9', fontSize: '1.2rem', display: 'block', lineHeight: 1 }}>{expanded ? '✕' : '☰'}</span>
             </BsNavbar.Toggle>
@@ -179,10 +138,8 @@ const Navbar = () => {
               </div>
             </Nav>
 
-            {/* Desktop right side — ALWAYS LTR */}
+            {/* Desktop right side */}
             <div className="d-none d-lg-flex align-items-center" dir="ltr" style={{ gap: '12px', flexShrink: 0 }}>
-
-              {/* Phone */}
               <a href="tel:+97142999088" dir="ltr"
                 style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ffffff', textDecoration: 'none', fontSize: '0.82rem', transition: 'color 0.2s ease' }}
                 onMouseEnter={e => e.currentTarget.style.color = '#4a90d9'}
@@ -193,39 +150,14 @@ const Navbar = () => {
                   <div style={{ fontWeight: '700', fontSize: '0.82rem' }}>+971 42 999 088</div>
                 </div>
               </a>
-
               <div style={{ width: '1px', height: '28px', backgroundColor: 'rgba(45,95,196,0.4)' }} />
-
-              {/* Book Valuation */}
               <Link to="/contact" dir="ltr"
                 style={{ backgroundColor: '#2d5fc4', color: '#ffffff', border: '2px solid #2d5fc4', borderRadius: '8px', padding: '9px 20px', fontSize: '0.82rem', fontWeight: '700', textDecoration: 'none', whiteSpace: 'nowrap', transition: 'all 0.25s ease' }}
                 onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#1a3a7c'; e.currentTarget.style.borderColor = '#1a3a7c' }}
                 onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#2d5fc4'; e.currentTarget.style.borderColor = '#2d5fc4' }}>
                 📅 {t('nav.bookValuation')}
               </Link>
-
-              {/* Desktop Language switcher */}
-              <div style={{ position: 'relative' }} ref={langRef} dir="ltr">
-                <div onClick={() => setLangOpen(!langOpen)}
-                  style={{ width: '38px', height: '38px', borderRadius: '50%', border: '1.5px solid #4a90d9', backgroundColor: 'rgba(45,95,196,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.3rem' }}>
-                  🌐
-                </div>
-                {langOpen && (
-                  <div dir="ltr" style={{ position: 'absolute', top: '46px', right: '0', backgroundColor: '#0d1f4e', border: '1px solid #2d5fc4', borderRadius: '8px', overflow: 'hidden', zIndex: 9999, minWidth: '160px', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
-                    {langOptions.map(lang => (
-                      <div key={lang.code} onClick={() => switchLanguage(lang.code)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', cursor: 'pointer', color: currentLang === lang.display ? '#4a90d9' : '#ffffff', backgroundColor: currentLang === lang.display ? 'rgba(45,95,196,0.2)' : 'transparent', fontSize: '0.88rem', borderBottom: '1px solid rgba(45,95,196,0.2)' }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.25)'}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = currentLang === lang.display ? 'rgba(45,95,196,0.2)' : 'transparent'}>
-                        <span style={{ fontSize: '1.2rem' }}>{lang.flag}</span>
-                        <span style={{ flex: 1 }}>{lang.label}</span>
-                        <span style={{ fontSize: '0.75rem', color: '#8aafd4' }}>{lang.display}</span>
-                        {currentLang === lang.display && <span style={{ color: '#4a90d9' }}>✓</span>}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <LangSwitcher />
             </div>
 
             {/* Mobile bottom */}
@@ -239,12 +171,10 @@ const Navbar = () => {
                 📅 {t('nav.bookValuation')}
               </Link>
             </div>
-
           </BsNavbar.Collapse>
         </Container>
       </BsNavbar>
 
-      {/* Overlay */}
       {expanded && (
         <div onClick={() => setExpanded(false)}
           style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 998, top: '70px' }} />
