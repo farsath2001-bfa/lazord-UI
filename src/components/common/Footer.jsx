@@ -65,21 +65,21 @@ const Footer = () => {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
             <div>
               <h3 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>
-                📬 {t('footer.newsletter.title') || 'Stay Updated on Dubai Property Market'}
+                📬 Stay Updated on Dubai Property Market
               </h3>
               <p style={{ color: '#8aafd4', fontSize: '0.82rem', margin: '4px 0 0' }}>
-                {t('footer.newsletter.desc') || 'Get the latest listings, market insights and investment tips.'}
+                Get the latest listings, market insights and investment tips.
               </p>
             </div>
             <form onSubmit={handleSubscribe} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              <input type="email" required placeholder={t('footer.newsletter.placeholder') || 'Enter your email'}
+              <input type="email" required placeholder="Enter your email"
                 value={email} onChange={e => setEmail(e.target.value)}
                 style={{ backgroundColor: 'rgba(6,15,38,0.5)', border: '1px solid rgba(74,144,217,0.4)', borderRadius: '8px', color: '#ffffff', padding: '10px 16px', fontSize: '0.88rem', outline: 'none', minWidth: '220px' }} />
               <button type="submit" disabled={subStatus === 'loading'}
                 style={{ backgroundColor: '#2d5fc4', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '0.88rem', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'background 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1a3a7c'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#2d5fc4'}>
-                {subStatus === 'loading' ? '...' : subStatus === 'done' ? '✅ Done!' : subStatus === 'error' ? '❌ Try again' : t('footer.newsletter.btn') || 'Subscribe'}
+                {subStatus === 'loading' ? '...' : subStatus === 'done' ? '✅ Done!' : subStatus === 'error' ? '❌ Try again' : 'Subscribe'}
               </button>
             </form>
           </div>
@@ -90,14 +90,14 @@ const Footer = () => {
       <Container style={{ padding: '48px 15px 32px' }}>
         <Row className="g-5">
 
-          {/* Brand */}
+          {/* Brand — big logo like page loader */}
           <Col lg={4} md={12}>
-            <Link to="/" dir="ltr" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', marginBottom: '16px' }}>
-              <img src={logo} alt="Lazord Real Estate"
-                style={{ height: '60px', width: 'auto', filter: 'brightness(0) invert(1)', objectFit: 'contain' }} />
+           <Link to="/" dir="ltr" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '14px', textDecoration: 'none', marginBottom: '2px' }}>
+               <img src={logo} alt="Lazord Real Estate"
+               style={{ height: '120px', width: 'auto', objectFit: 'contain' }} />
               <div dir="ltr" style={{ lineHeight: '1.2' }}>
-                <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', letterSpacing: '1px' }}>LAZORD</div>
-                <div style={{ color: '#4a90d9', fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Real Estate</div>
+                <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.2rem', letterSpacing: '3px', textTransform: 'uppercase' }}>LAZORD</div>
+                <div style={{ color: '#4a90d9', fontSize: '0.7rem', letterSpacing: '3px', textTransform: 'uppercase' }}>Real Estate</div>
               </div>
             </Link>
             <p style={{ color: '#8aafd4', fontSize: '0.88rem', lineHeight: '1.7', marginBottom: '20px', maxWidth: '280px' }}>
@@ -145,7 +145,7 @@ const Footer = () => {
           {/* Property Types */}
           <Col lg={2} md={4} xs={6}>
             <h6 style={{ color: '#4a90d9', marginBottom: '16px', letterSpacing: '1px', textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: '700' }}>
-              Properties
+              {t('nav.properties')}
             </h6>
             <ul className="list-unstyled" style={{ margin: 0 }}>
               {propertyLinks.map(item => (
@@ -174,7 +174,7 @@ const Footer = () => {
                 <a href="tel:+97142999088" style={{ color: '#8aafd4', textDecoration: 'none', display: 'flex', gap: '8px', transition: 'color 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.color = '#4a90d9'}
                   onMouseLeave={e => e.currentTarget.style.color = '#8aafd4'}>
-                  <span>📞</span><span>+971 42 999 088</span>
+                  <span>📞</span><span dir="ltr">+971 42 999 088</span>
                 </a>
               </li>
               <li style={{ marginBottom: '16px' }}>

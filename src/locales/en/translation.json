@@ -127,19 +127,19 @@
     "title2": "Clients Say"
   },
   "cta": {
-    "badge": "Free Consultation",
-    "title1": "Ready to Find Your",
-    "title2": "Dream Property?",
-    "desc": "Book a free consultation with our experts today. We'll help you find the perfect property and negotiate the best price in the Dubai market.",
-    "whatsapp": "Chat on WhatsApp",
-    "valuation": "Book Free Valuation",
-    "phone": "+971 42 999 088",
-    "features": {
-      "rera": "RERA Licensed Agency",
-      "secure": "Secure Transactions",
-      "nationalities": "Serving 40+ Nationalities",
-      "rating": "Client Rating 4.9/5"
-    }
+  "badge": "Free Consultation",
+  "title1": "Ready to Find Your",
+  "title2": "Dream Property?",
+  "subtitle": "Book a free consultation with our expert agents today. We'll help you find the perfect property, navigate the buying process, and get the best deal in Dubai's market.",
+  "whatsapp": "Chat on WhatsApp",
+  "book": "Book Free Valuation",
+  "call": "+971 42 999 088",
+  "badges": {
+    "rera": "RERA Licensed Agency",
+    "secure": "Secure Transactions",
+    "nationalities": "40+ Nationalities Served",
+    "rating": "4.9/5 Client Rating"
+  }
   },
   "contact": {
     "badge": "Contact Us",

@@ -13,7 +13,7 @@ const CTABanner = () => {
   ]
 
   return (
-    <section style={{ backgroundColor: '#0a1630', padding: '90px 0' }}>
+    <section style={{ backgroundColor: '#0a1630', padding: '40px 0' }}>
       <Container>
         <div style={{
           background: 'linear-gradient(135deg, #0d1f4e 0%, #1a3a7c 50%, #0d1f4e 100%)',
@@ -57,7 +57,7 @@ const CTABanner = () => {
             </Col>
           </Row>
 
-          <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap', marginTop: '48px', paddingTop: '32px', borderTop: '1px solid rgba(45,95,196,0.2)' }}>
+          <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap', marginTop: '20px', paddingTop: '32px', borderTop: '1px solid rgba(45,95,196,0.2)' }}>
             {badges.map((badge, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ fontSize: '1.1rem' }}>{badge.icon}</span>

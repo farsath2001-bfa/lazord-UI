@@ -22,7 +22,7 @@ const WhyChooseUs = () => {
   ]
 
   return (
-    <section style={{ backgroundColor: '#060f26', padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ backgroundColor: '#060f26', padding: '40px 0', position: 'relative', overflow: 'hidden' }}>
 
       {/* Background glow */}
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '600px', height: '600px', borderRadius: '50%', backgroundColor: '#2d5fc4', opacity: 0.04, filter: 'blur(120px)', pointerEvents: 'none' }} />
@@ -30,7 +30,7 @@ const WhyChooseUs = () => {
       <Container style={{ position: 'relative', zIndex: 1 }}>
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '16px' }}>
             <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>✦ {t('why.badge')}</span>
           </div>
@@ -40,7 +40,7 @@ const WhyChooseUs = () => {
         </div>
 
         {/* Reasons Grid */}
-        <Row className="g-4" style={{ marginBottom: '56px' }}>
+        <Row className="g-4" style={{ marginBottom: '20px' }}>
           {reasons.map((r, i) => (
             <Col key={i} lg={4} md={6}>
               <div style={{
@@ -104,7 +104,6 @@ const WhyChooseUs = () => {
             </Col>
           </Row>
         </div>
-
       </Container>
     </section>
   )

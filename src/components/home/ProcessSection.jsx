@@ -22,7 +22,7 @@ const ProcessSection = () => {
   ]
 
   return (
-    <section style={{ backgroundColor: '#060f26', padding: '90px 0' }}>
+    <section style={{ backgroundColor: '#060f26', padding: '40px 0' }}>
       <Container>
 
         {/* Header */}

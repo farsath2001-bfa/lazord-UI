@@ -33,10 +33,10 @@ const PageLoader = ({ onComplete }) => {
         opacity: phase === 'enter' ? 0 : 1,
         transform: phase === 'enter' ? 'scale(0.85)' : 'scale(1)',
         transition: 'opacity 0.8s ease 0.2s, transform 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.2s',
-        textAlign: 'center', marginBottom: '28px'
+        textAlign: 'center', marginBottom: '0px'
       }}>
         <img src={logo} alt="Lazord Real Estate"
-          style={{ width: '150px', height: 'auto', marginBottom: '20px' }} />
+          style={{ width: '150px', height: 'auto', marginBottom: '0px' }} />
       </div>
 
       {/* Brand name */}
@@ -46,13 +46,6 @@ const PageLoader = ({ onComplete }) => {
         transition: 'opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s',
         textAlign: 'center'
       }}>
-        {/* <div style={{ color: '#ffffff', fontSize: '1.4rem', fontWeight: '300', letterSpacing: '6px', textTransform: 'uppercase', marginBottom: '6px' }}>
-          لازورد
-        </div>
-        <div style={{ color: '#4a90d9', fontSize: '0.7rem', fontWeight: '600', letterSpacing: '5px', textTransform: 'uppercase', marginBottom: '24px' }}>
-          Real Estate
-        </div> */}
-
         {/* Animated line */}
         <div style={{ width: '120px', height: '1px', backgroundColor: 'rgba(74,144,217,0.2)', margin: '0 auto 20px', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: 0, left: 0, height: '100%', width: `${lineWidth}%`, backgroundColor: '#4a90d9', boxShadow: '0 0 8px rgba(74,144,217,0.8)', transition: 'width 1.2s cubic-bezier(0.4, 0, 0.2, 1)' }} />
