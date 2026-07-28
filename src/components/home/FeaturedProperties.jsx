@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
+import { motion } from 'framer-motion'
 import axios from 'axios'
 import PropertyCard from '../common/PropertyCard'
 
@@ -16,7 +17,6 @@ const FeaturedProperties = () => {
   const [loading, setLoading] = useState(true)
 
   const filters = ['All', 'Buy', 'Rent', 'Off Plan']
-
   const sortOptions = [
     { value: 'newest',     label: '🕐 Newest' },
     { value: 'price_asc',  label: '💰 Price: Low → High' },
@@ -29,11 +29,8 @@ const FeaturedProperties = () => {
       try {
         const res = await axios.get(`${API_URL}/api/properties`)
         setProperties(res.data.data || [])
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
+      } catch (err) { console.error(err) }
+      finally { setLoading(false) }
     }
     fetchProperties()
   }, [])
@@ -42,16 +39,12 @@ const FeaturedProperties = () => {
     let result = activeFilter === 'All'
       ? [...properties]
       : properties.filter(p => p.type === activeFilter)
-
-    // Sort
     switch (activeSort) {
       case 'price_asc':  result.sort((a, b) => a.price - b.price); break
       case 'price_desc': result.sort((a, b) => b.price - a.price); break
       case 'area_desc':  result.sort((a, b) => (b.area || 0) - (a.area || 0)); break
-      case 'newest':
       default:           result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); break
     }
-
     setFiltered(result.slice(0, 6))
   }, [properties, activeFilter, activeSort])
 
@@ -69,7 +62,13 @@ const FeaturedProperties = () => {
       <Container>
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '32px' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '32px' }}
+        >
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '14px' }}>
               <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>✦ {t('featured.badge')}</span>
@@ -83,45 +82,37 @@ const FeaturedProperties = () => {
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.4)' }}>
             {t('featured.viewAll')} →
           </Link>
-        </div>
+        </motion.div>
 
         {/* Filter + Sort bar */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '32px' }}>
-
-          {/* Type filter pills */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '32px' }}
+        >
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {filters.map(f => (
-              <button key={f} onClick={() => setActiveFilter(f)} style={btnStyle(activeFilter === f)}>
+              <motion.button
+                key={f}
+                onClick={() => setActiveFilter(f)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                style={btnStyle(activeFilter === f)}
+              >
                 {f}
-              </button>
+              </motion.button>
             ))}
           </div>
-
-          {/* Sort dropdown */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ color: '#8aafd4', fontSize: '0.82rem', whiteSpace: 'nowrap' }}>Sort by:</span>
-            <select
-              value={activeSort}
-              onChange={e => setActiveSort(e.target.value)}
-              style={{
-                backgroundColor: '#0d1f4e',
-                border: '1px solid rgba(45,95,196,0.35)',
-                borderRadius: '8px',
-                color: '#ffffff',
-                padding: '8px 14px',
-                fontSize: '0.85rem',
-                outline: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              {sortOptions.map(s => (
-                <option key={s.value} value={s.value} style={{ backgroundColor: '#0d1f4e' }}>
-                  {s.label}
-                </option>
-              ))}
+            <select value={activeSort} onChange={e => setActiveSort(e.target.value)}
+              style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)', borderRadius: '8px', color: '#ffffff', padding: '8px 14px', fontSize: '0.85rem', outline: 'none', cursor: 'pointer' }}>
+              {sortOptions.map(s => <option key={s.value} value={s.value} style={{ backgroundColor: '#0d1f4e' }}>{s.label}</option>)}
             </select>
           </div>
-        </div>
+        </motion.div>
 
         {/* Properties Grid */}
         {loading ? (
@@ -136,16 +127,23 @@ const FeaturedProperties = () => {
           </div>
         ) : (
           <Row className="g-4">
-            {filtered.map(property => (
+            {filtered.map((property, i) => (
               <Col key={property._id} lg={4} md={6} xs={12}>
-                <PropertyCard property={property} />
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                >
+                  <PropertyCard property={property} />
+                </motion.div>
               </Col>
             ))}
           </Row>
         )}
 
       </Container>
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <style>{`@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
     </section>
   )
 }
