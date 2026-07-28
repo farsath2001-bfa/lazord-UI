@@ -3,7 +3,13 @@ import { createContext, useContext, useState } from 'react'
 const AdminContext = createContext()
 
 export const AdminProvider = ({ children }) => {
-  const [token, setToken] = useState(() => localStorage.getItem('adminToken') || null)
+  const [token, setToken] = useState(() => {
+    const t = localStorage.getItem('adminToken')
+    // ✅ reject bad values
+    if (!t || t === 'undefined' || t === 'null') return null
+    return t
+  })
+
   const [admin, setAdmin] = useState(() => {
     try {
       const saved = localStorage.getItem('adminData')
@@ -12,6 +18,7 @@ export const AdminProvider = ({ children }) => {
       return null
     }
   })
+
   const [loading, setLoading] = useState(false)
 
   const login = (adminData, adminToken) => {
