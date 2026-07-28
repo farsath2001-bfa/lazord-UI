@@ -110,7 +110,7 @@ const handleSubmit = async (e) => {
  
 
     login(adminData, adminToken)
-    navigate('/admin/dashboard')
+    navigate('/admin/login')
 
   } catch (err) {
     setError(err.message || 'Invalid email or password')

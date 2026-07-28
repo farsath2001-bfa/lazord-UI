@@ -1,24 +1,22 @@
-// import { StrictMode } from 'react'
-// import { createRoot } from 'react-dom/client'
-// import './index.css'
-// import App from './App.jsx'
-
-// createRoot(document.getElementById('root')).render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>,
-// )
-// Apply saved language on page load
-const savedLang = localStorage.getItem('i18nextLng') || 'en'
-document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr'
-document.documentElement.lang = savedLang
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import 'bootstrap/dist/css/bootstrap.min.css'  
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './i18n'
 import App from './App.jsx'
 import './rtl-fix.css'
+
+// ✅ Apply saved language
+const savedLang = localStorage.getItem('i18nextLng') || 'en'
+document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr'
+document.documentElement.lang = savedLang
+
+// ✅ Clear bad/broken tokens on every app start
+const token = localStorage.getItem('adminToken')
+if (!token || token === 'undefined' || token === 'null') {
+  localStorage.removeItem('adminToken')
+  localStorage.removeItem('adminData')
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
