@@ -100,10 +100,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!token) {
-        setLoading(false)
-        return
-      }
+      if (!token) { setLoading(false); return }
       try {
         const config = { headers: { Authorization: `Bearer ${token}` } }
         const [propsRes, leadsRes] = await Promise.all([
@@ -147,34 +144,38 @@ const AdminDashboard = () => {
   return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh' }}>
       <AdminNavbar />
-      <div style={{ padding: '32px 30px' }}>
+      <div className="dash-container">
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '8px' }}>
+        <div className="dash-header">
           <div>
-            <h1 style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: '700', margin: 0 }}>Dashboard</h1>
-            <p style={{ color: '#8aafd4', margin: '4px 0 0', fontSize: '0.88rem' }}>📅 {today}</p>
+            <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.3rem, 4vw, 1.8rem)', fontWeight: '700', margin: 0 }}>
+              Dashboard
+            </h1>
+            <p style={{ color: '#8aafd4', margin: '4px 0 0', fontSize: '0.82rem' }}>📅 {today}</p>
           </div>
-          <Link to="/admin/properties"
-            style={{ backgroundColor: '#2d5fc4', color: '#fff', textDecoration: 'none', borderRadius: '8px', padding: '9px 18px', fontSize: '0.85rem', fontWeight: '700' }}>
+          <Link to="/admin/properties" className="dash-add-btn">
             + Add Property
           </Link>
         </div>
 
         {/* Stat Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '28px' }}>
+        <div className="dash-stats-grid">
           {statCards.map((card, i) => (
             <Link key={i} to={card.link} style={{ textDecoration: 'none' }}>
-              <div style={{ backgroundColor: '#0d1f4e', border: `1px solid ${card.color}30`, borderRadius: '14px', padding: '20px', transition: 'all 0.25s ease' }}
+              <div
+                className="dash-stat-card"
+                style={{ border: `1px solid ${card.color}30` }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = card.color; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${card.color}25` }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = `${card.color}30`; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}>
+                onMouseLeave={e => { e.currentTarget.style.borderColor = `${card.color}30`; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+              >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
                   <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: `${card.color}20`, border: `1px solid ${card.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
                     {card.icon}
                   </div>
                   <span style={{ color: card.color, fontSize: '0.65rem', fontWeight: '700', textTransform: 'uppercase' }}>View →</span>
                 </div>
-                <div style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: '800', lineHeight: '1', marginBottom: '4px' }}>
+                <div style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 4vw, 1.8rem)', fontWeight: '800', lineHeight: '1', marginBottom: '4px' }}>
                   {loading ? '—' : card.value}
                 </div>
                 <div style={{ color: '#8aafd4', fontSize: '0.78rem' }}>{card.label}</div>
@@ -184,23 +185,23 @@ const AdminDashboard = () => {
         </div>
 
         {/* Map */}
-        <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden', marginBottom: '28px' }}>
-          <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden', marginBottom: '20px' }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
             <div>
-              <h2 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>🗺️ Properties Map</h2>
-              <p style={{ color: '#8aafd4', fontSize: '0.78rem', margin: '2px 0 0' }}>{filteredProperties.length} properties shown across Dubai</p>
+              <h2 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', margin: 0 }}>🗺️ Properties Map</h2>
+              <p style={{ color: '#8aafd4', fontSize: '0.75rem', margin: '2px 0 0' }}>{filteredProperties.length} properties across Dubai</p>
             </div>
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {['All', 'Buy', 'Rent', 'Off Plan'].map(f => (
                 <button key={f} onClick={() => setMapFilter(f)}
-                  style={{ backgroundColor: mapFilter === f ? (markerColors[f] || '#2d5fc4') : 'rgba(45,95,196,0.15)', color: '#fff', border: 'none', borderRadius: '20px', padding: '5px 14px', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s ease', opacity: mapFilter === f ? 1 : 0.6 }}>
+                  style={{ backgroundColor: mapFilter === f ? (markerColors[f] || '#2d5fc4') : 'rgba(45,95,196,0.15)', color: '#fff', border: 'none', borderRadius: '20px', padding: '4px 12px', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer', opacity: mapFilter === f ? 1 : 0.6 }}>
                   {f}
                 </button>
               ))}
             </div>
           </div>
 
-          <div style={{ height: '420px', position: 'relative' }}>
+          <div style={{ height: '300px', position: 'relative' }}>
             {loading ? (
               <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8aafd4', backgroundColor: '#060f26' }}>
                 <div style={{ textAlign: 'center' }}>
@@ -209,9 +210,9 @@ const AdminDashboard = () => {
                 </div>
               </div>
             ) : (
-              <MapContainer center={[25.1972, 55.2744]} zoom={11} style={{ height: '100%', width: '100%' }} scrollWheelZoom={false}>
+              <MapContainer center={[25.1972, 55.2744]} zoom={10} style={{ height: '100%', width: '100%' }} scrollWheelZoom={false}>
                 <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  attribution='&copy; OpenStreetMap'
                   url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                 />
                 {filteredProperties.map(p => {
@@ -220,12 +221,12 @@ const AdminDashboard = () => {
                   return (
                     <Marker key={p._id} position={coords} icon={createColoredIcon(color)}>
                       <Popup>
-                        <div style={{ minWidth: '180px' }}>
-                          {p.image && <img src={p.image} alt={p.title} style={{ width: '100%', height: '90px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px' }} />}
-                          <strong style={{ display: 'block', fontSize: '0.88rem', marginBottom: '4px' }}>{p.title}</strong>
-                          <span style={{ color: '#666', fontSize: '0.78rem', display: 'block', marginBottom: '4px' }}>📍 {p.location}</span>
+                        <div style={{ minWidth: '160px' }}>
+                          {p.image && <img src={p.image} alt={p.title} style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px' }} />}
+                          <strong style={{ display: 'block', fontSize: '0.85rem', marginBottom: '4px' }}>{p.title}</strong>
+                          <span style={{ color: '#666', fontSize: '0.75rem', display: 'block', marginBottom: '4px' }}>📍 {p.location}</span>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ color, fontWeight: '700', fontSize: '0.88rem' }}>{formatPrice(p.price, p.type)}</span>
+                            <span style={{ color, fontWeight: '700', fontSize: '0.85rem' }}>{formatPrice(p.price, p.type)}</span>
                             <span style={{ backgroundColor: color + '20', color, padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: '700' }}>{p.type}</span>
                           </div>
                         </div>
@@ -237,24 +238,23 @@ const AdminDashboard = () => {
             )}
           </div>
 
-          <div style={{ padding: '12px 24px', borderTop: '1px solid rgba(45,95,196,0.2)', display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ padding: '10px 20px', borderTop: '1px solid rgba(45,95,196,0.2)', display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
             {Object.entries(markerColors).map(([type, color]) => (
               <div key={type} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: color, boxShadow: `0 0 6px ${color}` }} />
-                <span style={{ color: '#8aafd4', fontSize: '0.75rem' }}>{type}</span>
-                <span style={{ color: '#4a4a6a', fontSize: '0.72rem' }}>({properties.filter(p => p.type === type).length})</span>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: color }} />
+                <span style={{ color: '#8aafd4', fontSize: '0.72rem' }}>{type} ({properties.filter(p => p.type === type).length})</span>
               </div>
             ))}
-            <span style={{ color: '#4a4a6a', fontSize: '0.75rem', marginLeft: 'auto' }}>Click marker for details</span>
           </div>
         </div>
 
         {/* Recent Leads */}
         <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
-          <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>Recent Leads</h2>
-            <Link to="/admin/leads" style={{ color: '#4a90d9', fontSize: '0.85rem', textDecoration: 'none', fontWeight: '600' }}>View All →</Link>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', margin: 0 }}>Recent Leads</h2>
+            <Link to="/admin/leads" style={{ color: '#4a90d9', fontSize: '0.82rem', textDecoration: 'none', fontWeight: '600' }}>View All →</Link>
           </div>
+
           {loading ? (
             <div style={{ padding: '40px', textAlign: 'center', color: '#8aafd4' }}>Loading...</div>
           ) : recentLeads.length === 0 ? (
@@ -262,60 +262,115 @@ const AdminDashboard = () => {
               <div style={{ fontSize: '2rem', marginBottom: '8px' }}>📭</div>No leads yet
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ backgroundColor: 'rgba(45,95,196,0.1)' }}>
-                    {['Lead', 'Contact', 'Source', 'Service', 'Status', 'Date'].map(h => (
-                      <th key={h} style={{ padding: '11px 16px', color: '#8aafd4', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'left', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentLeads.map((lead, i) => (
-                    <tr key={lead._id}
-                      style={{ borderTop: '1px solid rgba(45,95,196,0.15)', backgroundColor: i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)', transition: 'background 0.15s' }}
-                      onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)'}
-                      onMouseLeave={e => e.currentTarget.style.backgroundColor = i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)'}>
-                      <td style={{ padding: '12px 16px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <div style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.85rem', flexShrink: 0 }}>
-                            {lead.name?.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.85rem' }}>{lead.name}</div>
-                            {lead.status === 'New' && <div style={{ color: '#e74c3c', fontSize: '0.65rem', fontWeight: '700' }}>● NEW</div>}
-                          </div>
+            <>
+              {/* Mobile Cards */}
+              <div className="leads-mobile">
+                {recentLeads.map((lead, i) => (
+                  <div key={lead._id} style={{ padding: '14px 16px', borderBottom: '1px solid rgba(45,95,196,0.1)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.9rem', flexShrink: 0 }}>
+                          {lead.name?.charAt(0).toUpperCase()}
                         </div>
-                      </td>
-                      <td style={{ padding: '12px 16px' }}>
-                        <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{lead.email}</div>
-                        <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{lead.phone}</div>
-                      </td>
-                      <td style={{ padding: '12px 16px' }}>
-                        <span style={{ backgroundColor: 'rgba(45,95,196,0.15)', color: '#4a90d9', padding: '3px 10px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: '600', whiteSpace: 'nowrap' }}>
-                          {sourceIcon[lead.source] || '📌'} {lead.source || '—'}
-                        </span>
-                      </td>
-                      <td style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.8rem' }}>{lead.service}</td>
-                      <td style={{ padding: '12px 16px' }}>
-                        <span style={{ backgroundColor: `${statusColor[lead.status]}20`, color: statusColor[lead.status], padding: '4px 10px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: '700' }}>
-                          {lead.status}
-                        </span>
-                      </td>
-                      <td style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
-                        {new Date(lead.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                      </td>
+                        <div>
+                          <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.88rem' }}>{lead.name}</div>
+                          <div style={{ color: '#8aafd4', fontSize: '0.75rem' }}>{lead.phone}</div>
+                        </div>
+                      </div>
+                      <span style={{ backgroundColor: `${statusColor[lead.status]}20`, color: statusColor[lead.status], padding: '3px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: '700', whiteSpace: 'nowrap' }}>
+                        {lead.status}
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      <span style={{ backgroundColor: 'rgba(45,95,196,0.15)', color: '#4a90d9', padding: '2px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: '600' }}>
+                        {sourceIcon[lead.source] || '📌'} {lead.source || '—'}
+                      </span>
+                      <span style={{ color: '#8aafd4', fontSize: '0.72rem', alignSelf: 'center' }}>
+                        {new Date(lead.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table */}
+              <div className="leads-desktop" style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ backgroundColor: 'rgba(45,95,196,0.1)' }}>
+                      {['Lead', 'Contact', 'Source', 'Service', 'Status', 'Date'].map(h => (
+                        <th key={h} style={{ padding: '11px 16px', color: '#8aafd4', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'left', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
+                      ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {recentLeads.map((lead, i) => (
+                      <tr key={lead._id}
+                        style={{ borderTop: '1px solid rgba(45,95,196,0.15)', backgroundColor: i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)', transition: 'background 0.15s' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)'}>
+                        <td style={{ padding: '12px 16px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.85rem', flexShrink: 0 }}>
+                              {lead.name?.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.85rem' }}>{lead.name}</div>
+                              {lead.status === 'New' && <div style={{ color: '#e74c3c', fontSize: '0.65rem', fontWeight: '700' }}>● NEW</div>}
+                            </div>
+                          </div>
+                        </td>
+                        <td style={{ padding: '12px 16px' }}>
+                          <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{lead.email}</div>
+                          <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{lead.phone}</div>
+                        </td>
+                        <td style={{ padding: '12px 16px' }}>
+                          <span style={{ backgroundColor: 'rgba(45,95,196,0.15)', color: '#4a90d9', padding: '3px 10px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: '600', whiteSpace: 'nowrap' }}>
+                            {sourceIcon[lead.source] || '📌'} {lead.source || '—'}
+                          </span>
+                        </td>
+                        <td style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.8rem' }}>{lead.service}</td>
+                        <td style={{ padding: '12px 16px' }}>
+                          <span style={{ backgroundColor: `${statusColor[lead.status]}20`, color: statusColor[lead.status], padding: '4px 10px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: '700' }}>
+                            {lead.status}
+                          </span>
+                        </td>
+                        <td style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
+                          {new Date(lead.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </div>
 
       </div>
+
       <style>{`
+        .dash-container { padding: 20px 16px; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .dash-add-btn { background-color: #2d5fc4; color: #fff; text-decoration: none; border-radius: 8px; padding: 9px 16px; font-size: 0.85rem; font-weight: 700; white-space: nowrap; }
+        .dash-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+        .dash-stat-card { background-color: #0d1f4e; border-radius: 14px; padding: 16px; transition: all 0.25s ease; height: 100%; }
+        .leads-mobile { display: block; }
+        .leads-desktop { display: none; }
+
+        @media (min-width: 640px) {
+          .dash-container { padding: 24px 20px; }
+          .dash-stats-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+          .dash-container { padding: 32px 30px; }
+          .dash-stats-grid { grid-template-columns: repeat(6, 1fr); gap: 16px; }
+          .dash-stat-card { padding: 20px; }
+          .leads-mobile { display: none; }
+          .leads-desktop { display: block; }
+        }
+
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .leaflet-container { background: #060f26 !important; }
         .leaflet-popup-content-wrapper { border-radius: 10px; }

@@ -31,9 +31,10 @@ const AdminLeads = () => {
   const [deletingSource, setDeletingSource] = useState(null)
   const [selectedLead, setSelectedLead] = useState(null)
 
+  const config = { headers: { Authorization: `Bearer ${token}` } }
+
   const fetchLeads = async () => {
     if (!token) { setLoading(false); return }
-    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/leads`, config)
       setLeads(res.data.data)
@@ -44,7 +45,6 @@ const AdminLeads = () => {
   useEffect(() => { fetchLeads() }, [token])
 
   const updateStatus = async (id, status) => {
-    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       await axios.put(`${import.meta.env.VITE_API_URL}/api/leads/${id}`, { status }, config)
       setLeads(prev => prev.map(l => l._id === id ? { ...l, status } : l))
@@ -56,7 +56,6 @@ const AdminLeads = () => {
 
   const deleteLead = async (id) => {
     if (!window.confirm('Delete this lead?')) return
-    const config = { headers: { Authorization: `Bearer ${token}` } }
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/api/leads/${id}`, config)
       setLeads(prev => prev.filter(l => l._id !== id))
@@ -134,43 +133,43 @@ const AdminLeads = () => {
   return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh' }}>
       <AdminNavbar />
-      <div style={{ padding: '32px 30px' }}>
+      <div className="leads-container">
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+        <div className="leads-header">
           <div>
-            <h1 style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: '700', margin: 0 }}>Leads</h1>
-            <p style={{ color: '#8aafd4', marginBottom: 0, marginTop: '4px', fontSize: '0.85rem' }}>Manage customer inquiries</p>
+            <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.3rem, 4vw, 1.8rem)', fontWeight: '700', margin: 0 }}>Leads</h1>
+            <p style={{ color: '#8aafd4', marginBottom: 0, marginTop: '4px', fontSize: '0.82rem' }}>Manage customer inquiries</p>
           </div>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <div className="leads-export-btns">
             <button onClick={() => exportToCSV(filtered, 'lazord-leads-filtered')} disabled={filtered.length === 0}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(39,174,96,0.15)', color: '#27ae60', border: '1px solid rgba(39,174,96,0.3)', borderRadius: '10px', padding: '10px 18px', fontSize: '0.85rem', fontWeight: '700', cursor: filtered.length === 0 ? 'not-allowed' : 'pointer', opacity: filtered.length === 0 ? 0.5 : 1 }}>
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(39,174,96,0.15)', color: '#27ae60', border: '1px solid rgba(39,174,96,0.3)', borderRadius: '10px', padding: '9px 14px', fontSize: '0.82rem', fontWeight: '700', cursor: filtered.length === 0 ? 'not-allowed' : 'pointer', opacity: filtered.length === 0 ? 0.5 : 1, whiteSpace: 'nowrap' }}>
               📥 Export Shown ({filtered.length})
             </button>
             <button onClick={() => exportToCSV(leads, 'lazord-leads-all')} disabled={leads.length === 0}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(45,95,196,0.15)', color: '#4a90d9', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '10px', padding: '10px 18px', fontSize: '0.85rem', fontWeight: '700', cursor: leads.length === 0 ? 'not-allowed' : 'pointer' }}>
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(45,95,196,0.15)', color: '#4a90d9', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '10px', padding: '9px 14px', fontSize: '0.82rem', fontWeight: '700', cursor: leads.length === 0 ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap' }}>
               📥 Export All ({leads.length})
             </button>
           </div>
         </div>
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
+        <div className="leads-stats-grid">
           {stats.map((stat, i) => (
-            <div key={i} style={{ backgroundColor: '#0d1f4e', border: `1px solid ${stat.color}30`, borderRadius: '12px', padding: '16px 24px', flex: '1', minWidth: '120px', textAlign: 'center', transition: 'all 0.2s' }}
+            <div key={i} style={{ backgroundColor: '#0d1f4e', border: `1px solid ${stat.color}30`, borderRadius: '12px', padding: '14px 16px', textAlign: 'center', transition: 'all 0.2s' }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = stat.color; e.currentTarget.style.transform = 'translateY(-2px)' }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = `${stat.color}30`; e.currentTarget.style.transform = 'translateY(0)' }}>
-              <div style={{ color: stat.color, fontSize: '1.8rem', fontWeight: '800', lineHeight: '1' }}>{stat.value}</div>
-              <div style={{ color: '#8aafd4', fontSize: '0.75rem', marginTop: '4px' }}>{stat.label}</div>
+              <div style={{ color: stat.color, fontSize: 'clamp(1.4rem, 4vw, 1.8rem)', fontWeight: '800', lineHeight: '1' }}>{stat.value}</div>
+              <div style={{ color: '#8aafd4', fontSize: '0.72rem', marginTop: '4px' }}>{stat.label}</div>
             </div>
           ))}
         </div>
 
         {/* Bulk Delete */}
-        <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(231,76,60,0.2)', borderRadius: '14px', padding: '18px 24px', marginBottom: '24px' }}>
-          <div style={{ marginBottom: '12px' }}>
-            <h3 style={{ color: '#ffffff', fontSize: '0.92rem', fontWeight: '700', margin: 0 }}>🗑️ Bulk Delete by Source</h3>
-            <p style={{ color: '#8aafd4', fontSize: '0.78rem', margin: '4px 0 0' }}>Monthly cleanup — export first as backup!</p>
+        <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(231,76,60,0.2)', borderRadius: '14px', padding: '16px', marginBottom: '16px' }}>
+          <div style={{ marginBottom: '10px' }}>
+            <h3 style={{ color: '#ffffff', fontSize: '0.88rem', fontWeight: '700', margin: 0 }}>🗑️ Bulk Delete by Source</h3>
+            <p style={{ color: '#8aafd4', fontSize: '0.75rem', margin: '4px 0 0' }}>Monthly cleanup — export first as backup!</p>
           </div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {['WhatsApp', 'Phone', 'Website Popup', 'Contact Form', 'Property Inquiry', 'Walk In'].map(src => {
@@ -179,9 +178,9 @@ const AdminLeads = () => {
               const isDeleting = deletingSource === src
               return (
                 <button key={src} onClick={() => deleteAllBySource(src)} disabled={count === 0 || isDeleting}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: count === 0 ? 'rgba(45,95,196,0.05)' : 'rgba(231,76,60,0.1)', color: count === 0 ? '#4a4a6a' : '#e74c3c', border: `1px solid ${count === 0 ? 'rgba(45,95,196,0.15)' : 'rgba(231,76,60,0.3)'}`, borderRadius: '8px', padding: '7px 14px', fontSize: '0.8rem', fontWeight: '600', cursor: count === 0 ? 'not-allowed' : 'pointer', opacity: count === 0 ? 0.5 : 1 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: '5px', backgroundColor: count === 0 ? 'rgba(45,95,196,0.05)' : 'rgba(231,76,60,0.1)', color: count === 0 ? '#4a4a6a' : '#e74c3c', border: `1px solid ${count === 0 ? 'rgba(45,95,196,0.15)' : 'rgba(231,76,60,0.3)'}`, borderRadius: '8px', padding: '6px 12px', fontSize: '0.75rem', fontWeight: '600', cursor: count === 0 ? 'not-allowed' : 'pointer', opacity: count === 0 ? 0.5 : 1 }}>
                   <span>{sc?.icon}</span><span>{src}</span>
-                  <span style={{ backgroundColor: 'rgba(231,76,60,0.2)', borderRadius: '10px', padding: '1px 7px', fontSize: '0.72rem', fontWeight: '800' }}>
+                  <span style={{ backgroundColor: 'rgba(231,76,60,0.2)', borderRadius: '10px', padding: '1px 6px', fontSize: '0.7rem', fontWeight: '800' }}>
                     {isDeleting ? '...' : count}
                   </span>
                 </button>
@@ -192,48 +191,51 @@ const AdminLeads = () => {
 
         {/* Message */}
         {message && (
-          <div style={{ backgroundColor: message.includes('✅') ? 'rgba(39,174,96,0.15)' : 'rgba(231,76,60,0.15)', border: `1px solid ${message.includes('✅') ? 'rgba(39,174,96,0.3)' : 'rgba(231,76,60,0.3)'}`, borderRadius: '10px', padding: '12px 20px', color: message.includes('✅') ? '#27ae60' : '#e74c3c', marginBottom: '20px', fontWeight: '600' }}>
+          <div style={{ backgroundColor: message.includes('✅') ? 'rgba(39,174,96,0.15)' : 'rgba(231,76,60,0.15)', border: `1px solid ${message.includes('✅') ? 'rgba(39,174,96,0.3)' : 'rgba(231,76,60,0.3)'}`, borderRadius: '10px', padding: '10px 16px', color: message.includes('✅') ? '#27ae60' : '#e74c3c', marginBottom: '16px', fontWeight: '600', fontSize: '0.88rem' }}>
             {message}
           </div>
         )}
 
-        {/* Filters */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
+        {/* Status Filters */}
+        <div style={{ display: 'flex', gap: '6px', marginBottom: '8px', flexWrap: 'wrap' }}>
           {statuses.map(s => (
-            <button key={s} onClick={() => setFilter(s)} style={{ padding: '6px 14px', borderRadius: '20px', border: filter === s ? '1.5px solid #4a90d9' : '1.5px solid rgba(45,95,196,0.3)', backgroundColor: filter === s ? '#2d5fc4' : 'transparent', color: filter === s ? '#fff' : '#8aafd4', fontSize: '0.8rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}>
+            <button key={s} onClick={() => setFilter(s)} style={{ padding: '5px 12px', borderRadius: '20px', border: filter === s ? '1.5px solid #4a90d9' : '1.5px solid rgba(45,95,196,0.3)', backgroundColor: filter === s ? '#2d5fc4' : 'transparent', color: filter === s ? '#fff' : '#8aafd4', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
               {s} {s !== 'All' && `(${leads.filter(l => l.status === s).length})`}
             </button>
           ))}
         </div>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
+
+        {/* Source Filters */}
+        <div style={{ display: 'flex', gap: '6px', marginBottom: '16px', flexWrap: 'wrap' }}>
           {sources.map(s => {
             const src = sourceColor[s]
             return (
-              <button key={s} onClick={() => setSourceFilter(s)} style={{ padding: '5px 12px', borderRadius: '20px', border: sourceFilter === s ? `1.5px solid ${src?.color || '#4a90d9'}` : '1.5px solid rgba(45,95,196,0.2)', backgroundColor: sourceFilter === s ? (src?.bg || 'rgba(45,95,196,0.2)') : 'transparent', color: sourceFilter === s ? (src?.color || '#4a90d9') : '#8aafd4', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}>
+              <button key={s} onClick={() => setSourceFilter(s)} style={{ padding: '4px 10px', borderRadius: '20px', border: sourceFilter === s ? `1.5px solid ${src?.color || '#4a90d9'}` : '1.5px solid rgba(45,95,196,0.2)', backgroundColor: sourceFilter === s ? (src?.bg || 'rgba(45,95,196,0.2)') : 'transparent', color: sourceFilter === s ? (src?.color || '#4a90d9') : '#8aafd4', fontSize: '0.72rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
                 {src?.icon} {s} {s !== 'All' && `(${leads.filter(l => l.source === s).length})`}
               </button>
             )
           })}
         </div>
 
-        {/* Leads Table + Detail Panel */}
-        <div style={{ display: 'grid', gridTemplateColumns: selectedLead ? '1fr 360px' : '1fr', gap: '20px', alignItems: 'start' }}>
+        {/* Main Content */}
+        <div className={`leads-grid ${selectedLead ? 'leads-grid-open' : ''}`}>
+
+          {/* Table / Cards */}
           <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
-            <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-              <h2 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>
-                {filter === 'All' && sourceFilter === 'All' ? 'All Leads' : 'Filtered Leads'} ({filtered.length})
+            <div style={{ padding: '14px 16px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+              <h2 style={{ color: '#ffffff', fontSize: '0.92rem', fontWeight: '700', margin: 0 }}>
+                {filter === 'All' && sourceFilter === 'All' ? 'All Leads' : 'Filtered'} ({filtered.length})
               </h2>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                {/* Search */}
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                 <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#8aafd4', fontSize: '0.85rem' }}>🔍</span>
-                  <input type="text" placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)}
-                    style={{ backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', color: '#ffffff', padding: '7px 12px 7px 30px', fontSize: '0.82rem', outline: 'none', width: '180px' }} />
+                  <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#8aafd4', fontSize: '0.82rem' }}>🔍</span>
+                  <input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)}
+                    style={{ backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', color: '#ffffff', padding: '7px 12px 7px 30px', fontSize: '0.82rem', outline: 'none', width: '140px' }} />
                 </div>
                 {filtered.length > 0 && (
                   <button onClick={deleteAllFiltered} disabled={deletingSource === 'all'}
-                    style={{ backgroundColor: 'rgba(231,76,60,0.15)', color: '#e74c3c', border: '1px solid rgba(231,76,60,0.3)', borderRadius: '8px', padding: '7px 14px', fontSize: '0.78rem', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-                    {deletingSource === 'all' ? 'Deleting...' : `🗑️ Delete Shown (${filtered.length})`}
+                    style={{ backgroundColor: 'rgba(231,76,60,0.15)', color: '#e74c3c', border: '1px solid rgba(231,76,60,0.3)', borderRadius: '8px', padding: '7px 12px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                    {deletingSource === 'all' ? 'Deleting...' : `🗑️ Delete (${filtered.length})`}
                   </button>
                 )}
               </div>
@@ -243,73 +245,119 @@ const AdminLeads = () => {
               <div style={{ padding: '40px', textAlign: 'center', color: '#8aafd4' }}>Loading...</div>
             ) : filtered.length === 0 ? (
               <div style={{ padding: '40px', textAlign: 'center', color: '#8aafd4' }}>
-                <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔍</div>
-                No leads found
+                <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔍</div>No leads found
               </div>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr style={{ backgroundColor: 'rgba(45,95,196,0.1)' }}>
-                      {['Lead', 'Contact', 'Source', 'Service', 'Status', 'Date', ''].map(h => (
-                        <th key={h} style={{ padding: '11px 16px', color: '#8aafd4', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'left', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filtered.map((lead, i) => (
-                      <tr key={lead._id} onClick={() => setSelectedLead(selectedLead?._id === lead._id ? null : lead)}
-                        style={{ borderTop: '1px solid rgba(45,95,196,0.15)', backgroundColor: selectedLead?._id === lead._id ? 'rgba(45,95,196,0.15)' : i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)', cursor: 'pointer', transition: 'background 0.15s' }}
-                        onMouseEnter={e => { if (selectedLead?._id !== lead._id) e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)' }}
-                        onMouseLeave={e => { if (selectedLead?._id !== lead._id) e.currentTarget.style.backgroundColor = i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)' }}>
-                        <td style={{ padding: '12px 16px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.82rem', flexShrink: 0 }}>
-                              {lead.name?.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                              <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.85rem' }}>{lead.name}</div>
-                              {lead.status === 'New' && <div style={{ color: '#e74c3c', fontSize: '0.65rem', fontWeight: '700' }}>● NEW</div>}
-                            </div>
+              <>
+                {/* Mobile Cards */}
+                <div className="leads-cards-mobile">
+                  {filtered.map((lead) => (
+                    <div key={lead._id}
+                      onClick={() => setSelectedLead(selectedLead?._id === lead._id ? null : lead)}
+                      style={{ padding: '14px 16px', borderBottom: '1px solid rgba(45,95,196,0.1)', cursor: 'pointer', backgroundColor: selectedLead?._id === lead._id ? 'rgba(45,95,196,0.15)' : 'transparent' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.9rem', flexShrink: 0 }}>
+                            {lead.name?.charAt(0).toUpperCase()}
                           </div>
-                        </td>
-                        <td style={{ padding: '12px 16px' }}>
-                          <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{lead.email}</div>
-                          <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{lead.phone}</div>
-                        </td>
-                        <td style={{ padding: '12px 16px' }}>
-                          {lead.source ? (
-                            <span style={{ backgroundColor: sourceColor[lead.source]?.bg || 'rgba(45,95,196,0.2)', color: sourceColor[lead.source]?.color || '#4a90d9', border: `1px solid ${sourceColor[lead.source]?.color || '#4a90d9'}40`, borderRadius: '20px', padding: '3px 10px', fontSize: '0.72rem', fontWeight: '700', whiteSpace: 'nowrap' }}>
+                          <div>
+                            <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.88rem' }}>{lead.name}</div>
+                            <div style={{ color: '#8aafd4', fontSize: '0.75rem' }}>{lead.phone}</div>
+                          </div>
+                        </div>
+                        <select value={lead.status} onChange={e => { e.stopPropagation(); updateStatus(lead._id, e.target.value) }}
+                          onClick={e => e.stopPropagation()}
+                          style={{ backgroundColor: statusColor[lead.status]?.bg, color: statusColor[lead.status]?.color, border: `1px solid ${statusColor[lead.status]?.color}40`, borderRadius: '20px', padding: '3px 8px', fontSize: '0.7rem', fontWeight: '700', cursor: 'pointer', outline: 'none' }}>
+                          {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => (
+                            <option key={s} value={s} style={{ backgroundColor: '#0d1f4e', color: '#fff' }}>{s}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                          {lead.source && (
+                            <span style={{ backgroundColor: sourceColor[lead.source]?.bg, color: sourceColor[lead.source]?.color, padding: '2px 8px', borderRadius: '20px', fontSize: '0.68rem', fontWeight: '600' }}>
                               {sourceColor[lead.source]?.icon} {lead.source}
                             </span>
-                          ) : '—'}
-                        </td>
-                        <td style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.8rem' }}>{lead.service}</td>
-                        <td style={{ padding: '12px 16px' }} onClick={e => e.stopPropagation()}>
-                          <select value={lead.status} onChange={e => updateStatus(lead._id, e.target.value)}
-                            style={{ backgroundColor: statusColor[lead.status]?.bg, color: statusColor[lead.status]?.color, border: `1px solid ${statusColor[lead.status]?.color}40`, borderRadius: '20px', padding: '3px 10px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', outline: 'none' }}>
-                            {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => (
-                              <option key={s} value={s} style={{ backgroundColor: '#0d1f4e', color: '#ffffff' }}>{s}</option>
-                            ))}
-                          </select>
-                        </td>
-                        <td style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
-                          {new Date(lead.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                        </td>
-                        <td style={{ padding: '12px 16px' }} onClick={e => e.stopPropagation()}>
-                          <button onClick={() => deleteLead(lead._id)} style={{ backgroundColor: 'rgba(231,76,60,0.15)', color: '#e74c3c', border: '1px solid rgba(231,76,60,0.3)', borderRadius: '6px', padding: '5px 10px', fontSize: '0.78rem', cursor: 'pointer' }}>🗑️</button>
-                        </td>
+                          )}
+                          <span style={{ color: '#4a4a6a', fontSize: '0.7rem', alignSelf: 'center' }}>
+                            {new Date(lead.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                          </span>
+                        </div>
+                        <button onClick={e => { e.stopPropagation(); deleteLead(lead._id) }}
+                          style={{ backgroundColor: 'rgba(231,76,60,0.15)', color: '#e74c3c', border: '1px solid rgba(231,76,60,0.3)', borderRadius: '6px', padding: '4px 8px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop Table */}
+                <div className="leads-table-desktop" style={{ overflowX: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead>
+                      <tr style={{ backgroundColor: 'rgba(45,95,196,0.1)' }}>
+                        {['Lead', 'Contact', 'Source', 'Service', 'Status', 'Date', ''].map(h => (
+                          <th key={h} style={{ padding: '11px 16px', color: '#8aafd4', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'left', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {filtered.map((lead, i) => (
+                        <tr key={lead._id} onClick={() => setSelectedLead(selectedLead?._id === lead._id ? null : lead)}
+                          style={{ borderTop: '1px solid rgba(45,95,196,0.15)', backgroundColor: selectedLead?._id === lead._id ? 'rgba(45,95,196,0.15)' : i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)', cursor: 'pointer', transition: 'background 0.15s' }}
+                          onMouseEnter={e => { if (selectedLead?._id !== lead._id) e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)' }}
+                          onMouseLeave={e => { if (selectedLead?._id !== lead._id) e.currentTarget.style.backgroundColor = i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)' }}>
+                          <td style={{ padding: '12px 16px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                              <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.82rem', flexShrink: 0 }}>
+                                {lead.name?.charAt(0).toUpperCase()}
+                              </div>
+                              <div>
+                                <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.85rem' }}>{lead.name}</div>
+                                {lead.status === 'New' && <div style={{ color: '#e74c3c', fontSize: '0.65rem', fontWeight: '700' }}>● NEW</div>}
+                              </div>
+                            </div>
+                          </td>
+                          <td style={{ padding: '12px 16px' }}>
+                            <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{lead.email}</div>
+                            <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{lead.phone}</div>
+                          </td>
+                          <td style={{ padding: '12px 16px' }}>
+                            {lead.source ? (
+                              <span style={{ backgroundColor: sourceColor[lead.source]?.bg, color: sourceColor[lead.source]?.color, border: `1px solid ${sourceColor[lead.source]?.color}40`, borderRadius: '20px', padding: '3px 10px', fontSize: '0.72rem', fontWeight: '700', whiteSpace: 'nowrap' }}>
+                                {sourceColor[lead.source]?.icon} {lead.source}
+                              </span>
+                            ) : '—'}
+                          </td>
+                          <td style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.8rem' }}>{lead.service}</td>
+                          <td style={{ padding: '12px 16px' }} onClick={e => e.stopPropagation()}>
+                            <select value={lead.status} onChange={e => updateStatus(lead._id, e.target.value)}
+                              style={{ backgroundColor: statusColor[lead.status]?.bg, color: statusColor[lead.status]?.color, border: `1px solid ${statusColor[lead.status]?.color}40`, borderRadius: '20px', padding: '3px 10px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', outline: 'none' }}>
+                              {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => (
+                                <option key={s} value={s} style={{ backgroundColor: '#0d1f4e', color: '#ffffff' }}>{s}</option>
+                              ))}
+                            </select>
+                          </td>
+                          <td style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
+                            {new Date(lead.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                          </td>
+                          <td style={{ padding: '12px 16px' }} onClick={e => e.stopPropagation()}>
+                            <button onClick={() => deleteLead(lead._id)} style={{ backgroundColor: 'rgba(231,76,60,0.15)', color: '#e74c3c', border: '1px solid rgba(231,76,60,0.3)', borderRadius: '6px', padding: '5px 10px', fontSize: '0.78rem', cursor: 'pointer' }}>🗑️</button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
           </div>
 
           {/* Lead Detail Panel */}
           {selectedLead && (
-            <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '16px', padding: '24px', position: 'sticky', top: '80px' }}>
+            <div className="lead-detail-panel">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h3 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>📋 Lead Detail</h3>
                 <button onClick={() => setSelectedLead(null)} style={{ background: 'transparent', border: 'none', color: '#8aafd4', fontSize: '1.2rem', cursor: 'pointer' }}>✕</button>
@@ -329,7 +377,7 @@ const AdminLeads = () => {
               ].map(row => (
                 <div key={row.label} style={{ marginBottom: '14px' }}>
                   <div style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{row.icon} {row.label}</div>
-                  <div style={{ color: '#ffffff', fontSize: '0.88rem', fontWeight: '600' }}>{row.value}</div>
+                  <div style={{ color: '#ffffff', fontSize: '0.88rem', fontWeight: '600', wordBreak: 'break-all' }}>{row.value}</div>
                 </div>
               ))}
               {selectedLead.message && (
@@ -356,6 +404,31 @@ const AdminLeads = () => {
           )}
         </div>
       </div>
+
+      <style>{`
+        .leads-container { padding: 16px 14px; }
+        .leads-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .leads-export-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+        .leads-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+        .leads-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        .leads-grid-open { grid-template-columns: 1fr; }
+        .leads-cards-mobile { display: block; }
+        .leads-table-desktop { display: none; }
+        .lead-detail-panel { background-color: #0d1f4e; border: 1px solid rgba(45,95,196,0.3); border-radius: 16px; padding: 20px; }
+
+        @media (min-width: 640px) {
+          .leads-container { padding: 20px 18px; }
+          .leads-stats-grid { grid-template-columns: repeat(5, 1fr); gap: 12px; }
+        }
+
+        @media (min-width: 1024px) {
+          .leads-container { padding: 32px 30px; }
+          .leads-grid-open { grid-template-columns: 1fr 360px; }
+          .leads-cards-mobile { display: none; }
+          .leads-table-desktop { display: block; }
+          .lead-detail-panel { position: sticky; top: 80px; }
+        }
+      `}</style>
     </div>
   )
 }
