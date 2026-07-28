@@ -82,10 +82,7 @@ const AdminLogin = () => {
   const navigate = useNavigate()
   const { login, token } = useAdmin()
 
-  // If already logged in → redirect to dashboard
-  useEffect(() => {
-    if (token) navigate('/admin/dashboard')
-  }, [token, navigate])
+ 
 
   useEffect(() => {
     setEyeBlinking(password.length > 0 && !showPassword)
