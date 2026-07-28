@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import AdminNavbar from '../../components/admin/AdminNavbar'
@@ -14,7 +14,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl:     'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 })
 
-// Custom colored markers by type
 const createColoredIcon = (color) => L.divIcon({
   className: '',
   html: `<div style="
@@ -101,13 +100,17 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!token) {
+        setLoading(false)
+        return
+      }
       try {
         const config = { headers: { Authorization: `Bearer ${token}` } }
         const [propsRes, leadsRes] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_API_URL}/api/properties`),
+          axios.get(`${import.meta.env.VITE_API_URL}/api/properties`, config),
           axios.get(`${import.meta.env.VITE_API_URL}/api/leads`, config)
         ])
-        const leads = leadsRes.data.data
+        const leads = leadsRes.data.data || []
         const props = propsRes.data.data || []
         setStats({
           properties: props.length,
@@ -120,7 +123,7 @@ const AdminDashboard = () => {
         setRecentLeads(leads.slice(0, 6))
         setProperties(props)
       } catch (err) {
-        console.error(err)
+        console.error('Dashboard error:', err)
       } finally {
         setLoading(false)
       }
@@ -180,7 +183,7 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        {/* ── DARK MAP with colored markers ── */}
+        {/* Map */}
         <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden', marginBottom: '28px' }}>
           <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <div>
@@ -207,7 +210,6 @@ const AdminDashboard = () => {
               </div>
             ) : (
               <MapContainer center={[25.1972, 55.2744]} zoom={11} style={{ height: '100%', width: '100%' }} scrollWheelZoom={false}>
-                {/* Dark map tile */}
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
@@ -235,7 +237,6 @@ const AdminDashboard = () => {
             )}
           </div>
 
-          {/* Legend */}
           <div style={{ padding: '12px 24px', borderTop: '1px solid rgba(45,95,196,0.2)', display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
             {Object.entries(markerColors).map(([type, color]) => (
               <div key={type} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -272,7 +273,8 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {recentLeads.map((lead, i) => (
-                    <tr key={lead._id} style={{ borderTop: '1px solid rgba(45,95,196,0.15)', backgroundColor: i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)', transition: 'background 0.15s' }}
+                    <tr key={lead._id}
+                      style={{ borderTop: '1px solid rgba(45,95,196,0.15)', backgroundColor: i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)', transition: 'background 0.15s' }}
                       onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)'}
                       onMouseLeave={e => e.currentTarget.style.backgroundColor = i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)'}>
                       <td style={{ padding: '12px 16px' }}>

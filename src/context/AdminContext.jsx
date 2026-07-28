@@ -9,23 +9,31 @@ export const AdminProvider = ({ children }) => {
 
   useEffect(() => {
     const savedAdmin = localStorage.getItem('adminData')
-    if (savedAdmin && token) {
-      setAdmin(JSON.parse(savedAdmin))
+    const savedToken = localStorage.getItem('adminToken')
+    if (savedAdmin && savedToken) {
+      try {
+        setAdmin(JSON.parse(savedAdmin))
+        setToken(savedToken)  // ✅ sync state with localStorage
+      } catch {
+        localStorage.removeItem('adminToken')
+        localStorage.removeItem('adminData')
+        setToken(null)
+      }
     }
   }, [])
 
   const login = (adminData, adminToken) => {
-    setAdmin(adminData)
-    setToken(adminToken)
     localStorage.setItem('adminToken', adminToken)
     localStorage.setItem('adminData', JSON.stringify(adminData))
+    setToken(adminToken)   // ✅ update state immediately
+    setAdmin(adminData)    // ✅ update state immediately
   }
 
   const logout = () => {
-    setAdmin(null)
-    setToken(null)
     localStorage.removeItem('adminToken')
     localStorage.removeItem('adminData')
+    setToken(null)
+    setAdmin(null)
   }
 
   return (
