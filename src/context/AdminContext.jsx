@@ -1,32 +1,24 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 const AdminContext = createContext()
 
 export const AdminProvider = ({ children }) => {
-  const [admin, setAdmin] = useState(null)
-  const [token, setToken] = useState(localStorage.getItem('adminToken') || null)
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    const savedAdmin = localStorage.getItem('adminData')
-    const savedToken = localStorage.getItem('adminToken')
-    if (savedAdmin && savedToken) {
-      try {
-        setAdmin(JSON.parse(savedAdmin))
-        setToken(savedToken)  // ✅ sync state with localStorage
-      } catch {
-        localStorage.removeItem('adminToken')
-        localStorage.removeItem('adminData')
-        setToken(null)
-      }
+  const [token, setToken] = useState(() => localStorage.getItem('adminToken') || null)
+  const [admin, setAdmin] = useState(() => {
+    try {
+      const saved = localStorage.getItem('adminData')
+      return saved ? JSON.parse(saved) : null
+    } catch {
+      return null
     }
-  }, [])
+  })
+  const [loading, setLoading] = useState(false)
 
   const login = (adminData, adminToken) => {
     localStorage.setItem('adminToken', adminToken)
     localStorage.setItem('adminData', JSON.stringify(adminData))
-    setToken(adminToken)   // ✅ update state immediately
-    setAdmin(adminData)    // ✅ update state immediately
+    setToken(adminToken)
+    setAdmin(adminData)
   }
 
   const logout = () => {
