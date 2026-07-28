@@ -90,42 +90,55 @@
     "title2": "Area",
     "viewAll": "View All"
   },
-  "services": {
-    "badge": "Our Services",
-    "title1": "What We",
-    "title2": "Offer You",
-    "items": {
-      "buy": {
-        "title": "Buy Property",
-        "desc": "We help you find your dream property from over 1,500 listings across Dubai."
-      },
-      "sell": {
-        "title": "Sell Your Property",
-        "desc": "We ensure the best price for your property through advanced marketing strategies."
-      },
-      "rent": {
-        "title": "Rent Property",
-        "desc": "Whether tenant or landlord, we provide the best rental solutions in Dubai."
-      },
-      "invest": {
-        "title": "Property Investment",
-        "desc": "Specialized investment consultancy to help you build a profitable real estate portfolio."
-      },
-      "offplan": {
-        "title": "Off Plan Projects",
-        "desc": "Get the best prices on new projects with flexible payment plans."
-      },
-      "valuation": {
-        "title": "Free Valuation",
-        "desc": "Get an accurate valuation of your property from our certified market experts."
-      }
+ "services": {
+  "badge": "Our Services",
+  "title1": "What We",
+  "title2": "Offer You",
+  "subtitle": "Comprehensive real estate services tailored for the Dubai market",
+  "items": {
+    "buy": {
+      "title": "Buy Property",
+      "desc": "We help you find your dream property from over 1,500 listings across Dubai.",
+      "link": "Browse Properties"
+    },
+    "sell": {
+      "title": "Sell Your Property",
+      "desc": "We ensure the best price for your property through advanced marketing strategies.",
+      "link": "List Your Property"
+    },
+    "rent": {
+      "title": "Rent Property",
+      "desc": "Whether tenant or landlord, we provide the best rental solutions in Dubai.",
+      "link": "View Rentals"
+    },
+    "invest": {
+      "title": "Property Investment",
+      "desc": "Specialized investment consultancy to help you build a profitable real estate portfolio.",
+      "link": "Learn More"
+    },
+    "offplan": {
+      "title": "Off Plan Projects",
+      "desc": "Get the best prices on new projects with flexible payment plans.",
+      "link": "View Projects"
+    },
+    "commercial": {
+      "title": "Commercial Properties",
+      "desc": "Office spaces, retail units and commercial investments across Dubai's business districts.",
+      "link": "View Commercial"
+    },
+    "valuation": {
+      "title": "Free Valuation",
+      "desc": "Get an accurate valuation of your property from our certified market experts.",
+      "link": "Book Valuation"
     }
-  },
-  "testimonials": {
-    "badge": "Client Reviews",
-    "title1": "What Our",
-    "title2": "Clients Say"
-  },
+  }
+},
+"testimonials": {
+  "badge": "Client Reviews",
+  "title1": "What Our",
+  "title2": "Clients Say",
+  "subtitle": "What our happy clients say about their experience with Lazord Real Estate"
+},
   "cta": {
   "badge": "Free Consultation",
   "title1": "Ready to Find Your",

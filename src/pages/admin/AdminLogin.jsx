@@ -230,7 +230,7 @@ const handleSubmit = async (e) => {
                     type="email"
                     required
                     autoComplete="email"
-                    placeholder="admin@lazordrealestate.ae"
+                    placeholder="Email@gmail.com"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     style={{ ...inputStyle, padding:'13px 14px 13px 42px' }}
