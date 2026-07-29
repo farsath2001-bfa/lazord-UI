@@ -45,7 +45,7 @@ const Footer = () => {
     { label: t('nav.about'),      path: '/about' },
     { label: t('nav.contact'),    path: '/contact' },
     { label: 'FAQ',               path: '/faq' },
-    { label: t('nav.agents') || 'Agents', path: '/agents' },
+    // { label: t('nav.agents') || 'Agents', path: '/agents' },
     { label: t('footer.legal') || 'Privacy & Terms', path: '/legal' },
   ]
 
@@ -96,8 +96,8 @@ const Footer = () => {
                <img src={logo} alt="Lazord Real Estate"
                style={{ height: '120px', width: 'auto', objectFit: 'contain' }} />
               <div dir="ltr" style={{ lineHeight: '1.2' }}>
-                <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.2rem', letterSpacing: '3px', textTransform: 'uppercase' }}>LAZORD</div>
-                <div style={{ color: '#4a90d9', fontSize: '0.7rem', letterSpacing: '3px', textTransform: 'uppercase' }}>Real Estate</div>
+                {/* <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.2rem', letterSpacing: '3px', textTransform: 'uppercase' }}>LAZORD</div>
+                <div style={{ color: '#4a90d9', fontSize: '0.7rem', letterSpacing: '3px', textTransform: 'uppercase' }}>Real Estate</div> */}
               </div>
             </Link>
             <p style={{ color: '#8aafd4', fontSize: '0.88rem', lineHeight: '1.7', marginBottom: '20px', maxWidth: '280px' }}>

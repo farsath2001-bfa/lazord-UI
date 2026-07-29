@@ -13,7 +13,7 @@ html, body, #root {
 }
 
 .navbar {
-  background-color: #0d1f4e !important;
+  background-color: #ffffff !important;
 }
 
 .nav-link:hover {
@@ -23,4 +23,54 @@ html, body, #root {
 .navbar-collapse {
   background-color: #0d1f4e;
   padding: 10px 0;
+}
+/* White navbar override */
+.navbar {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+  box-shadow: none !important;
+}
+
+/* Dark text for nav links */
+.navbar .nav-link {
+  color: #1a1a2e !important;
+}
+
+.navbar .nav-link:hover {
+  color: #2d5fc4 !important;
+}
+/* Force white navbar */
+.navbar.sticky-top {
+  background-color: #ffffff !important;
+  border-bottom: 2px solid rgba(45,95,196,0.15) !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08) !important;
+}
+
+.navbar.sticky-top .nav-link {
+  color: #1a1a2e !important;
+}
+
+
+
+.navbar-collapse {
+  background-color: #ffffff !important;
+}
+/* Navbar text colors */
+.navbar.sticky-top .nav-link {
+  color: #1a1a2e !important;
+}
+
+.navbar.sticky-top .nav-link:hover,
+.navbar.sticky-top .nav-link:focus,
+.navbar.sticky-top .nav-link.active {
+  color: #2d5fc4 !important;
+}
+
+/* Override Bootstrap default blue link color */
+.navbar a {
+  color: #1a1a2e !important;
+}
+
+.navbar a:hover {
+  color: #2d5fc4 !important;
 }
