@@ -1,304 +1,211 @@
+import { useRef } from 'react'
+import html2canvas from 'html2canvas'
+import lazordLogo from '../../assets/image/lazordlogoo.png'
+
 const PropertyPDFButton = ({ property }) => {
+  const formatPrice = (price, type) => {
+    if (type === 'Rent') return `AED ${price?.toLocaleString()} / year`
+    if (price >= 1000000) return `AED ${(price / 1000000).toFixed(2)}M`
+    return `AED ${price?.toLocaleString()}`
+  }
 
-  const generatePDF = () => {
-    const formatPrice = (price, type) => {
-      if (type === 'Rent') return `AED ${price?.toLocaleString()} / year`
-      if (price >= 1000000) return `AED ${(price / 1000000).toFixed(2)}M`
-      return `AED ${price?.toLocaleString()}`
-    }
-
-    const html = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>${property.title}</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    /* ── Remove all browser print headers/footers ── */
-    @page {
-      size: A4;
-      margin: 0mm;
-    }
-
-    @media print {
-      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      * { -webkit-print-color-adjust: exact !important; }
-    }
-
-    html, body {
+  const generatePDF = async () => {
+    // Create hidden div with PDF content
+    const div = document.createElement('div')
+    div.style.cssText = `
+      position: fixed; top: -9999px; left: -9999px;
+      width: 794px; background: white;
       font-family: 'Segoe UI', Arial, sans-serif;
-      color: #1a1a2e;
-      background: #fff;
-      width: 210mm;
-      min-height: 297mm;
-    }
+    `
+div.innerHTML = `
+  <div style="width:794px; min-height:1123px; background:white; position:relative;">
 
-    /* Header */
-    .header {
-      background: linear-gradient(135deg, #0d1f4e 0%, #1a3a7c 100%);
-      color: white;
-      padding: 20px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: 1px; }
-    .logo h1 span { color: #4a90d9; }
-    .logo p { color: rgba(255,255,255,0.6); font-size: 0.72rem; margin-top: 2px; letter-spacing: 1px; }
-    .header-contact { text-align: right; }
-    .header-contact p { color: rgba(255,255,255,0.85); font-size: 0.75rem; margin-bottom: 3px; }
-
-    /* Hero */
-    .hero { position: relative; }
-    .hero img { width: 100%; height: 260px; object-fit: cover; display: block; }
-    .hero-overlay {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
-      padding: 20px 28px;
-    }
-    .tag {
-      background: #2d5fc4; color: white;
-      padding: 3px 10px; border-radius: 20px;
-      font-size: 0.7rem; font-weight: 700;
-      display: inline-block; margin-bottom: 6px;
-      letter-spacing: 0.5px; text-transform: uppercase;
-    }
-    .hero-overlay h2 { color: white; font-size: 1.5rem; font-weight: 700; }
-    .hero-overlay .loc { color: rgba(255,255,255,0.8); font-size: 0.82rem; margin-top: 3px; }
-
-    /* Content */
-    .content { padding: 20px 32px; }
-
-    /* Price bar */
-    .price-bar {
-      background: #f0f4ff;
-      border: 2px solid #2d5fc4;
-      border-radius: 10px;
-      padding: 14px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-    .price { font-size: 1.7rem; font-weight: 800; color: #0d1f4e; }
-    .badges { display: flex; gap: 8px; align-items: center; }
-    .badge-type { background: #2d5fc4; color: white; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
-    .badge-status { background: #e8f8f0; color: #27ae60; border: 1px solid #27ae60; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
-    .roi-tag { background: #fff8e8; color: #e67e22; border: 1px solid #e67e22; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
-
-    /* Stats grid */
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
-    .stat {
-      background: #f8f9ff; border: 1px solid #e0e8ff;
-      border-radius: 8px; padding: 12px 10px; text-align: center;
-    }
-    .stat-icon { font-size: 1.2rem; margin-bottom: 4px; }
-    .stat-value { font-size: 1rem; font-weight: 800; color: #0d1f4e; }
-    .stat-label { font-size: 0.65rem; color: #666; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-    /* Two column layout */
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
-
-    /* Sections */
-    .section { margin-bottom: 16px; }
-    .section h3 {
-      font-size: 0.88rem; font-weight: 700; color: #0d1f4e;
-      margin-bottom: 8px; padding-bottom: 6px;
-      border-bottom: 2px solid #2d5fc4;
-      text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .section p { color: #444; font-size: 0.82rem; line-height: 1.6; }
-
-    /* Amenities */
-    .amenities { display: flex; flex-wrap: wrap; gap: 6px; }
-    .amenity {
-      background: #f0f4ff; border: 1px solid #2d5fc4;
-      border-radius: 5px; padding: 4px 10px;
-      font-size: 0.75rem; color: #0d1f4e; font-weight: 600;
-    }
-
-    /* Developer */
-    .dev-box {
-      background: #f8f9ff; border: 1px solid #e0e8ff;
-      border-radius: 8px; padding: 12px 16px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .dev-icon {
-      width: 38px; height: 38px; background: #2d5fc4;
-      border-radius: 8px; display: flex; align-items: center;
-      justify-content: center; color: white; font-size: 1.1rem; flex-shrink: 0;
-    }
-    .dev-name { font-weight: 700; color: #0d1f4e; font-size: 0.9rem; }
-    .dev-sub { color: #666; font-size: 0.75rem; margin-top: 1px; }
-
-    /* Gallery strip */
-    .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
-    .gallery img { width: 100%; height: 80px; object-fit: cover; border-radius: 6px; }
-
-    /* Footer */
-    .footer {
-      background: #0d1f4e; color: white;
-      padding: 16px 32px;
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: auto;
-    }
-    .footer-left p { font-size: 0.75rem; color: rgba(255,255,255,0.8); margin-bottom: 2px; }
-    .footer-left strong { font-size: 0.88rem; }
-    .footer-right { max-width: 280px; font-size: 0.65rem; color: rgba(255,255,255,0.5); text-align: right; line-height: 1.5; }
-
-    /* Divider */
-    .divider { height: 1px; background: #e0e8ff; margin: 0 0 16px; }
-  </style>
-</head>
-<body>
-
-  <!-- Header -->
-  <div class="header">
-    <div class="logo">
-      <h1>LAZORD <span>REALESTATE</span></h1>
-      <p>لازورد للعقارات </p>
-    </div>
-    <div class="header-contact">
-      <p>📞 +971 42 999 088 · +971 56 111 9233</p>
-      <p>✉️ info@lazordrealestate.ae</p>
-      <p>📍 Office 803, Al Salemiyah Tower, Dubai</p>
-    </div>
-  </div>
-
-  <!-- Hero -->
-  ${property.image ? `
-  <div class="hero">
-    <img src="${property.image}" alt="${property.title}" />
-    <div class="hero-overlay">
-      <span class="tag">${property.tag || property.type}</span>
-      <h2>${property.title}</h2>
-      <p class="loc">📍 ${property.location}${property.community ? ` — ${property.community}` : ''}, Dubai, UAE</p>
-    </div>
-  </div>` : `
-  <div style="background:#0d1f4e;padding:28px 32px;">
-    <span class="tag" style="margin-bottom:8px;display:inline-block;">${property.tag || property.type}</span>
-    <h2 style="color:#fff;font-size:1.5rem;font-weight:700;">${property.title}</h2>
-    <p style="color:rgba(255,255,255,0.7);font-size:0.82rem;margin-top:4px;">📍 ${property.location}${property.community ? ` — ${property.community}` : ''}, Dubai, UAE</p>
-  </div>`}
-
-  <div class="content">
-
-    <!-- Price -->
-    <div class="price-bar">
-      <div class="price">${formatPrice(property.price, property.type)}</div>
-      <div class="badges">
-        ${property.roi ? `<span class="roi-tag">📈 ROI ${property.roi}</span>` : ''}
-        <span class="badge-type">${property.type}</span>
-        <span class="badge-status">${property.status}</span>
-      </div>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-icon">🛏</div>
-        <div class="stat-value">${property.bedrooms === 0 ? 'Studio' : property.bedrooms}</div>
-        <div class="stat-label">Bedrooms</div>
-      </div>
-      <div class="stat">
-        <div class="stat-icon">🚿</div>
-        <div class="stat-value">${property.bathrooms}</div>
-        <div class="stat-label">Bathrooms</div>
-      </div>
-      <div class="stat">
-        <div class="stat-icon">📐</div>
-        <div class="stat-value">${property.area?.toLocaleString()}</div>
-        <div class="stat-label">Area (sqft)</div>
-      </div>
-      <div class="stat">
-        <div class="stat-icon">🏗️</div>
-        <div class="stat-value">${property.completionYear || 'Ready'}</div>
-        <div class="stat-label">Completion</div>
-      </div>
-    </div>
-
-    <!-- Two column: Description + Developer -->
-    <div class="two-col">
-      ${property.description ? `
-      <div class="section">
-        <h3>About This Property</h3>
-        <p>${property.description}</p>
-      </div>` : '<div></div>'}
-
-      ${property.developer ? `
-      <div class="section">
-        <h3>Developer</h3>
-        <div class="dev-box">
-          <div class="dev-icon">🏗️</div>
-          <div>
-            <div class="dev-name">${property.developer}</div>
-            <div class="dev-sub">Licensed Developer · Dubai, UAE</div>
-          </div>
+    <!-- HEADER -->
+    <div style="background:#0a1c50; padding:12px 20px; display:flex; justify-content:space-between; align-items:center;">
+      
+      <!-- Left: Logo + Name -->
+      <div style="display:flex; align-items:center; gap:12px;">
+        <img src="${lazordLogo}" style="height:75px; width:auto; object-fit:contain;" crossorigin="anonymous" />
+        <div>
+          <div style="font-size:18px; font-weight:800; color:white; line-height:1.2;">LAZORD</div>
+          <div style="font-size:18px; font-weight:800; color:#4a90d9; line-height:1.2;">REAL ESTATE</div>
         </div>
-      </div>` : '<div></div>'}
-    </div>
+      </div>
 
-    <!-- Amenities -->
-    ${property.amenities?.length > 0 ? `
-    <div class="section">
-      <h3>Amenities & Features</h3>
-      <div class="amenities">
-        ${property.amenities.map(a => `<span class="amenity">✓ ${a}</span>`).join('')}
+     
+
+    </div>
+    <!-- Gold divider -->
+    <div style="height:3px; background:linear-gradient(to right, #c9a84c, #4a90d9);"></div>
+
+    <!-- PROPERTY IMAGE -->
+    ${property.image ? `
+    <div style="position:relative; height:350px; overflow:hidden;">
+      <img src="${property.image}" style="width:100%; height:100%; object-fit:cover;" crossorigin="anonymous" />
+      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);"></div>
+      ${property.tag ? `<div style="position:absolute; top:14px; left:20px; background:#2d5fc4; color:white; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700;">${property.tag.toUpperCase()}</div>` : ''}
+      <div style="position:absolute; bottom:16px; left:20px;">
+        <div style="color:white; font-size:22px; font-weight:800; margin-bottom:4px;">${property.title || ''}</div>
+        <div style="color:#c8d6ee; font-size:12px;">📍 ${property.location || ''}${property.community ? ' — ' + property.community : ''}, Dubai, UAE</div>
       </div>
     </div>` : ''}
 
-    <!-- Gallery strip -->
-    ${property.gallery?.length > 1 ? `
-    <div class="section">
-      <h3>Gallery</h3>
-      <div class="gallery">
-        ${property.gallery.slice(0, 3).map(img => `<img src="${img}" alt="gallery" />`).join('')}
+    <div style="padding:20px 20px 100px;">
+
+          <!-- PRICE ROW -->
+          <div style="background:#f0f4ff; border-radius:10px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="font-size:26px; font-weight:800; color:#0a1c50;">${formatPrice(property.price, property.type)}</div>
+            <div style="display:flex; gap:8px;">
+              <span style="background:${property.type === 'Buy' ? '#2d5fc4' : property.type === 'Rent' ? '#27ae60' : '#8e44ad'}; color:white; padding:6px 16px; border-radius:20px; font-size:12px; font-weight:700;">${property.type || ''}</span>
+              <span style="background:transparent; color:#27ae60; border:1.5px solid #27ae60; padding:6px 16px; border-radius:20px; font-size:12px; font-weight:700;">${property.status || 'Available'}</span>
+            </div>
+          </div>
+
+          <!-- SPECS -->
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px;">
+            ${[
+              { label: 'BEDROOMS',    value: property.bedrooms === 0 ? 'Studio' : String(property.bedrooms || '—'), icon: '🛏' },
+              { label: 'BATHROOMS',   value: String(property.bathrooms || '—'), icon: '🚿' },
+              { label: 'AREA (SQFT)', value: property.area ? property.area.toLocaleString() : '—', icon: '📐' },
+              { label: 'COMPLETION',  value: property.completionYear ? String(property.completionYear) : 'Ready', icon: '🏗' },
+            ].map(s => `
+              <div style="background:#f8faff; border:1px solid #dde4f0; border-radius:10px; padding:14px; text-align:center;">
+                <div style="font-size:20px; margin-bottom:6px;">${s.icon}</div>
+                <div style="font-size:18px; font-weight:800; color:#0a1c50;">${s.value}</div>
+                <div style="font-size:10px; color:#888; margin-top:4px; letter-spacing:0.5px;">${s.label}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- ABOUT + DEVELOPER -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+
+            <!-- About -->
+            ${property.description ? `
+            <div style="background:#f8faff; border-radius:10px; padding:16px;">
+              <div style="font-size:11px; font-weight:700; color:#2d5fc4; letter-spacing:1px; margin-bottom:6px; padding-bottom:6px; border-bottom:1.5px solid #2d5fc4;">ABOUT THIS PROPERTY</div>
+              <div style="font-size:12px; color:#444; line-height:1.7;">${property.description?.slice(0, 350)}${property.description?.length > 350 ? '...' : ''}</div>
+            </div>` : '<div></div>'}
+
+            <!-- Developer + ROI -->
+            <div style="background:#f8faff; border-radius:10px; padding:16px;">
+              <div style="font-size:11px; font-weight:700; color:#2d5fc4; letter-spacing:1px; margin-bottom:10px; padding-bottom:6px; border-bottom:1.5px solid #2d5fc4;">DEVELOPER</div>
+              ${property.developer ? `
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                <div style="width:38px; height:38px; border-radius:8px; background:#dce8f5; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; color:#2d5fc4;">${property.developer.charAt(0).toUpperCase()}</div>
+                <div>
+                  <div style="font-size:13px; font-weight:700; color:#0a1c50;">${property.developer}</div>
+                  <div style="font-size:10px; color:#888;">Licensed Developer · Dubai, UAE</div>
+                </div>
+              </div>` : ''}
+              ${property.roi ? `
+              <div style="background:#27ae60; border-radius:8px; padding:10px; text-align:center;">
+                <div style="color:white; font-size:20px; font-weight:800;">${property.roi}</div>
+                <div style="color:rgba(255,255,255,0.8); font-size:10px; margin-top:2px;">EXPECTED ROI</div>
+              </div>` : ''}
+            </div>
+          </div>
+
+          <!-- AMENITIES -->
+          ${property.amenities?.length ? `
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px; font-weight:700; color:#2d5fc4; letter-spacing:1px; margin-bottom:8px; padding-bottom:6px; border-bottom:1.5px solid #2d5fc4;">AMENITIES & FEATURES</div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              ${property.amenities.map(a => `
+                <span style="background:#ebf0ff; border:1px solid #b4c8f0; color:#2d5fc4; padding:5px 12px; border-radius:20px; font-size:11px; font-weight:600;">✓ ${a}</span>
+              `).join('')}
+            </div>
+          </div>` : ''}
+
+        </div>
+
+       <!-- FOOTER — fixed at bottom -->
+<div style="position:absolute; bottom:0; left:0; right:0;">
+  <div style="height:3px; background:linear-gradient(to right, #c9a84c, #4a90d9);"></div>
+  <div style="background:#0a1c50; padding:20px 20px; display:flex; justify-content:space-between; align-items:center;">
+    
+    <!-- Left: Logo + Company Name -->
+    <div style="display:flex; align-items:center; gap:12px;">
+      <img src="${lazordLogo}" style="height:75px; width:auto; object-fit:contain;" crossorigin="anonymous" />
+      <div>
+        <div style="color:white; font-size:13px; font-weight:800; margin-bottom:4px;">Lazord Real Estate LLC</div>
+        <div style="color:#8aafd4; font-size:10px; margin-bottom:2px;">📍 Office 803, Al Salemiyah Tower, Dubai</div>
+        <div style="color:#8aafd4; font-size:10px; margin-bottom:2px;">✉️ info@lazordrealestate.ae</div>
+        <div style="color:#8aafd4; font-size:10px; margin-bottom:2px;">📞 +971 42 999 088 · +971 56 111 9233</div>
+        <div style="color:#8aafd4; font-size:10px;">🌐 www.lazordrealestate.ae</div>
       </div>
-    </div>` : ''}
+    </div>
+
+    <!-- Right: Disclaimer + Date -->
+    <div style="text-align:right; max-width:260px;">
+      <div style="color:#6a80a0; font-size:10px; line-height:1.6; margin-bottom:6px;">
+        This property sheet is for informational purposes only. All details are subject to change without notice. Lazord Real Estate LLC is fully RERA licensed and DED certified.
+      </div>
+      <div style="color:#4a5a70; font-size:10px;">
+        Generated ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+      </div>
+    </div>
 
   </div>
+</div>
 
-  <!-- Footer -->
-  <div class="footer">
-    <div class="footer-left">
-      <strong>Lazord Real Estate LLC</strong>
-      <p>📞 +971 42 999 088 · +971 56 111 9233</p>
-      <p>✉️ info@lazordrealestate.ae</p>
-      <p>🌐 lazordrealestate.ae</p>
-    </div>
-    <div class="footer-right">
-      This property sheet is for informational purposes only. All details are subject to change without notice. Lazord Real Estate LLC is fully RERA licensed and DED certified.<br/>
-      Generated ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-    </div>
-  </div>
+</div>
+`
 
-</body>
-</html>`
+document.body.appendChild(div)
 
-    const win = window.open('', '_blank')
-    win.document.write(html)
-    win.document.close()
-    win.onload = () => {
-      // Small delay to ensure images load
-      setTimeout(() => win.print(), 800)
+    // Wait for images to load
+    await new Promise(resolve => setTimeout(resolve, 1500))
+
+    try {
+      const canvas = await html2canvas(div, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        width: 794,
+        windowWidth: 794,
+      })
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.95)
+
+      // Create download link
+      const { default: jsPDF } = await import('jspdf')
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+      const W = 210
+      const H = 297
+      pdf.addImage(imgData, 'JPEG', 0, 0, W, H)
+
+      const filename = `${(property.title || 'property').replace(/[^a-z0-9]/gi, '-').toLowerCase()}-lazord.pdf`
+      pdf.save(filename)
+
+    } catch (err) {
+      console.error('PDF error:', err)
+    } finally {
+      document.body.removeChild(div)
     }
   }
 
   return (
-    <button onClick={generatePDF}
+    <button
+      onClick={generatePDF}
       style={{
-        display: 'flex', alignItems: 'center', gap: '6px',
-        backgroundColor: 'rgba(230,126,34,0.15)',
-        color: '#e67e22',
-        border: '1px solid rgba(230,126,34,0.3)',
-        borderRadius: '6px', padding: '6px 14px',
-        fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer',
-        transition: 'all 0.2s ease'
+        backgroundColor: 'rgba(45,95,196,0.15)',
+        color: '#4a90d9',
+        border: '1px solid rgba(74,144,217,0.3)',
+        borderRadius: '6px',
+        padding: '6px 12px',
+        fontSize: '0.78rem',
+        fontWeight: '600',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        transition: 'all 0.2s ease',
+        whiteSpace: 'nowrap'
       }}
-      onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(230,126,34,0.3)'}
-      onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(230,126,34,0.15)'}
-      title="Generate PDF property sheet"
+      onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.3)'; e.currentTarget.style.borderColor = '#4a90d9' }}
+      onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.15)'; e.currentTarget.style.borderColor = 'rgba(74,144,217,0.3)' }}
     >
       📄 PDF
     </button>
