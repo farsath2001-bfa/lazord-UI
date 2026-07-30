@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import PropertyCard from '../components/common/PropertyCard'
 import FeaturedAreas from '../components/home/FeaturedAreas'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination, Autoplay } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -22,20 +26,18 @@ const Properties = () => {
   const [searchParams] = useSearchParams()
   const { t } = useTranslation()
 
-  const [search, setSearch]     = useState(searchParams.get('search') || '')
-  const [type, setType]         = useState(searchParams.get('type') || 'All')
-  const [category, setCategory] = useState('All')
-  const [beds, setBeds]         = useState('All')
-  const [sort, setSort]         = useState('newest')
+  const [search, setSearch]         = useState(searchParams.get('search') || '')
+  const [type, setType]             = useState(searchParams.get('type') || 'All')
+  const [category, setCategory]     = useState('All')
+  const [beds, setBeds]             = useState('All')
+  const [sort, setSort]             = useState('newest')
   const [properties, setProperties] = useState([])
-  const [loading, setLoading]   = useState(true)
+  const [loading, setLoading]       = useState(true)
   const [filtersOpen, setFiltersOpen] = useState(false)
 
   useEffect(() => {
-    const urlType   = searchParams.get('type') || 'All'
-    const urlSearch = searchParams.get('search') || ''
-    setType(urlType)
-    setSearch(urlSearch)
+    setType(searchParams.get('type') || 'All')
+    setSearch(searchParams.get('search') || '')
   }, [searchParams])
 
   useEffect(() => {
@@ -61,9 +63,11 @@ const Properties = () => {
   }, [search, type, category, beds, sort])
 
   const inputStyle = {
-    backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)',
-    borderRadius: '8px', color: '#ffffff', padding: '10px 14px',
-    fontSize: '0.88rem', outline: 'none', width: '100%', cursor: 'pointer'
+    backgroundColor: '#0d1f4e',
+    border: '1px solid rgba(45,95,196,0.35)',
+    borderRadius: '8px', color: '#ffffff',
+    padding: '10px 14px', fontSize: '0.88rem',
+    outline: 'none', width: '100%', cursor: 'pointer'
   }
 
   const hasActiveFilters = type !== 'All' || category !== 'All' || beds !== 'All' || search
@@ -71,7 +75,7 @@ const Properties = () => {
   return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
 
-      {/* Header — compact, no extra padding */}
+      {/* Header */}
       <div style={{ backgroundColor: '#0d1f4e', borderBottom: '1px solid rgba(45,95,196,0.3)', padding: '32px 0 24px' }}>
         <Container>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '10px' }}>
@@ -89,15 +93,18 @@ const Properties = () => {
               </p>
             </div>
             {/* Mobile filter toggle */}
-            <button className="d-lg-none" onClick={() => setFiltersOpen(!filtersOpen)}
-              style={{ backgroundColor: hasActiveFilters ? 'rgba(45,95,196,0.3)' : '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)', borderRadius: '8px', color: '#ffffff', padding: '9px 16px', fontSize: '0.85rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <button
+              className="d-lg-none"
+              onClick={() => setFiltersOpen(!filtersOpen)}
+              style={{ backgroundColor: hasActiveFilters ? 'rgba(45,95,196,0.3)' : '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)', borderRadius: '8px', color: '#ffffff', padding: '9px 16px', fontSize: '0.85rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
               🔍 {hasActiveFilters ? 'Filters Active' : 'Filters'} {filtersOpen ? '▲' : '▼'}
             </button>
           </div>
         </Container>
       </div>
 
-      {/* Featured Areas — directly below header, no gap */}
+      {/* Featured Areas */}
       <FeaturedAreas />
 
       <Container style={{ paddingTop: '8px' }}>
@@ -155,8 +162,10 @@ const Properties = () => {
                     <span onClick={f.clear} style={{ cursor: 'pointer', color: '#8aafd4', fontWeight: '700', marginLeft: '2px' }}>×</span>
                   </div>
                 ))}
-                <div onClick={() => { setSearch(''); setType('All'); setCategory('All'); setBeds('All') }}
-                  style={{ color: '#e74c3c', fontSize: '0.8rem', cursor: 'pointer', alignSelf: 'center', marginLeft: '4px' }}>
+                <div
+                  onClick={() => { setSearch(''); setType('All'); setCategory('All'); setBeds('All') }}
+                  style={{ color: '#e74c3c', fontSize: '0.8rem', cursor: 'pointer', alignSelf: 'center', marginLeft: '4px' }}
+                >
                   {t('properties.clearAll')}
                 </div>
               </div>
@@ -177,17 +186,48 @@ const Properties = () => {
             <p style={{ color: '#8aafd4' }}>{t('properties.noResultsDesc')}</p>
           </div>
         ) : (
-          <Row className="g-4">
-            {properties.map(property => (
-              <Col key={property._id} lg={4} md={6} xs={12}>
-                <PropertyCard property={property} />
-              </Col>
-            ))}
-          </Row>
+          <>
+            {/* ✅ MOBILE — Swiper slider */}
+            <div className="d-block d-lg-none">
+              <Swiper
+                modules={[Pagination, Autoplay]}
+                spaceBetween={16}
+                slidesPerView={1.2}
+                pagination={{ clickable: true, dynamicBullets: true }}
+                autoplay={{ delay: 3500, disableOnInteraction: false }}
+                breakpoints={{
+                  480: { slidesPerView: 1.5 },
+                  640: { slidesPerView: 2.1 },
+                }}
+                style={{ paddingBottom: '40px' }}
+              >
+                {properties.map(property => (
+                  <SwiperSlide key={property._id}>
+                    <PropertyCard property={property} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+
+            {/* ✅ DESKTOP — Normal grid */}
+            <div className="d-none d-lg-block">
+              <Row className="g-4">
+                {properties.map(property => (
+                  <Col key={property._id} lg={4} md={6}>
+                    <PropertyCard property={property} />
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          </>
         )}
       </Container>
 
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .swiper-pagination-bullet { background: rgba(74,144,217,0.4) !important; }
+        .swiper-pagination-bullet-active { background: #4a90d9 !important; }
+      `}</style>
     </div>
   )
 }
