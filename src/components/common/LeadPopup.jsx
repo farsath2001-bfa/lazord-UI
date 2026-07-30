@@ -18,11 +18,24 @@ const LeadPopup = () => {
   })
 
   useEffect(() => {
+    // Auto show after 3s if not seen
     const seen = sessionStorage.getItem('leadPopupSeen')
     if (!seen) {
       const timer = setTimeout(() => setShow(true), 3000)
       return () => clearTimeout(timer)
     }
+
+    // ✅ Listen for manual open from Book Valuation button
+    const handleOpen = () => setShow(true)
+    window.addEventListener('openLeadPopup', handleOpen)
+    return () => window.removeEventListener('openLeadPopup', handleOpen)
+  }, [])
+
+  // ✅ Always listen for manual open (even if already seen)
+  useEffect(() => {
+    const handleOpen = () => setShow(true)
+    window.addEventListener('openLeadPopup', handleOpen)
+    return () => window.removeEventListener('openLeadPopup', handleOpen)
   }, [])
 
   const handleClose = () => {
@@ -110,7 +123,7 @@ const LeadPopup = () => {
           {/* Glow */}
           <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', width: '200px', height: '200px', borderRadius: '50%', backgroundColor: '#2d5fc4', opacity: 0.08, filter: 'blur(60px)', pointerEvents: 'none' }} />
 
-          {/* Close */}
+          {/* Close button */}
           <button onClick={handleClose} style={{
             position: 'absolute', top: '14px', right: '14px',
             backgroundColor: 'rgba(255,255,255,0.08)',
@@ -124,18 +137,16 @@ const LeadPopup = () => {
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#8aafd4' }}
           >×</button>
 
-          {/* Logo — same as navbar */}
-         <div dir="ltr" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '20px', direction: 'ltr', unicodeBidi: 'isolate' }}>
-  <div style={{ border: '2px solid rgba(255,255,255,0.8)', borderRadius: '8px', padding: '3px 6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <img src={logo} alt="Lazord Real Estate" style={{ height: '48px', width: 'auto', objectFit: 'contain', display: 'block' }} />
-  </div>
-  <div dir="ltr" style={{ lineHeight: '1.2', textAlign: 'left', direction: 'ltr', unicodeBidi: 'isolate' }}>
-    <div dir="ltr" style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', letterSpacing: '0.5px', direction: 'ltr', unicodeBidi: 'isolate' }}>
-      Lazord<span style={{ color: '#4a90d9' }}>RealEstate</span>
-    </div>
-    
-  </div>
-</div>
+          {/* Logo only — no text */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+            <div style={{ border: '2px solid rgba(255,255,255,0.8)', borderRadius: '8px', padding: '3px 6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img
+                src={logo}
+                alt="Lazord Real Estate"
+                style={{ height: '80px', width: 'auto', objectFit: 'contain', display: 'block' }}
+              />
+            </div>
+          </div>
 
           {/* Divider */}
           <div style={{ width: '40px', height: '2px', backgroundColor: '#2d5fc4', margin: '0 auto 16px', borderRadius: '2px' }} />
@@ -148,7 +159,7 @@ const LeadPopup = () => {
           </p>
         </div>
 
-        {/* Form */}
+        {/* Form body */}
         <div style={{ padding: '28px 32px 32px' }}>
           {submitted ? (
             <div style={{ textAlign: 'center', padding: '20px 0' }}>

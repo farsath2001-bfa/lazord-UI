@@ -258,7 +258,7 @@ const AdminProperties = () => {
                     <div>
                       <label style={labelStyle}>Tag</label>
                       <select style={inputStyle} value={form.tag} onChange={e => setForm(p => ({ ...p, tag: e.target.value }))}>
-                        {['New', 'Featured', 'Hot Deal', 'Off Plan', 'Rent', 'Family'].map(t => <option key={t}>{t}</option>)}
+                        {['New', 'Featured', 'Hot Deal', 'Off Plan', 'Rent','Buy', 'Family'].map(t => <option key={t}>{t}</option>)}
                       </select>
                     </div>
                     <div>

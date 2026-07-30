@@ -22,8 +22,7 @@ const CTABanner = () => {
       shadow: 'rgba(37,211,102,0.3)'
     },
     {
-      to: '/contact',
-      external: false,
+      popup: true,
       bg: '#2d5fc4', hoverBg: '#1a3a7c',
       label: '📅 ' + t('cta.book'),
       shadow: 'rgba(45,95,196,0.3)'
@@ -42,7 +41,7 @@ const CTABanner = () => {
   return (
     <section style={{ backgroundColor: '#0a1630', padding: '40px 0', position: 'relative', overflow: 'hidden' }}>
 
-      {/* Ambient glow behind section */}
+      {/* Ambient glow */}
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '300px', borderRadius: '50%', backgroundColor: '#2d5fc4', opacity: 0.04, filter: 'blur(100px)', pointerEvents: 'none' }} />
 
       <Container style={{ position: 'relative', zIndex: 1 }}>
@@ -78,7 +77,7 @@ const CTABanner = () => {
               position: 'absolute', left: p.left, top: p.top,
               width: p.size, height: p.size,
               borderRadius: '50%', backgroundColor: '#4a90d9', opacity: 0.4,
-              animation: `ctaParticle 4s ease-in-out infinite`,
+              animation: 'ctaParticle 4s ease-in-out infinite',
               animationDelay: p.delay, pointerEvents: 'none'
             }} />
           ))}
@@ -128,9 +127,29 @@ const CTABanner = () => {
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    {btn.external ? (
+                    {/* ✅ Popup button */}
+                    {btn.popup ? (
+                      <button
+                        onClick={() => window.dispatchEvent(new Event('openLeadPopup'))}
+                        style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                          backgroundColor: btn.bg, color: '#fff',
+                          padding: '15px 28px', borderRadius: '12px',
+                          fontSize: '0.95rem', fontWeight: '700',
+                          border: 'none', cursor: 'pointer', width: '100%',
+                          boxShadow: `0 8px 24px ${btn.shadow}`,
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = btn.hoverBg; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = btn.bg; e.currentTarget.style.transform = 'translateY(0)' }}
+                      >
+                        {btn.label}
+                      </button>
+
+                    ) : btn.external ? (
+                      /* ✅ External link */
                       
-                      <a href={btn.href}
+                       <a href={btn.href}
                         target={btn.href.startsWith('http') ? '_blank' : undefined}
                         rel="noopener noreferrer"
                         style={{
@@ -154,7 +173,9 @@ const CTABanner = () => {
                       >
                         {btn.label}
                       </a>
+
                     ) : (
+                      /* ✅ Internal link */
                       <Link
                         to={btn.to}
                         style={{

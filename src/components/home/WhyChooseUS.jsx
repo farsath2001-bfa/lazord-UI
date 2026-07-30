@@ -62,9 +62,7 @@ const WhyChooseUs = () => {
   { Icon: RiBarChart2Line,       key: 'expertise', color: '#4a90d9', bg: 'rgba(74,144,217,0.12)', border: 'rgba(74,144,217,0.3)', glow: 'rgba(74,144,217,0.15)' },
   { Icon: RiFileShield2Line,     key: 'trusted',   color: '#27ae60', bg: 'rgba(39,174,96,0.12)',  border: 'rgba(39,174,96,0.3)',  glow: 'rgba(39,174,96,0.15)'  },
   { Icon: RiEarthLine,           key: 'global',    color: '#2d5fc4', bg: 'rgba(45,95,196,0.12)',  border: 'rgba(45,95,196,0.3)',  glow: 'rgba(45,95,196,0.15)'  },
-  { Icon: RiCustomerService2Line,key: 'support',   color: '#e67e22', bg: 'rgba(230,126,34,0.12)', border: 'rgba(230,126,34,0.3)', glow: 'rgba(230,126,34,0.15)' },
-  { Icon: RiSpeedLine,           key: 'fast',      color: '#e74c3c', bg: 'rgba(231,76,60,0.12)',  border: 'rgba(231,76,60,0.3)',  glow: 'rgba(231,76,60,0.15)'  },
-]
+ ]
 
  const stats = [
   { target: 18,   suffix: '+', label: 'Years in Dubai Market', Icon: RiTrophyLine,        color: '#f1c40f' },
@@ -116,7 +114,7 @@ const WhyChooseUs = () => {
         {/* Reason Cards */}
         <Row className="g-4" style={{ marginBottom: '56px' }}>
           {reasons.map((r, i) => (
-            <Col key={i} lg={4} md={6}>
+            <Col key={i} lg={3} md={6}>
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
