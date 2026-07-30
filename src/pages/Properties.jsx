@@ -33,7 +33,6 @@ const Properties = () => {
   const [sort, setSort]             = useState('newest')
   const [properties, setProperties] = useState([])
   const [loading, setLoading]       = useState(true)
-  const [filtersOpen, setFiltersOpen] = useState(false)
 
   useEffect(() => {
     setType(searchParams.get('type') || 'All')
@@ -92,14 +91,6 @@ const Properties = () => {
                 {loading ? 'Loading...' : `${properties.length} ${t('properties.found')}`}
               </p>
             </div>
-            {/* Mobile filter toggle */}
-            <button
-              className="d-lg-none"
-              onClick={() => setFiltersOpen(!filtersOpen)}
-              style={{ backgroundColor: hasActiveFilters ? 'rgba(45,95,196,0.3)' : '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)', borderRadius: '8px', color: '#ffffff', padding: '9px 16px', fontSize: '0.85rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              🔍 {hasActiveFilters ? 'Filters Active' : 'Filters'} {filtersOpen ? '▲' : '▼'}
-            </button>
           </div>
         </Container>
       </div>
@@ -109,68 +100,108 @@ const Properties = () => {
 
       <Container style={{ paddingTop: '8px' }}>
 
-        {/* Filter Bar */}
-        <div className={filtersOpen ? 'd-block' : 'd-none d-lg-block'}>
-          <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '14px', padding: '20px', marginBottom: '24px' }}>
-            <Row className="g-3 align-items-end">
-              <Col lg={4} xs={12}>
-                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.search')}</label>
-                <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1rem' }}>🔍</span>
-                  <input type="text" placeholder={t('properties.searchPlaceholder')} value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    style={{ ...inputStyle, paddingLeft: '36px' }} />
-                </div>
-              </Col>
-              <Col lg={2} xs={6}>
-                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.type')}</label>
-                <select value={type} onChange={e => setType(e.target.value)} style={inputStyle}>
-                  {propertyTypes.map(t2 => <option key={t2} value={t2}>{t2}</option>)}
-                </select>
-              </Col>
-              <Col lg={2} xs={6}>
-                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.category')}</label>
-                <select value={category} onChange={e => setCategory(e.target.value)} style={inputStyle}>
-                  {categories.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </Col>
-              <Col lg={2} xs={6}>
-                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.bedrooms')}</label>
-                <select value={beds} onChange={e => setBeds(e.target.value)} style={inputStyle}>
-                  {bedOptions.map(b => <option key={b} value={b}>{b === 'All' ? 'Any' : b}</option>)}
-                </select>
-              </Col>
-              <Col lg={2} xs={6}>
-                <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('properties.sortBy')}</label>
-                <select value={sort} onChange={e => setSort(e.target.value)} style={inputStyle}>
-                  {sortOptions.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-                </select>
-              </Col>
-            </Row>
-
-            {hasActiveFilters && (
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(45,95,196,0.2)' }}>
-                <span style={{ color: '#8aafd4', fontSize: '0.8rem', alignSelf: 'center' }}>{t('properties.activeFilters')}</span>
-                {[
-                  search && { label: `"${search}"`, clear: () => setSearch('') },
-                  type !== 'All' && { label: type, clear: () => setType('All') },
-                  category !== 'All' && { label: category, clear: () => setCategory('All') },
-                  beds !== 'All' && { label: `${beds} bed`, clear: () => setBeds('All') },
-                ].filter(Boolean).map((f, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(45,95,196,0.2)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '20px', padding: '3px 12px', color: '#4a90d9', fontSize: '0.8rem' }}>
-                    {f.label}
-                    <span onClick={f.clear} style={{ cursor: 'pointer', color: '#8aafd4', fontWeight: '700', marginLeft: '2px' }}>×</span>
-                  </div>
-                ))}
-                <div
-                  onClick={() => { setSearch(''); setType('All'); setCategory('All'); setBeds('All') }}
-                  style={{ color: '#e74c3c', fontSize: '0.8rem', cursor: 'pointer', alignSelf: 'center', marginLeft: '4px' }}
-                >
-                  {t('properties.clearAll')}
-                </div>
-              </div>
-            )}
+        {/* ✅ Filter Bar — always visible, scrollable on mobile */}
+        <div style={{
+          backgroundColor: '#0d1f4e',
+          border: '1px solid rgba(45,95,196,0.3)',
+          borderRadius: '14px',
+          padding: '16px',
+          marginBottom: '24px',
+          overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch'
+        }}>
+          {/* Search — full width always */}
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+              {t('properties.search')}
+            </label>
+            <div style={{ position: 'relative' }}>
+              <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1rem' }}>🔍</span>
+              <input
+                type="text"
+                placeholder={t('properties.searchPlaceholder')}
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                style={{ ...inputStyle, paddingLeft: '36px' }}
+              />
+            </div>
           </div>
+
+          {/* Dropdowns — scrollable row on mobile */}
+          <div style={{
+            display: 'flex',
+            gap: '10px',
+            overflowX: 'auto',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            paddingBottom: '4px'
+          }}>
+            {/* Type */}
+            <div style={{ minWidth: '130px', flex: '1' }}>
+              <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+                {t('properties.type')}
+              </label>
+              <select value={type} onChange={e => setType(e.target.value)} style={inputStyle}>
+                {propertyTypes.map(t2 => <option key={t2} value={t2}>{t2}</option>)}
+              </select>
+            </div>
+
+            {/* Category */}
+            <div style={{ minWidth: '130px', flex: '1' }}>
+              <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+                {t('properties.category')}
+              </label>
+              <select value={category} onChange={e => setCategory(e.target.value)} style={inputStyle}>
+                {categories.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+
+            {/* Bedrooms */}
+            <div style={{ minWidth: '120px', flex: '1' }}>
+              <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+                {t('properties.bedrooms')}
+              </label>
+              <select value={beds} onChange={e => setBeds(e.target.value)} style={inputStyle}>
+                {bedOptions.map(b => <option key={b} value={b}>{b === 'All' ? 'Any' : b}</option>)}
+              </select>
+            </div>
+
+            {/* Sort */}
+            <div style={{ minWidth: '150px', flex: '1' }}>
+              <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+                {t('properties.sortBy')}
+              </label>
+              <select value={sort} onChange={e => setSort(e.target.value)} style={inputStyle}>
+                {sortOptions.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+              </select>
+            </div>
+          </div>
+
+          {/* Active filters */}
+          {hasActiveFilters && (
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(45,95,196,0.2)' }}>
+              <span style={{ color: '#8aafd4', fontSize: '0.8rem', alignSelf: 'center' }}>
+                {t('properties.activeFilters')}
+              </span>
+              {[
+                search && { label: `"${search}"`, clear: () => setSearch('') },
+                type !== 'All' && { label: type, clear: () => setType('All') },
+                category !== 'All' && { label: category, clear: () => setCategory('All') },
+                beds !== 'All' && { label: `${beds} bed`, clear: () => setBeds('All') },
+              ].filter(Boolean).map((f, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(45,95,196,0.2)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '20px', padding: '3px 12px', color: '#4a90d9', fontSize: '0.8rem' }}>
+                  {f.label}
+                  <span onClick={f.clear} style={{ cursor: 'pointer', color: '#8aafd4', fontWeight: '700', marginLeft: '2px' }}>×</span>
+                </div>
+              ))}
+              <div
+                onClick={() => { setSearch(''); setType('All'); setCategory('All'); setBeds('All') }}
+                style={{ color: '#e74c3c', fontSize: '0.8rem', cursor: 'pointer', alignSelf: 'center', marginLeft: '4px' }}
+              >
+                {t('properties.clearAll')}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Results */}
@@ -227,6 +258,7 @@ const Properties = () => {
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .swiper-pagination-bullet { background: rgba(74,144,217,0.4) !important; }
         .swiper-pagination-bullet-active { background: #4a90d9 !important; }
+        div::-webkit-scrollbar { display: none; }
       `}</style>
     </div>
   )
