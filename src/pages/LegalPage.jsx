@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 
 const LegalPage = () => {
   const [activeTab, setActiveTab] = useState('privacy')
@@ -46,7 +47,14 @@ const LegalPage = () => {
   }
 
   return (
-    <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
+    <>
+      <SEO
+        title="Privacy Policy & Terms of Use"
+        description="Lazord Real Estate's privacy policy and terms of use."
+        path="/legal"
+        noindex
+      />
+      <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
 
       {/* Header */}
       <div style={{ backgroundColor: '#0d1f4e', borderBottom: '1px solid rgba(45,95,196,0.3)', padding: '50px 0 40px', position: 'relative', overflow: 'hidden' }}>
@@ -268,7 +276,8 @@ const LegalPage = () => {
         </div>
 
       </Container>
-    </div>
+      </div>
+    </>
   )
 }
 

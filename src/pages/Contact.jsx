@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import axios from 'axios'
+import SEO from '../components/SEO'
 
 const services = ['Buy a Property', 'Rent a Property', 'Sell My Property', 'Off Plan Investment', 'Commercial Property', 'Free Valuation', 'General Inquiry']
 
@@ -55,7 +56,13 @@ const Contact = () => {
   }
 
   return (
-    <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
+    <>
+      <SEO
+        title="Contact Us"
+        description="Get in touch with Lazord Real Estate — Office 803, AlSalemiya Tower, Rigga Al Butteen, Dubai. Call, WhatsApp or visit us."
+        path="/contact"
+      />
+      <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
 
       {/* ── HERO with bg image ── */}
       <div style={{ position: 'relative', minHeight: '360px', display: 'flex', alignItems: 'center', overflow: 'hidden', borderBottom: '1px solid rgba(45,95,196,0.3)' }}>
@@ -302,7 +309,8 @@ const Contact = () => {
         input::placeholder, textarea::placeholder { color: #4a5a7a; }
         select option { background-color: #0d1f4e; color: #ffffff; }
       `}</style>
-    </div>
+      </div>
+    </>
   )
 }
 

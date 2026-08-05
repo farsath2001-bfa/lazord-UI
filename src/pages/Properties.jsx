@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import SEO from '../components/SEO'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -72,7 +73,13 @@ const Properties = () => {
   const hasActiveFilters = type !== 'All' || category !== 'All' || beds !== 'All' || search
 
   return (
-    <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
+    <>
+      <SEO
+        title="Properties for Sale & Rent in Dubai"
+        description="Browse verified apartments, villas and commercial units for sale and rent in Dubai. Off-plan and ready properties from Lazord Real Estate."
+        path="/properties"
+      />
+      <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
 
       {/* Header */}
       <div style={{ backgroundColor: '#0d1f4e', borderBottom: '1px solid rgba(45,95,196,0.3)', padding: '32px 0 24px' }}>
@@ -260,7 +267,8 @@ const Properties = () => {
         .swiper-pagination-bullet-active { background: #4a90d9 !important; }
         div::-webkit-scrollbar { display: none; }
       `}</style>
-    </div>
+      </div>
+    </>
   )
 }
 

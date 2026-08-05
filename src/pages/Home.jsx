@@ -4,6 +4,7 @@ import FeaturedProperties from '../components/home/FeaturedProperties'
 import WhyChooseUs from '../components/home/WhyChooseUS'
 import CTABanner from '../components/home/CtaBanner'
 import ProcessSection from '../components/home/ProcessSection'
+import SEO from '../components/SEO'
 
 const Home = () => {
   const propertiesRef = useScrollReveal({ direction: 'up', delay: 0, duration: 700 })
@@ -13,6 +14,12 @@ const Home = () => {
 
   return (
     <>
+      <SEO
+        title="Dubai Real Estate Agency"
+        description="Lazord Real Estate — RERA & DED licensed agency in Dubai since 2007. Buy, rent and invest in off-plan and secondary market properties across the UAE."
+        path="/"
+      />
+
       <div data-cursor="hero">
         <Hero />
       </div>

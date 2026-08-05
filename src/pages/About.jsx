@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { motion, useInView } from 'framer-motion'
 import Services from '../components/home/Services'
 import Testimonials from '../components/home/Testimonials'
+import SEO from '../components/SEO'
 
 const IMAGE_HERO  = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1400&q=80'
 const IMAGE_STORY = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80'
@@ -94,7 +95,13 @@ const cardStyle = {
 
 const About = () => {
   return (
-    <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
+    <>
+      <SEO
+        title="About Us"
+        description="18+ years in Dubai real estate. Lazord Real Estate is RERA licensed and DED certified, based in Rigga Al Butteen, Deira."
+        path="/about"
+      />
+      <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
 
       {/* ── HERO with Dubai BG Image ── */}
       <div style={{ position: 'relative', minHeight: '520px', display: 'flex', alignItems: 'center', overflow: 'hidden', borderBottom: '1px solid rgba(45,95,196,0.3)' }}>
@@ -596,7 +603,8 @@ const About = () => {
         @keyframes particleFloat { 0%{transform:translateY(0);opacity:0.6} 100%{transform:translateY(-80px);opacity:0} }
         @keyframes pulseRing { 0%,100%{opacity:0.4;transform:scale(1)} 50%{opacity:0.7;transform:scale(1.1)} }
       `}</style>
-    </div>
+      </div>
+    </>
   )
 }
 
