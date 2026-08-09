@@ -44,6 +44,19 @@ const formatPrice = (price, type) => {
   return `AED ${price.toLocaleString()}`
 }
 
+// Formats digits into +971 5X XXX XXXX as the user types (same pattern as Contact.jsx)
+const formatUAEPhone = (raw) => {
+  let digits = raw.replace(/\D/g, '')
+  if (digits.startsWith('971')) digits = digits.slice(3)
+  else if (digits.startsWith('0')) digits = digits.slice(1)
+  digits = digits.slice(0, 9)
+  let out = '+971'
+  if (digits.length > 0) out += ' ' + digits.slice(0, 2)
+  if (digits.length > 2) out += ' ' + digits.slice(2, 5)
+  if (digits.length > 5) out += ' ' + digits.slice(5, 9)
+  return out
+}
+
 const PropertyDetail = () => {
   const { id } = useParams()
   const [property, setProperty] = useState(null)
@@ -75,13 +88,17 @@ const PropertyDetail = () => {
         name: 'Property Visitor',
         email: 'visitor@lazord.ae',
         phone: 'N/A',
-        service: 'Property Inquiry',
+        service: 'General Inquiry',
         source,
         property: id,
         message: `Clicked ${source} on property: ${property?.title}`
       })
       setLeadTracked(prev => ({ ...prev, [source.toLowerCase()]: true }))
     } catch (err) { console.error(err) }
+  }
+
+  const handlePhoneChange = e => {
+    setForm(p => ({ ...p, phone: formatUAEPhone(e.target.value) }))
   }
 
   const handleEnquiry = async (e) => {
@@ -91,13 +108,14 @@ const PropertyDetail = () => {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/leads`, {
         ...form,
         source: 'Property Inquiry',
-        service: 'Property Inquiry',
+        service: 'General Inquiry',
         property: id,
         message: form.message || `Enquiry about: ${property?.title}`
       })
       setFormStatus('success')
       setForm({ name: '', email: '', phone: '', message: '' })
-    } catch {
+    } catch (err) {
+      console.error('Enquiry submit failed:', err.response?.data || err.message)
       setFormStatus('error')
     } finally {
       setSubmitting(false)
@@ -352,22 +370,22 @@ const PropertyDetail = () => {
                   </div>
                 ) : (
                   <form onSubmit={handleEnquiry} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <input required type="text" placeholder="Your Name" value={form.name}
+                    <input required type="text" name="name" autoComplete="name" placeholder="Your Name" value={form.name}
                       onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
                       style={inputStyle}
                       onFocus={e => e.target.style.borderColor = '#4a90d9'}
                       onBlur={e => e.target.style.borderColor = 'rgba(45,95,196,0.3)'} />
-                    <input required type="email" placeholder="Email Address" value={form.email}
+                    <input required type="email" name="email" autoComplete="email" placeholder="Email Address" value={form.email}
                       onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
                       style={inputStyle}
                       onFocus={e => e.target.style.borderColor = '#4a90d9'}
                       onBlur={e => e.target.style.borderColor = 'rgba(45,95,196,0.3)'} />
-                    <input required type="tel" placeholder="Phone Number" value={form.phone}
-                      onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
+                    <input required type="tel" name="phone" autoComplete="tel" placeholder="+971 5X XXX XXXX" value={form.phone}
+                      onChange={handlePhoneChange}
                       style={inputStyle}
                       onFocus={e => e.target.style.borderColor = '#4a90d9'}
                       onBlur={e => e.target.style.borderColor = 'rgba(45,95,196,0.3)'} />
-                    <textarea rows={3} placeholder={`I'm interested in ${property.title}...`}
+                    <textarea rows={3} name="message" placeholder={`I'm interested in ${property.title}...`}
                       value={form.message}
                       onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                       style={{ ...inputStyle, resize: 'vertical' }}
