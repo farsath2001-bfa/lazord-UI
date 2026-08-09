@@ -86,12 +86,12 @@ const Footer = () => {
       {/* Newsletter Bar */}
       <div style={{ position: 'relative', borderBottom: '1px solid rgba(74,144,217,0.14)', padding: '30px 0' }}>
         <Container>
-          <div style={{
+          <div className="footer-newsletter-bar" style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px',
             background: 'linear-gradient(135deg, rgba(45,95,196,0.10) 0%, rgba(26,58,124,0.10) 100%)',
             border: '1px solid rgba(74,144,217,0.18)', borderRadius: '16px', padding: '22px 28px',
           }}>
-            <div>
+            <div className="footer-newsletter-copy">
               <h3 style={{ color: '#ffffff', fontSize: '1.02rem', fontWeight: '700', margin: 0, letterSpacing: '-0.01em' }}>
                 Stay ahead of Dubai's property market
               </h3>
@@ -99,13 +99,18 @@ const Footer = () => {
                 New listings, price movement and off-plan launches — in your inbox.
               </p>
             </div>
-            <form onSubmit={handleSubscribe} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              <input type="email" required placeholder="Enter your email"
+            <form onSubmit={handleSubscribe} className="footer-newsletter-form" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <label htmlFor="newsletter-email" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+                Email address
+              </label>
+              <input id="newsletter-email" name="email" type="email" autoComplete="email" required placeholder="Enter your email"
                 value={email} onChange={e => setEmail(e.target.value)}
+                className="footer-newsletter-input"
                 style={{ backgroundColor: 'rgba(5,11,31,0.6)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '10px', color: '#ffffff', padding: '11px 16px', fontSize: '0.87rem', outline: 'none', minWidth: '230px', transition: 'border-color 0.2s' }}
                 onFocus={e => e.currentTarget.style.borderColor = '#4a90d9'}
                 onBlur={e => e.currentTarget.style.borderColor = 'rgba(74,144,217,0.3)'} />
               <button type="submit" disabled={subStatus === 'loading'}
+                className="footer-newsletter-btn"
                 style={{ background: 'linear-gradient(135deg, #2d5fc4 0%, #1a3a7c 100%)', color: '#fff', border: 'none', borderRadius: '10px', padding: '11px 22px', fontSize: '0.87rem', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'opacity 0.2s, transform 0.15s' }}
                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
@@ -121,21 +126,21 @@ const Footer = () => {
         <Row className="g-5">
 
           {/* Brand */}
-          <Col lg={4} md={12}>
-            <Link to="/" dir="ltr" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', marginBottom: '4px' }}>
-              <img src={logo} alt="Lazord Real Estate" style={{ height: '125px', width: 'auto', objectFit: 'contain' }} />
+          <Col lg={4} md={12} className="footer-brand-col">
+            <Link to="/" dir="ltr" className="footer-brand-logo" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', marginBottom: '4px' }}>
+              <img src={logo} alt="Lazord Real Estate" style={{ height: '104px', width: 'auto', objectFit: 'contain' }} />
             </Link>
-            <p style={{ color: '#7d9fce', fontSize: '0.87rem', lineHeight: '1.75', marginBottom: '18px', maxWidth: '280px' }}>
+            <p className="footer-brand-tagline" style={{ color: '#7d9fce', fontSize: '0.87rem', lineHeight: '1.75', marginBottom: '18px', maxWidth: '280px' }}>
               {t('footer.tagline')}
             </p>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '22px' }}>
+            <div className="footer-brand-badges" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '22px' }}>
               {['RERA Licensed', 'DED Certified', 'Est. 2007'].map(tag => (
                 <span key={tag} style={{ backgroundColor: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.22)', borderRadius: '20px', padding: '5px 13px', color: '#9db8dd', fontSize: '0.71rem', fontWeight: '600', letterSpacing: '0.01em' }}>
                   {tag}
                 </span>
               ))}
             </div>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <div className="footer-brand-socials" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {socialMedia.map((social, i) => (
                 <a key={i} href={social.url} target="_blank" rel="noopener noreferrer" title={social.name}
                   style={{ width: '32px', height: '32px', borderRadius: '9px', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(74,144,217,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7d9fce', textDecoration: 'none', transition: 'all 0.2s ease' }}
@@ -148,7 +153,7 @@ const Footer = () => {
           </Col>
 
           {/* Quick Links */}
-          <Col lg={2} md={4} xs={6}>
+          <Col lg={2} md={4} xs={6} className="footer-links-col">
             <h6 style={{ color: '#5b8fd6', marginBottom: '18px', letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: '0.72rem', fontWeight: '700' }}>
               {t('footer.quickLinks')}
             </h6>
@@ -166,7 +171,7 @@ const Footer = () => {
           </Col>
 
           {/* Property Types */}
-          <Col lg={2} md={4} xs={6}>
+          <Col lg={2} md={4} xs={6} className="footer-links-col">
             <h6 style={{ color: '#5b8fd6', marginBottom: '18px', letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: '0.72rem', fontWeight: '700' }}>
               {t('nav.properties')}
             </h6>
@@ -215,7 +220,7 @@ const Footer = () => {
         </Row>
 
         {/* Bottom bar */}
-        <div style={{ borderTop: '1px solid rgba(74,144,217,0.14)', marginTop: '44px', paddingTop: '22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <div className="footer-bottom-bar" style={{ borderTop: '1px solid rgba(74,144,217,0.14)', marginTop: '44px', paddingTop: '22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <p style={{ color: '#556b95', fontSize: '0.8rem', margin: 0 }}>
             {t('footer.rights')}
           </p>
@@ -233,6 +238,42 @@ const Footer = () => {
           </div>
         </div>
       </Container>
+
+      <style>{`
+        @media (max-width: 767.98px) {
+          .footer-newsletter-bar {
+            flex-direction: column;
+            align-items: stretch;
+            text-align: center;
+            padding: 20px 18px !important;
+          }
+          .footer-newsletter-copy { text-align: center; }
+          .footer-newsletter-form {
+            flex-direction: column;
+            width: 100%;
+          }
+          .footer-newsletter-input {
+            width: 100% !important;
+            min-width: 0 !important;
+            box-sizing: border-box;
+          }
+          .footer-newsletter-btn { width: 100%; }
+
+          .footer-brand-col { text-align: center; margin-bottom: 8px; }
+          .footer-brand-logo { justify-content: center; }
+          .footer-brand-tagline { margin-left: auto; margin-right: auto; }
+          .footer-brand-badges { justify-content: center; }
+          .footer-brand-socials { justify-content: center; }
+
+          .footer-links-col { text-align: center; }
+          .footer-links-col ul { padding-left: 0; }
+
+          .footer-bottom-bar {
+            flex-direction: column;
+            text-align: center;
+          }
+        }
+      `}</style>
     </footer>
   )
 }

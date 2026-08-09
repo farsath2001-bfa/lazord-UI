@@ -1,7 +1,7 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import Services from '../components/home/Services'
 import Testimonials from '../components/home/Testimonials'
 import SEO from '../components/SEO'
@@ -11,12 +11,14 @@ const IMAGE_STORY = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880
 const IMAGE_WHY   = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&q=80'
 
 const team = [
-  { name: 'Mohammed Al Nimer', role: 'CEO',                      exp: '15 Years Experience', avatar: 'M', color: '#2d5fc4', langs: 'Arabic, English',            spec: 'Luxury Villas & Penthouses' },
-  { name: 'Khairy',            role: 'Senior Sales Director',    exp: '14 Years Experience', avatar: 'K', color: '#27ae60', langs: 'English, Arabic',            spec: 'Off Plan & Investments' },
-  { name: 'Fethi',             role: 'Property Consultant',      exp: '7 Years Experience',  avatar: 'F', color: '#e67e22', langs: 'English, Arabic',            spec: 'Apartments & Rentals' },
-  { name: 'Abdullah',          role: 'Client Relations Manager', exp: '14 Years Experience', avatar: 'G', color: '#8e44ad', langs: 'Arabic, English',            spec: 'Client Experience' },
-  { name: 'Jardali',           role: 'Investment Advisor',       exp: '11 Years Experience', avatar: 'J', color: '#16a085', langs: 'English, Brazilian, Arabic', spec: 'Commercial & Portfolio' },
-  { name: 'OB-FA-AM',             role: 'Property Consultant All The Above',      exp: '8 Years Experience',  avatar: 'A', color: '#c0392b', langs: 'Arabic, English',            spec: 'Business Bay & Dubai Land' },
+  { name: 'Mohammed Al Nimer', role: 'CEO',                  exp: '15 Years Experience', avatar: 'M', color: '#2d5fc4',   langs: 'Arabic, English',            spec: 'Luxury Villas & Penthouses', quote: 'Building trust, one transaction at a time.' },
+  { name: 'Khairy',            role: 'Senior Sales',         exp: '14 Years Experience', avatar: 'K', color: '#27ae60',   langs: 'English, Arabic',            spec: 'Off Plan & Investments', quote: 'Turning off-plan opportunities into long-term wins.' },
+  { name: 'Fethi',             role: 'Property Management',  exp: '10 Years Experience', avatar: 'F', color: '#0bee31cc', langs: 'English, Arabic',            spec: 'Apartments & Rentals', quote: 'Keeping every rental running smoothly, always.' },
+  { name: 'Abdullah',          role: 'Accountant',           exp: '14 Years Experience', avatar: 'G', color: '#8e44ad',   langs: 'Arabic, English',            spec: 'Client Experience', quote: 'Every number tells the story of your investment.' },
+  { name: 'Ahmed',             role: 'Accountant',           exp: '05 Years Experience', avatar: 'A', color: '#8e44ad',   langs: 'Arabic, English',            spec: 'Client Experience', quote: 'Precision today, peace of mind tomorrow.' },
+  { name: 'Jardali',           role: 'Investment Advisor',   exp: '11 Years Experience', avatar: 'J', color: '#c0e90c',   langs: 'English, Brazilian, Arabic', spec: 'Commercial & Portfolio', quote: 'Numbers matter, but relationships matter more.' },
+  { name: 'Obada',             role: 'Property Consultant ', exp: '4 Years Experience',  avatar: 'O', color: '#c0392b',   langs: 'Arabic, English',            spec: 'Business Bay & Dubai Land', quote: 'Business Bay to Dubai Land — I know every block.' },
+  { name: 'Fadi',              role: 'Adminstrative',        exp: '4 Years Experience',  avatar: 'F', color: '#c02b82',   langs: 'Arabic, English',            spec: 'Rigga Al Buteen & Dubai Land', quote: 'Behind every smooth deal is solid paperwork.' },
 ]
 
 const milestones = [
@@ -27,6 +29,65 @@ const milestones = [
   { year: '2024', title: 'Digital Transformation', desc: 'Launched digital property platform to serve international investors remotely.', icon: '💻' },
   { year: '2026', title: 'Today',                  desc: 'Continuing to grow with 1,500+ listings, 18+ years of expertise and dedicated professionals.', icon: '🚀' },
 ]
+
+// Section dots for desktop scroll-spy navigation
+const sectionDotItems = [
+  { id: 'section-hero',         label: 'Overview' },
+  { id: 'section-story',        label: 'Our Story' },
+  { id: 'section-journey',      label: 'Our Journey' },
+  { id: 'section-services',     label: 'Services' },
+  { id: 'section-whychoose',    label: 'Why Choose Us' },
+  { id: 'section-testimonials', label: 'Testimonials' },
+  { id: 'section-team',         label: 'Our Team' },
+]
+
+const SectionDots = () => {
+  const [active, setActive] = useState('section-hero')
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id)
+      })
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 })
+
+    sectionDotItems.forEach(item => {
+      const el = document.getElementById(item.id)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [])
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  return (
+    <div className="d-none d-lg-flex section-dots">
+      {sectionDotItems.map(item => (
+        <button key={item.id} onClick={() => scrollTo(item.id)} className="section-dot-btn" aria-label={item.label} type="button">
+          <span className={`section-dot ${active === item.id ? 'active' : ''}`} />
+          <span className="section-dot-label">{item.label}</span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// Animated count-up number, triggers once when scrolled into view
+const AnimatedStatNumber = ({ target, suffix = '', duration = 1.6 }) => {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true })
+  const count = useMotionValue(0)
+  const spring = useSpring(count, { duration: duration * 1000, bounce: 0 })
+  const display = useTransform(spring, v => Math.round(v).toLocaleString() + suffix)
+
+  useEffect(() => {
+    if (inView) count.set(target)
+  }, [inView, target, count])
+
+  return <motion.span ref={ref}>{display}</motion.span>
+}
 
 // Reusable fade-up animation wrapper
 const FadeUp = ({ children, delay = 0, className = '' }) => {
@@ -103,8 +164,11 @@ const About = () => {
       />
       <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
 
+      {/* Desktop scroll-spy dots */}
+      <SectionDots />
+
       {/* ── HERO with Dubai BG Image ── */}
-      <div style={{ position: 'relative', minHeight: '520px', display: 'flex', alignItems: 'center', overflow: 'hidden', borderBottom: '1px solid rgba(45,95,196,0.3)' }}>
+      <div id="section-hero" style={{ position: 'relative', minHeight: '520px', display: 'flex', alignItems: 'center', overflow: 'hidden', borderBottom: '1px solid rgba(45,95,196,0.3)' }}>
 
         {/* BG Image */}
         <div style={{
@@ -219,37 +283,118 @@ const About = () => {
             </Col>
           </Row>
         </Container>
+
+        {/* Floating "Meet the Team" quick-jump */}
+        <motion.button
+          type="button"
+          onClick={() => document.getElementById('section-team')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: [0, -6, 0] }}
+          transition={{
+            opacity: { delay: 1, duration: 0.6 },
+            y: { delay: 1.6, duration: 2.2, repeat: Infinity, ease: 'easeInOut' }
+          }}
+          whileHover={{ scale: 1.05 }}
+          className="hero-team-jump"
+          style={{
+            position: 'absolute', bottom: '24px', right: '24px', zIndex: 3,
+            display: 'flex', alignItems: 'center', gap: '8px',
+            backgroundColor: 'rgba(45,95,196,0.25)', backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(74,144,217,0.4)', borderRadius: '30px',
+            padding: '10px 18px', color: '#ffffff', fontSize: '0.82rem', fontWeight: '700',
+            cursor: 'pointer'
+          }}
+        >
+          👥 Meet the Team ↓
+        </motion.button>
       </div>
 
-      <Container style={{ paddingTop: '64px' }}>
-
-        {/* Mobile Stats */}
-        <FadeUp className="d-lg-none" delay={0}>
-          <Row className="g-3" style={sectionGap}>
+      {/* Mission & Vision — folded into a compact strip right under the hero */}
+      <div style={{ backgroundColor: '#0a1630', borderBottom: '1px solid rgba(45,95,196,0.15)', padding: '28px 0' }}>
+        <Container>
+          <Row className="g-3">
             {[
-              { number: '18+',    label: 'Years of Experience',   icon: '🏆' },
-              { number: '1,500+', label: 'Properties Listed',     icon: '🏙️' },
-              { number: '1,200+', label: 'Happy Clients',         icon: '👥' },
-              { number: 'RERA',   label: 'Registered & Licensed', icon: '📋' },
-              { number: '40+',    label: 'Nationalities Served',  icon: '🌍' },
-              { number: '2007',   label: 'Established',           icon: '🏗️' },
-            ].map((stat, i) => (
-              <Col key={i} xs={6} sm={4}>
+              { icon: '🎯', title: 'Mission',     color: '#4a90d9', desc: 'Accurate, transparent, actionable advice for every client.' },
+              { icon: '💎', title: 'Core Values', color: '#f1c40f', desc: 'Professionalism, transparency, market knowledge, client-centricity.' },
+              { icon: '🔭', title: 'Vision',      color: '#4a90d9', desc: "Dubai's most trusted brokerage, built on integrity and lasting relationships." },
+            ].map((item, i) => (
+              <Col key={i} md={4}>
                 <motion.div
-                  whileHover={{ y: -4 }}
-                  style={{ ...cardStyle, textAlign: 'center', padding: '16px' }}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', backgroundColor: 'rgba(45,95,196,0.06)', border: '1px solid rgba(45,95,196,0.2)', borderRadius: '12px', padding: '14px 16px', height: '100%' }}
                 >
-                  <div style={{ fontSize: '1.4rem', marginBottom: '6px' }}>{stat.icon}</div>
-                  <div style={{ color: '#ffffff', fontSize: '1.3rem', fontWeight: '800' }}>{stat.number}</div>
-                  <div style={{ color: '#8aafd4', fontSize: '0.72rem', marginTop: '4px' }}>{stat.label}</div>
+                  <div style={{ fontSize: '1.3rem', flexShrink: 0 }}>{item.icon}</div>
+                  <div>
+                    <div style={{ color: item.color, fontWeight: '800', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{item.title}</div>
+                    <div style={{ color: '#a3c0e8', fontSize: '0.8rem', lineHeight: '1.5' }}>{item.desc}</div>
+                  </div>
                 </motion.div>
               </Col>
             ))}
           </Row>
-        </FadeUp>
+        </Container>
+      </div>
+
+      <Container style={{ paddingTop: '64px' }}>
+
+        {/* Mobile Stats — animated count-up + shimmer sweep */}
+        <div className="d-lg-none" style={sectionGap}>
+          <Row className="g-3">
+            {[
+              { number: 18,   suffix: '+', label: 'Years of Experience',   icon: '🏆', color: '#f1c40f' },
+              { number: 1500, suffix: '+', label: 'Properties Listed',     icon: '🏙️', color: '#4a90d9' },
+              { number: 1200, suffix: '+', label: 'Happy Clients',         icon: '👥', color: '#27ae60' },
+              { text: 'RERA',              label: 'Registered & Licensed', icon: '📋', color: '#8e44ad' },
+              { number: 40,   suffix: '+', label: 'Nationalities Served',  icon: '🌍', color: '#e67e22' },
+              { number: 2007, suffix: '',  label: 'Established',           icon: '🏗️', color: '#16a085' },
+            ].map((stat, i) => (
+              <Col key={i} xs={6} sm={4}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.4, delay: i * 0.07 }}
+                  whileHover={{ y: -4, borderColor: stat.color }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    backgroundColor: '#0d1f4e',
+                    border: '1px solid rgba(45,95,196,0.25)',
+                    borderRadius: '14px', padding: '18px 14px',
+                    textAlign: 'center', height: '100%',
+                    position: 'relative', overflow: 'hidden'
+                  }}
+                >
+                  {/* Corner glow */}
+                  <div style={{ position: 'absolute', top: '-24px', right: '-24px', width: '70px', height: '70px', borderRadius: '50%', backgroundColor: stat.color, opacity: 0.1, filter: 'blur(22px)' }} />
+
+                  {/* Shimmer sweep — plays once on first appearance */}
+                  <span className="stat-shimmer" style={{ animationDelay: `${0.5 + i * 0.15}s` }} />
+
+                  {/* Icon badge */}
+                  <div style={{
+                    width: '38px', height: '38px', borderRadius: '10px',
+                    backgroundColor: `${stat.color}20`, border: `1px solid ${stat.color}40`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '1.1rem', margin: '0 auto 10px', position: 'relative', zIndex: 1
+                  }}>
+                    {stat.icon}
+                  </div>
+
+                  <div style={{ color: '#ffffff', fontSize: '1.35rem', fontWeight: '800', position: 'relative', zIndex: 1 }}>
+                    {stat.text ? stat.text : <AnimatedStatNumber target={stat.number} suffix={stat.suffix} />}
+                  </div>
+                  <div style={{ color: '#a3c0e8', fontSize: '0.72rem', marginTop: '4px', lineHeight: '1.3', position: 'relative', zIndex: 1 }}>{stat.label}</div>
+                </motion.div>
+              </Col>
+            ))}
+          </Row>
+        </div>
 
         {/* Our Story */}
-        <Row className="align-items-center g-5" style={sectionGap}>
+        <Row id="section-story" className="align-items-center g-5" style={sectionGap}>
           <Col lg={6}>
             <FadeLeft>
               <div style={badgeStyle}><span style={badgeTextStyle}>✦ Our Story</span></div>
@@ -285,20 +430,25 @@ const About = () => {
           </Col>
         </Row>
 
-        {/* ── TIMELINE — Alternating Cards ── */}
-        <div style={sectionGap}>
+        {/* ── TIMELINE — Alternating Cards on desktop, slider on mobile ── */}
+        <div id="section-journey" style={sectionGap}>
           <FadeUp>
             <div style={{ textAlign: 'center', marginBottom: '48px' }}>
               <div style={badgeStyle}><span style={badgeTextStyle}>✦ Our Journey</span></div>
               <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '4px' }}>From 2007</h2>
               <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800' }}>To Today</h2>
+              {/* Mobile swipe hint */}
+              <div className="d-md-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '10px', opacity: 0.8 }}>
+                ← swipe to explore →
+              </div>
             </div>
           </FadeUp>
 
-          <div style={{ position: 'relative', maxWidth: '800px', margin: '0 auto' }}>
+          {/* Desktop alternating cards — untouched */}
+          <div className="d-none d-md-block" style={{ position: 'relative', maxWidth: '800px', margin: '0 auto' }}>
 
-            {/* Center vertical line (desktop only) */}
-            <div className="d-none d-md-block" style={{
+            {/* Center vertical line */}
+            <div style={{
               position: 'absolute', left: '50%', top: 0, bottom: 0,
               width: '2px', transform: 'translateX(-50%)',
               background: 'linear-gradient(to bottom, rgba(45,95,196,0), #2d5fc4 20%, #2d5fc4 80%, rgba(45,95,196,0))'
@@ -376,80 +526,59 @@ const About = () => {
             })}
           </div>
 
-          {/* Mobile timeline */}
-          <div className="d-md-none" style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', left: '20px', top: 0, bottom: 0, width: '2px', background: 'linear-gradient(to bottom, #2d5fc4, rgba(45,95,196,0.1))' }} />
-            {milestones.map((m, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                style={{ display: 'flex', gap: '16px', marginBottom: '16px', paddingLeft: '8px' }}
-              >
-                <div style={{
-                  width: '24px', height: '24px', borderRadius: '50%', flexShrink: 0, marginTop: '16px',
-                  backgroundColor: i === milestones.length - 1 ? '#4a90d9' : '#2d5fc4',
-                  border: '3px solid #060f26',
-                  boxShadow: '0 0 10px rgba(45,95,196,0.4)'
-                }} />
-                <div style={{
-                  backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)',
-                  borderRadius: '12px', padding: '14px 16px', flex: 1
-                }}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(45,95,196,0.2)', borderRadius: '20px', padding: '2px 10px', marginBottom: '6px' }}>
-                    <span>{m.icon}</span>
-                    <span style={{ color: '#4a90d9', fontWeight: '800', fontSize: '0.78rem' }}>{m.year}</span>
+          {/* Mobile — horizontal swipeable slider */}
+          <div className="d-md-none">
+            <div className="timeline-slider-track">
+              {milestones.map((m, i) => {
+                const isLast = i === milestones.length - 1
+                return (
+                  <div key={i} className="timeline-slide">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: i * 0.06 }}
+                      style={{
+                        backgroundColor: isLast ? 'rgba(45,95,196,0.12)' : '#0d1f4e',
+                        border: `1px solid ${isLast ? 'rgba(74,144,217,0.5)' : 'rgba(45,95,196,0.25)'}`,
+                        borderRadius: '16px',
+                        padding: '20px',
+                        height: '100%',
+                        boxShadow: isLast ? '0 8px 32px rgba(45,95,196,0.2)' : 'none',
+                      }}
+                    >
+                      <div style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '6px',
+                        backgroundColor: isLast ? '#2d5fc4' : 'rgba(45,95,196,0.2)',
+                        border: `1px solid ${isLast ? '#4a90d9' : 'rgba(74,144,217,0.3)'}`,
+                        borderRadius: '20px', padding: '3px 12px',
+                        marginBottom: '10px'
+                      }}>
+                        <span style={{ fontSize: '0.85rem' }}>{m.icon}</span>
+                        <span style={{ color: isLast ? '#ffffff' : '#4a90d9', fontWeight: '800', fontSize: '0.82rem' }}>{m.year}</span>
+                      </div>
+                      <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.92rem', marginBottom: '6px' }}>{m.title}</div>
+                      <div style={{ color: '#8aafd4', fontSize: '0.8rem', lineHeight: '1.6' }}>{m.desc}</div>
+                    </motion.div>
                   </div>
-                  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.88rem', marginBottom: '3px' }}>{m.title}</div>
-                  <div style={{ color: '#8aafd4', fontSize: '0.78rem', lineHeight: '1.6' }}>{m.desc}</div>
-                </div>
-              </motion.div>
-            ))}
+                )
+              })}
+            </div>
+            <div className="timeline-slider-dots">
+              {milestones.map((m, i) => (
+                <span key={i} style={{ backgroundColor: i === milestones.length - 1 ? '#4a90d9' : '#2d5fc4' }} />
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Mission & Vision */}
-        <FadeUp delay={0} >
-          <div style={sectionGap}>
-            <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-              <div style={badgeStyle}><span style={badgeTextStyle}>✦ Mission & Vision</span></div>
-              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '4px' }}>What Drives</h2>
-              <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800' }}>Us Forward</h2>
-            </div>
-            <Row className="g-4">
-              {[
-                { icon: '🎯', title: 'Mission',     color: '#4a90d9', desc: 'To provide accurate, transparent, and actionable real estate advice to every client — constantly creating innovative solutions and working in partnership with clients as a trusted advisor.' },
-                { icon: '💎', title: 'Core Values', color: '#ffffff', grad: true, desc: 'Professionalism, Transparency, Market Knowledge, and Client-Centricity — striving to set the highest standards of customer service and intensify focus on absolute client satisfaction.' },
-                { icon: '🔭', title: 'Vision',      color: '#4a90d9', desc: 'To be the most trusted brokerage in Dubai, known for integrity and long-term relationships — connecting visionary investors with prime real estate offering exceptional returns.' },
-              ].map((item, i) => (
-                <Col key={i} lg={4} md={12}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.15 }}
-                    whileHover={{ y: -6 }}
-                    style={{ ...cardStyle, borderColor: 'rgba(45,95,196,0.4)', ...(item.grad ? { background: 'linear-gradient(135deg, #0d1f4e 0%, #1a3a7c 100%)' } : {}) }}
-                  >
-                    <div style={{ fontSize: '2rem', marginBottom: '12px' }}>{item.icon}</div>
-                    <h4 style={{ color: item.color, fontWeight: '800', fontSize: '1rem', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>{item.title}</h4>
-                    <p style={{ color: '#8aafd4', fontSize: '0.88rem', lineHeight: '1.8', margin: 0 }}>{item.desc}</p>
-                  </motion.div>
-                </Col>
-              ))}
-            </Row>
-          </div>
-        </FadeUp>
-
-        {/* Services */}
-        <div style={sectionGap}>
+        {/* Services (What We Offer) */}
+        <div id="section-services" style={sectionGap}>
           <Services />
         </div>
 
         {/* Why Choose Us */}
-        <Row className="align-items-center g-5" style={sectionGap}>
+        <Row id="section-whychoose" className="align-items-center g-5" style={sectionGap}>
           <Col lg={7}>
             <FadeLeft>
               <div style={badgeStyle}><span style={badgeTextStyle}>✦ Why Choose Lazord</span></div>
@@ -499,28 +628,32 @@ const About = () => {
           </Col>
         </Row>
 
-        {/* Testimonials */}
-        <div style={sectionGap}>
+        {/* Testimonials (Our Clients Say) */}
+        <div id="section-testimonials" style={sectionGap}>
           <Testimonials />
         </div>
 
-        {/* ── TEAM — Glassmorphism ── */}
+        {/* ── TEAM — Glassmorphism grid on desktop, slider on mobile ── */}
         <FadeUp>
-          <div style={sectionGap}>
+          <div id="section-team" style={sectionGap}>
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
               <div style={badgeStyle}><span style={badgeTextStyle}>✦ Our Team</span></div>
               <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '4px' }}>Meet the</h2>
               <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800' }}>Experts Behind Lazord</h2>
+              <div className="d-md-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '10px', opacity: 0.8 }}>
+                ← swipe to explore →
+              </div>
             </div>
-            <Row className="g-4">
+            <Row className="g-4 team-row">
               {team.map((member, i) => (
-                <Col key={i} lg={4} md={6}>
+                <Col key={i} lg={4} md={6} className="team-col">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: i * 0.1 }}
                     whileHover={{ y: -8, boxShadow: '0 24px 60px rgba(45,95,196,0.25)' }}
+                    className="team-member-card"
                     style={{
                       backgroundColor: 'rgba(13,31,78,0.7)',
                       backdropFilter: 'blur(12px)',
@@ -533,6 +666,19 @@ const About = () => {
                     {/* Gradient glow bg */}
                     <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '120px', height: '120px', borderRadius: '50%', backgroundColor: member.color, opacity: 0.06, filter: 'blur(40px)' }} />
 
+                    {/* Contact icons */}
+                    <div style={{ position: 'absolute', top: '16px', right: '16px', display: 'flex', gap: '6px', zIndex: 2 }}>
+                      <a href={`https://wa.me/971561119233?text=${encodeURIComponent(`Hi, I'd like to speak with ${member.name} at Lazord Real Estate.`)}`}
+                        target="_blank" rel="noopener noreferrer"
+                        title={`WhatsApp ${member.name}`}
+                        style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundColor: 'rgba(37,211,102,0.15)', border: '1px solid rgba(37,211,102,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#25d366', textDecoration: 'none', fontSize: '0.8rem' }}
+                      >💬</a>
+                      <a href="tel:+97142999088"
+                        title={`Call about ${member.name}`}
+                        style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', textDecoration: 'none', fontSize: '0.8rem' }}
+                      >📞</a>
+                    </div>
+
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '18px' }}>
                       {/* Avatar with ring */}
                       <div style={{ position: 'relative', flexShrink: 0 }}>
@@ -542,7 +688,13 @@ const About = () => {
                         <div style={{ position: 'absolute', inset: '-4px', borderRadius: '50%', border: `2px solid ${member.color}`, opacity: 0.4, animation: 'pulseRing 3s ease-in-out infinite' }} />
                       </div>
                       <div>
-                        <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.95rem' }}>{member.name}</div>
+                        <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                          {member.name}
+                          {/* Verified checkmark badge */}
+                          <span title="Verified Lazord Agent" style={{ display: 'inline-flex', width: '15px', height: '15px', borderRadius: '50%', backgroundColor: '#4a90d9', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                          </span>
+                        </div>
                         <div style={{ color: member.color, fontSize: '0.8rem', marginTop: '2px', fontWeight: '600' }}>{member.role}</div>
                       </div>
                     </div>
@@ -554,6 +706,13 @@ const About = () => {
                           <span style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{item.text}</span>
                         </div>
                       ))}
+                    </div>
+
+                    {/* Hover-reveal quote (always visible on mobile via CSS) */}
+                    <div className="team-quote-overlay">
+                      <div style={{ fontSize: '0.8rem', color: '#c9dcf5', fontStyle: 'italic', lineHeight: '1.5' }}>
+                        "{member.quote}"
+                      </div>
                     </div>
                   </motion.div>
                 </Col>
@@ -602,6 +761,105 @@ const About = () => {
         @keyframes spinSlow { from{transform:translateY(-50%) rotate(0deg)} to{transform:translateY(-50%) rotate(360deg)} }
         @keyframes particleFloat { 0%{transform:translateY(0);opacity:0.6} 100%{transform:translateY(-80px);opacity:0} }
         @keyframes pulseRing { 0%,100%{opacity:0.4;transform:scale(1)} 50%{opacity:0.7;transform:scale(1.1)} }
+
+        /* ── Stat card shimmer sweep (plays once) ── */
+        .stat-shimmer {
+          position: absolute; top: 0; left: 0; width: 45%; height: 100%;
+          background: linear-gradient(120deg, transparent, rgba(255,255,255,0.22), transparent);
+          transform: translateX(-140%) skewX(-20deg);
+          opacity: 0;
+          animation: statShimmer 1.3s ease-out forwards;
+          pointer-events: none;
+          z-index: 1;
+        }
+        @keyframes statShimmer {
+          0% { transform: translateX(-140%) skewX(-20deg); opacity: 0; }
+          15% { opacity: 0.6; }
+          100% { transform: translateX(260%) skewX(-20deg); opacity: 0; }
+        }
+
+        /* ── Timeline mobile slider ── */
+        .timeline-slider-track {
+          display: flex;
+          gap: 14px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          padding: 4px 4px 8px;
+          margin: 0 -4px;
+        }
+        .timeline-slider-track::-webkit-scrollbar { display: none; }
+        .timeline-slide { flex: 0 0 78%; scroll-snap-align: center; }
+        .timeline-slider-dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
+        .timeline-slider-dots span { width: 6px; height: 6px; border-radius: 50%; opacity: 0.35; }
+
+        /* ── Team mobile slider (Bootstrap Row untouched at md+) ── */
+        @media (max-width: 767.98px) {
+          .team-row {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding-bottom: 8px;
+          }
+          .team-row::-webkit-scrollbar { display: none; }
+          .team-row > .team-col { flex: 0 0 84%; max-width: 84%; scroll-snap-align: center; }
+        }
+
+        /* ── Team card hover-reveal quote (desktop) / always-visible (mobile) ── */
+        .team-quote-overlay {
+          position: absolute; left: 0; right: 0; bottom: 0;
+          padding: 14px 22px 18px;
+          background: linear-gradient(to top, rgba(6,15,38,0.95) 60%, transparent);
+          transform: translateY(100%);
+          opacity: 0;
+          transition: transform 0.3s ease, opacity 0.3s ease;
+          z-index: 2;
+        }
+        .team-member-card:hover .team-quote-overlay {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        @media (max-width: 767.98px) {
+          .team-quote-overlay {
+            position: static;
+            transform: none;
+            opacity: 1;
+            background: none;
+            padding: 14px 0 0;
+            margin-top: 4px;
+            border-top: 1px solid rgba(45,95,196,0.15);
+          }
+        }
+
+        /* ── Desktop scroll-spy section dots ── */
+        .section-dots {
+          position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
+          z-index: 500; flex-direction: column; gap: 14px;
+        }
+        .section-dot-btn {
+          display: flex; align-items: center; gap: 8px;
+          background: none; border: none; cursor: pointer; padding: 0;
+        }
+        .section-dot {
+          width: 8px; height: 8px; border-radius: 50%;
+          background: rgba(74,144,217,0.3);
+          transition: all 0.25s ease;
+          flex-shrink: 0;
+        }
+        .section-dot.active {
+          background: #4a90d9; width: 10px; height: 10px;
+          box-shadow: 0 0 10px rgba(74,144,217,0.6);
+        }
+        .section-dot-label {
+          color: #a3c0e8; font-size: 0.72rem; font-weight: 600;
+          opacity: 0; transform: translateX(6px);
+          transition: all 0.2s ease; white-space: nowrap;
+        }
+        .section-dot-btn:hover .section-dot-label { opacity: 1; transform: translateX(0); }
+        .section-dot-btn:hover .section-dot { background: #4a90d9; }
       `}</style>
       </div>
     </>

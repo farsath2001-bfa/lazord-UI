@@ -34,6 +34,7 @@ const Properties = () => {
   const [sort, setSort]             = useState('newest')
   const [properties, setProperties] = useState([])
   const [loading, setLoading]       = useState(true)
+  const [searchFocused, setSearchFocused] = useState(false)
 
   useEffect(() => {
     setType(searchParams.get('type') || 'All')
@@ -119,18 +120,38 @@ const Properties = () => {
         }}>
           {/* Search — full width always */}
           <div style={{ marginBottom: '12px' }}>
-            <label style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+            <label htmlFor="properties-search" style={{ color: '#8aafd4', fontSize: '0.75rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
               {t('properties.search')}
             </label>
             <div style={{ position: 'relative' }}>
-              <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1rem' }}>🔍</span>
+              <span className="properties-search-icon" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1rem', pointerEvents: 'none' }}>🔍</span>
               <input
+                id="properties-search"
+                name="search"
                 type="text"
+                inputMode="search"
                 placeholder={t('properties.searchPlaceholder')}
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                style={{ ...inputStyle, paddingLeft: '36px' }}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                className="properties-search-input"
+                style={{
+                  ...inputStyle,
+                  paddingLeft: '36px',
+                  paddingRight: search ? '36px' : '14px',
+                  borderColor: searchFocused ? '#4a90d9' : 'rgba(45,95,196,0.35)',
+                  boxShadow: searchFocused ? '0 0 0 3px rgba(74,144,217,0.15)' : 'none',
+                  transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
+                }}
               />
+              {search && (
+                <span
+                  onClick={() => setSearch('')}
+                  className="properties-search-clear"
+                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', color: '#8aafd4', fontWeight: '700', cursor: 'pointer', fontSize: '1.1rem', lineHeight: 1, padding: '4px' }}
+                >×</span>
+              )}
             </div>
           </div>
 
@@ -145,40 +166,40 @@ const Properties = () => {
           }}>
             {/* Type */}
             <div style={{ minWidth: '130px', flex: '1' }}>
-              <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+              <label htmlFor="properties-type" style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
                 {t('properties.type')}
               </label>
-              <select value={type} onChange={e => setType(e.target.value)} style={inputStyle}>
+              <select id="properties-type" name="type" value={type} onChange={e => setType(e.target.value)} style={inputStyle}>
                 {propertyTypes.map(t2 => <option key={t2} value={t2}>{t2}</option>)}
               </select>
             </div>
 
             {/* Category */}
             <div style={{ minWidth: '130px', flex: '1' }}>
-              <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+              <label htmlFor="properties-category" style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
                 {t('properties.category')}
               </label>
-              <select value={category} onChange={e => setCategory(e.target.value)} style={inputStyle}>
+              <select id="properties-category" name="category" value={category} onChange={e => setCategory(e.target.value)} style={inputStyle}>
                 {categories.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
 
             {/* Bedrooms */}
             <div style={{ minWidth: '120px', flex: '1' }}>
-              <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+              <label htmlFor="properties-beds" style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
                 {t('properties.bedrooms')}
               </label>
-              <select value={beds} onChange={e => setBeds(e.target.value)} style={inputStyle}>
+              <select id="properties-beds" name="beds" value={beds} onChange={e => setBeds(e.target.value)} style={inputStyle}>
                 {bedOptions.map(b => <option key={b} value={b}>{b === 'All' ? 'Any' : b}</option>)}
               </select>
             </div>
 
             {/* Sort */}
             <div style={{ minWidth: '150px', flex: '1' }}>
-              <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
+              <label htmlFor="properties-sort" style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>
                 {t('properties.sortBy')}
               </label>
-              <select value={sort} onChange={e => setSort(e.target.value)} style={inputStyle}>
+              <select id="properties-sort" name="sort" value={sort} onChange={e => setSort(e.target.value)} style={inputStyle}>
                 {sortOptions.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
             </div>
@@ -266,6 +287,18 @@ const Properties = () => {
         .swiper-pagination-bullet { background: rgba(74,144,217,0.4) !important; }
         .swiper-pagination-bullet-active { background: #4a90d9 !important; }
         div::-webkit-scrollbar { display: none; }
+
+        /* ── Mobile: bigger, easier-to-tap search bar ── */
+        @media (max-width: 767.98px) {
+          .properties-search-input {
+            padding-top: 14px !important;
+            padding-bottom: 14px !important;
+            font-size: 1rem !important;
+            border-radius: 12px !important;
+          }
+          .properties-search-icon { font-size: 1.1rem !important; left: 14px !important; }
+          .properties-search-clear { font-size: 1.3rem !important; right: 12px !important; }
+        }
       `}</style>
       </div>
     </>

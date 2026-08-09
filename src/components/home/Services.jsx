@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
+import { motion } from 'framer-motion'
 
 const IconHome = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
 const IconKey = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
@@ -21,6 +22,30 @@ const Services = () => {
     { icon: <IconChart />,    key: 'valuation',  link: '/contact',    color: '#c0392b', bg: 'rgba(192,57,43,0.12)' },
   ]
 
+  const ServiceCard = ({ service }) => (
+    <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.2)', borderRadius: '16px', padding: '32px 28px', height: '100%', display: 'flex', flexDirection: 'column', transition: 'all 0.25s ease', position: 'relative', overflow: 'hidden' }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = service.color; e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = `0 20px 50px ${service.color}20` }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(45,95,196,0.2)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+    >
+      <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', borderRadius: '50%', backgroundColor: service.color, opacity: 0.06, filter: 'blur(30px)' }} />
+      <div style={{ width: '60px', height: '60px', borderRadius: '14px', backgroundColor: service.bg, border: `1px solid ${service.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: service.color, marginBottom: '20px' }}>
+        {service.icon}
+      </div>
+      <h4 style={{ color: '#ffffff', fontSize: '1.05rem', fontWeight: '700', marginBottom: '12px' }}>
+        {t(`services.items.${service.key}.title`)}
+      </h4>
+      <p style={{ color: '#a3c0e8', fontSize: '0.88rem', lineHeight: '1.7', flex: 1, marginBottom: '24px' }}>
+        {t(`services.items.${service.key}.desc`)}
+      </p>
+      <Link to={service.link} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: service.color, fontSize: '0.85rem', fontWeight: '700', textDecoration: 'none', transition: 'gap 0.2s ease' }}
+        onMouseEnter={e => e.currentTarget.style.gap = '10px'}
+        onMouseLeave={e => e.currentTarget.style.gap = '6px'}
+      >
+        {t(`services.items.${service.key}.link`)} →
+      </Link>
+    </div>
+  )
+
   return (
     <section style={{ backgroundColor: '#0a1630', padding: '90px 0' }}>
       <Container>
@@ -30,37 +55,58 @@ const Services = () => {
           </div>
           <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '300', marginBottom: '6px' }}>{t('services.title1')}</h2>
           <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '800', marginBottom: '16px' }}>{t('services.title2')}</h2>
-          <p style={{ color: '#8aafd4', fontSize: '1rem', maxWidth: '500px', margin: '0 auto', lineHeight: '1.7' }}>{t('services.subtitle')}</p>
+          <p style={{ color: '#a3c0e8', fontSize: '1rem', maxWidth: '500px', margin: '0 auto', lineHeight: '1.7' }}>{t('services.subtitle')}</p>
+          {/* Mobile swipe hint */}
+          <div className="d-md-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '12px', opacity: 0.8 }}>
+            ← swipe to explore →
+          </div>
         </div>
 
-        <Row className="g-4">
+        <Row className="g-4 services-row">
           {services.map((service, i) => (
-            <Col key={i} lg={4} md={6}>
-              <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.2)', borderRadius: '16px', padding: '32px 28px', height: '100%', display: 'flex', flexDirection: 'column', transition: 'all 0.25s ease', position: 'relative', overflow: 'hidden' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = service.color; e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = `0 20px 50px ${service.color}20` }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(45,95,196,0.2)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+            <Col key={i} lg={4} md={6} className="services-col">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                style={{ height: '100%' }}
               >
-                <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', borderRadius: '50%', backgroundColor: service.color, opacity: 0.06, filter: 'blur(30px)' }} />
-                <div style={{ width: '60px', height: '60px', borderRadius: '14px', backgroundColor: service.bg, border: `1px solid ${service.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: service.color, marginBottom: '20px' }}>
-                  {service.icon}
-                </div>
-                <h4 style={{ color: '#ffffff', fontSize: '1.05rem', fontWeight: '700', marginBottom: '12px' }}>
-                  {t(`services.items.${service.key}.title`)}
-                </h4>
-                <p style={{ color: '#8aafd4', fontSize: '0.88rem', lineHeight: '1.7', flex: 1, marginBottom: '24px' }}>
-                  {t(`services.items.${service.key}.desc`)}
-                </p>
-                <Link to={service.link} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: service.color, fontSize: '0.85rem', fontWeight: '700', textDecoration: 'none', transition: 'gap 0.2s ease' }}
-                  onMouseEnter={e => e.currentTarget.style.gap = '10px'}
-                  onMouseLeave={e => e.currentTarget.style.gap = '6px'}
-                >
-                  {t(`services.items.${service.key}.link`)} →
-                </Link>
-              </div>
+                <ServiceCard service={service} />
+              </motion.div>
             </Col>
           ))}
         </Row>
+
+        {/* Mobile scroll dots */}
+        <div className="d-md-none services-dots">
+          {services.map((service, i) => (
+            <span key={i} style={{ backgroundColor: service.color }} />
+          ))}
+        </div>
       </Container>
+
+      <style>{`
+        @media (max-width: 767.98px) {
+          .services-row {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding-bottom: 8px;
+          }
+          .services-row::-webkit-scrollbar { display: none; }
+          .services-row > .services-col { flex: 0 0 82%; max-width: 82%; scroll-snap-align: center; }
+        }
+        .services-dots { display: none; }
+        @media (max-width: 767.98px) {
+          .services-dots {
+            display: flex; justify-content: center; gap: 6px; margin-top: 18px;
+          }
+          .services-dots span { width: 6px; height: 6px; border-radius: 50%; opacity: 0.35; }
+        }
+      `}</style>
     </section>
   )
 }

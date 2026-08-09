@@ -22,8 +22,30 @@ const contactInfo = [
   { icon: '📍', title: 'Office Address',   lines: ['Office 803,', 'AlSalemiya Tower,', 'Rigga Al Butteen,', 'Dubai, UAE'], color: '#2d5fc4' },
   { icon: '📞', title: 'Phone & WhatsApp', lines: ['+971 42 999 088', '+971 56 111 9233'],                                  color: '#25d366' },
   { icon: '✉️', title: 'Email Us',          lines: ['info@lazordrealestate.ae', 'sales@lazordrealestate.ae'],                color: '#e67e22' },
-  { icon: '🕐', title: 'Working Hours',    lines: ['Mon – Sat: 9:00 AM – 7:00 PM', 'Sunday: 10:00 AM – 4:00 PM'],          color: '#8e44ad' },
+  { icon: '🕐', title: 'Working Hours',    lines: ['Mon – Thu: 9:00 AM – 6:30 PM', 'Friday: Closed', 'Sat – Sun: 9:30 AM – 3:00 PM'], color: '#8e44ad' },
 ]
+
+// Field icons for the form (color shifts via CSS :focus-within, not JS state)
+const FieldIcons = {
+  name: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+  email: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>,
+  phone: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>,
+  service: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>,
+  message: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>,
+}
+
+// Formats digits into +971 5X XXX XXXX as the user types
+const formatUAEPhone = (raw) => {
+  let digits = raw.replace(/\D/g, '')
+  if (digits.startsWith('971')) digits = digits.slice(3)
+  else if (digits.startsWith('0')) digits = digits.slice(1)
+  digits = digits.slice(0, 9)
+  let out = '+971'
+  if (digits.length > 0) out += ' ' + digits.slice(0, 2)
+  if (digits.length > 2) out += ' ' + digits.slice(2, 5)
+  if (digits.length > 5) out += ' ' + digits.slice(5, 9)
+  return out
+}
 
 const Contact = () => {
   const { t } = useTranslation()
@@ -32,6 +54,10 @@ const Contact = () => {
   const [loading, setLoading] = useState(false)
 
   const handleChange = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }))
+
+  const handlePhoneChange = e => {
+    setForm(p => ({ ...p, phone: formatUAEPhone(e.target.value) }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -50,7 +76,7 @@ const Contact = () => {
     width: '100%', backgroundColor: '#060f26',
     border: '1px solid rgba(45,95,196,0.3)',
     borderRadius: '10px', color: '#ffffff',
-    padding: '13px 16px', fontSize: '0.92rem',
+    padding: '13px 16px 13px 40px', fontSize: '0.92rem',
     outline: 'none', boxSizing: 'border-box',
     transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
   }
@@ -62,10 +88,10 @@ const Contact = () => {
         description="Get in touch with Lazord Real Estate — Office 803, AlSalemiya Tower, Rigga Al Butteen, Dubai. Call, WhatsApp or visit us."
         path="/contact"
       />
-      <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
+      <div className="contact-page" style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
 
       {/* ── HERO with bg image ── */}
-      <div style={{ position: 'relative', minHeight: '360px', display: 'flex', alignItems: 'center', overflow: 'hidden', borderBottom: '1px solid rgba(45,95,196,0.3)' }}>
+      <div className="contact-hero" style={{ position: 'relative', minHeight: '360px', display: 'flex', alignItems: 'center', overflow: 'hidden', borderBottom: '1px solid rgba(45,95,196,0.3)' }}>
         {/* BG Image */}
         <div style={{
           position: 'absolute', inset: 0,
@@ -86,19 +112,19 @@ const Contact = () => {
           <div style={{ position: 'absolute', width: '8px', height: '8px', background: '#2d5fc4', borderRadius: '50%', top: '-4px', left: '50%', transform: 'translateX(-50%)' }} />
         </div>
 
-        <Container style={{ position: 'relative', zIndex: 2, padding: '70px 20px' }}>
+        <Container className="contact-hero-container" style={{ position: 'relative', zIndex: 2, padding: '70px 20px' }}>
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '16px' }}>
+            <div className="contact-hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '16px' }}>
               <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>✦ {t('contact.badge')}</span>
             </div>
             <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 4vw, 3rem)', fontWeight: '300', marginBottom: '8px' }}>{t('contact.title1')}</h1>
             <h1 style={{ color: '#4a90d9', fontSize: 'clamp(1.6rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '20px' }}>{t('contact.title2')}</h1>
-            <p style={{ color: '#8aafd4', fontSize: '0.95rem', lineHeight: '1.8', maxWidth: '540px', marginBottom: '24px' }}>{t('contact.subtitle')}</p>
+            <p className="contact-hero-subtitle" style={{ color: '#a9c4ea', fontSize: '0.95rem', lineHeight: '1.8', maxWidth: '540px', marginBottom: '24px' }}>{t('contact.subtitle')}</p>
             {/* Quick contact badges */}
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {['📞 +971 42 999 088', '✉️ info@lazordrealestate.ae', '🕐 Mon–Sat 9AM–7PM'].map((item, i) => (
+            <div className="contact-hero-quickbadges" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              {['📞 +971 42 999 088', '✉️ info@lazordrealestate.ae', '🕐 Mon–Thu 9AM–6:30PM', '🕐 Sat–Sun 9:30AM–3PM · Fri Closed'].map((item, i) => (
                 <motion.span key={i} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 + i * 0.1 }}
-                  style={{ backgroundColor: 'rgba(45,95,196,0.2)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '20px', padding: '6px 14px', color: '#c0d4f0', fontSize: '0.8rem', fontWeight: '600' }}>
+                  style={{ backgroundColor: 'rgba(45,95,196,0.2)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '20px', padding: '6px 14px', color: '#c9dcf5', fontSize: '0.8rem', fontWeight: '600' }}>
                   {item}
                 </motion.span>
               ))}
@@ -110,20 +136,21 @@ const Contact = () => {
       <Container style={{ paddingTop: '48px' }}>
 
         {/* Info Cards */}
-        <Row className="g-3" style={{ marginBottom: '28px' }}>
+        <Row className="g-3 contact-info-row" style={{ marginBottom: '28px' }}>
           {contactInfo.map((info, i) => (
-            <Col key={i} lg={3} sm={6} xs={12}>
+            <Col key={i} lg={3} sm={6} xs={6}>
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 whileHover={{ y: -5, borderColor: info.color }}
+                className="contact-info-card"
                 style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '14px', padding: '20px 16px', height: '100%' }}
               >
                 <div style={{ width: '44px', height: '44px', borderRadius: '10px', backgroundColor: `${info.color}20`, border: `1px solid ${info.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', marginBottom: '12px' }}>{info.icon}</div>
                 <h4 style={{ color: '#ffffff', fontSize: '0.88rem', fontWeight: '700', marginBottom: '8px' }}>{info.title}</h4>
-                {info.lines.map((line, j) => <p key={j} style={{ color: '#8aafd4', fontSize: '0.82rem', margin: '0 0 3px', lineHeight: '1.5' }}>{line}</p>)}
+                {info.lines.map((line, j) => <p key={j} style={{ color: '#a9c4ea', fontSize: '0.82rem', margin: '0 0 3px', lineHeight: '1.5' }}>{line}</p>)}
               </motion.div>
             </Col>
           ))}
@@ -134,10 +161,11 @@ const Contact = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          className="contact-social-block"
           style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', padding: '24px', marginBottom: '28px' }}
         >
           <h2 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', marginBottom: '6px' }}>Follow Us on Social Media</h2>
-          <p style={{ color: '#8aafd4', fontSize: '0.85rem', marginBottom: '20px' }}>Stay updated with our latest properties and news</p>
+          <p style={{ color: '#a9c4ea', fontSize: '0.85rem', marginBottom: '20px' }}>Stay updated with our latest properties and news</p>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             {socialMedia.map((social, i) => (
               <motion.a key={i} href={social.url} target="_blank" rel="noopener noreferrer"
@@ -146,7 +174,7 @@ const Contact = () => {
                 onMouseEnter={e => { e.currentTarget.style.backgroundColor = `${social.color}20`; e.currentTarget.style.borderColor = social.color }}
                 onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(45,95,196,0.25)' }}
               >
-                <span style={{ color: '#8aafd4', display: 'flex', transition: 'color 0.25s' }}>{social.svg}</span>
+                <span style={{ color: '#a9c4ea', display: 'flex', transition: 'color 0.25s' }}>{social.svg}</span>
                 <span style={{ fontSize: '0.82rem', fontWeight: '600' }}>{social.name}</span>
               </motion.a>
             ))}
@@ -161,23 +189,26 @@ const Contact = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
+              className="contact-form-card"
               style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '20px', padding: 'clamp(20px, 4vw, 40px)', position: 'relative', overflow: 'hidden' }}
             >
               {/* Glow decoration */}
               <div style={{ position: 'absolute', top: '-60px', right: '-60px', width: '200px', height: '200px', borderRadius: '50%', backgroundColor: '#2d5fc4', opacity: 0.04, filter: 'blur(60px)' }} />
 
               <h2 style={{ color: '#ffffff', fontSize: '1.3rem', fontWeight: '700', marginBottom: '6px' }}>{t('contact.form.title')}</h2>
-              <p style={{ color: '#8aafd4', fontSize: '0.88rem', marginBottom: '24px' }}>{t('contact.form.subtitle')}</p>
+              <p style={{ color: '#a9c4ea', fontSize: '0.88rem', marginBottom: '24px' }}>{t('contact.form.subtitle')}</p>
 
               {submitted ? (
                 <motion.div
+                  role="status"
+                  aria-live="polite"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   style={{ backgroundColor: 'rgba(39,174,96,0.12)', border: '1px solid rgba(39,174,96,0.3)', borderRadius: '14px', padding: '40px 24px', textAlign: 'center' }}
                 >
                   <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', delay: 0.2 }} style={{ fontSize: '3.5rem', marginBottom: '16px' }}>✅</motion.div>
                   <h3 style={{ color: '#27ae60', fontWeight: '700', marginBottom: '10px' }}>{t('contact.form.successTitle')}</h3>
-                  <p style={{ color: '#8aafd4', fontSize: '0.92rem', marginBottom: '24px' }}>{t('contact.form.successDesc')}</p>
+                  <p style={{ color: '#a9c4ea', fontSize: '0.92rem', marginBottom: '24px' }}>{t('contact.form.successDesc')}</p>
                   <button onClick={() => { setSubmitted(false); setForm({ name: '', email: '', phone: '', service: '', message: '' }) }}
                     style={{ backgroundColor: '#2d5fc4', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '0.9rem', fontWeight: '700', cursor: 'pointer' }}>
                     {t('contact.form.sendAnother')}
@@ -187,37 +218,52 @@ const Contact = () => {
                 <form onSubmit={handleSubmit}>
                   <Row className="g-3">
                     <Col md={6} xs={12}>
-                      <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.name')} *</label>
-                      <input type="text" name="name" required placeholder="Your full name" value={form.name} onChange={handleChange} style={inputStyle}
-                        onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
-                        onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
+                      <label htmlFor="contact-name" style={{ color: '#a9c4ea', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.name')} *</label>
+                      <div className="contact-field-box">
+                        <span className="contact-field-icon">{FieldIcons.name}</span>
+                        <input id="contact-name" type="text" name="name" autoComplete="name" required placeholder="Your full name" value={form.name} onChange={handleChange} style={inputStyle}
+                          onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
+                          onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
+                      </div>
                     </Col>
                     <Col md={6} xs={12}>
-                      <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.email')} *</label>
-                      <input type="email" name="email" required placeholder="your@email.com" value={form.email} onChange={handleChange} style={inputStyle}
-                        onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
-                        onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
+                      <label htmlFor="contact-email" style={{ color: '#a9c4ea', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.email')} *</label>
+                      <div className="contact-field-box">
+                        <span className="contact-field-icon">{FieldIcons.email}</span>
+                        <input id="contact-email" type="email" name="email" autoComplete="email" required placeholder="your@email.com" value={form.email} onChange={handleChange} style={inputStyle}
+                          onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
+                          onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
+                      </div>
                     </Col>
                     <Col md={6} xs={12}>
-                      <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.phone')} *</label>
-                      <input type="tel" name="phone" required placeholder="+971 50 000 0000" value={form.phone} onChange={handleChange} style={inputStyle}
-                        onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
-                        onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
+                      <label htmlFor="contact-phone" style={{ color: '#a9c4ea', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.phone')} *</label>
+                      <div className="contact-field-box">
+                        <span className="contact-field-icon">{FieldIcons.phone}</span>
+                        <input id="contact-phone" type="tel" name="phone" autoComplete="tel" required placeholder="+971 5X XXX XXXX" value={form.phone} onChange={handlePhoneChange} style={inputStyle}
+                          onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
+                          onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
+                      </div>
                     </Col>
                     <Col md={6} xs={12}>
-                      <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.service')}</label>
-                      <select name="service" value={form.service} onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}
-                        onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
-                        onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }}>
-                        <option value="">Select a service...</option>
-                        {services.map(s => <option key={s} value={s}>{s}</option>)}
-                      </select>
+                      <label htmlFor="contact-service" style={{ color: '#a9c4ea', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.service')}</label>
+                      <div className="contact-field-box">
+                        <span className="contact-field-icon">{FieldIcons.service}</span>
+                        <select id="contact-service" name="service" value={form.service} onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}
+                          onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
+                          onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }}>
+                          <option value="">Select a service...</option>
+                          {services.map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                      </div>
                     </Col>
                     <Col xs={12}>
-                      <label style={{ color: '#8aafd4', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.message')}</label>
-                      <textarea name="message" rows={5} placeholder="Tell us about your property requirements..." value={form.message} onChange={handleChange} style={{ ...inputStyle, resize: 'vertical' }}
-                        onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
-                        onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
+                      <label htmlFor="contact-message" style={{ color: '#a9c4ea', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.message')}</label>
+                      <div className="contact-field-box contact-field-box-textarea">
+                        <span className="contact-field-icon contact-field-icon-top">{FieldIcons.message}</span>
+                        <textarea id="contact-message" name="message" rows={5} placeholder="Tell us about your property requirements..." value={form.message} onChange={handleChange} style={{ ...inputStyle, resize: 'vertical' }}
+                          onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
+                          onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
+                      </div>
                     </Col>
                     <Col xs={12}>
                       <motion.button
@@ -246,17 +292,19 @@ const Contact = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
+              className="contact-side-stack"
               style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
             >
               {/* WhatsApp Card */}
               <motion.div
                 whileHover={{ y: -4 }}
+                className="contact-side-card"
                 style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(37,211,102,0.3)', borderRadius: '16px', padding: '24px', position: 'relative', overflow: 'hidden' }}
               >
                 <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '120px', height: '120px', borderRadius: '50%', backgroundColor: '#25d366', opacity: 0.06, filter: 'blur(40px)' }} />
                 <div style={{ fontSize: '2.2rem', marginBottom: '12px' }}>💬</div>
                 <h3 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', marginBottom: '8px' }}>{t('contact.whatsapp.title')}</h3>
-                <p style={{ color: '#8aafd4', fontSize: '0.85rem', lineHeight: '1.7', marginBottom: '16px' }}>{t('contact.whatsapp.desc')}</p>
+                <p style={{ color: '#a9c4ea', fontSize: '0.85rem', lineHeight: '1.7', marginBottom: '16px' }}>{t('contact.whatsapp.desc')}</p>
                 <motion.a
                   href="https://wa.me/971561119233?text=Hello, I'm interested in a property from Lazord Real Estate."
                   target="_blank" rel="noopener noreferrer"
@@ -270,31 +318,43 @@ const Contact = () => {
               {/* Call Card */}
               <motion.div
                 whileHover={{ y: -4 }}
+                className="contact-side-card contact-call-card"
                 style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', padding: '20px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}
               >
                 <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: 'rgba(45,95,196,0.2)', border: '1px solid rgba(74,144,217,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', flexShrink: 0 }}>📞</div>
                 <div>
-                  <div style={{ color: '#8aafd4', fontSize: '0.75rem', marginBottom: '4px' }}>Call us directly</div>
+                  <div style={{ color: '#a9c4ea', fontSize: '0.75rem', marginBottom: '4px' }}>Call us directly</div>
                   <a href="tel:+97142999088" style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', textDecoration: 'none' }}>+971 42 999 088</a>
-                  <div style={{ color: '#4a90d9', fontSize: '0.78rem', marginTop: '2px' }}>Mon–Sat 9AM–7PM</div>
+                  <div style={{ color: '#4a90d9', fontSize: '0.78rem', marginTop: '2px' }}>Mon–Thu 9AM–6:30PM · Fri Closed · Sat–Sun 9:30AM–3PM</div>
                 </div>
               </motion.div>
 
               {/* Map */}
               <motion.div
                 whileHover={{ y: -2 }}
+                className="contact-side-card contact-map-card"
                 style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}
               >
-                <iframe
-                  title="Lazord Office Location"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.3684066212977!2d55.31978247538382!3d25.2581895776718!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5cd10170bd0f%3A0x33c038729b931804!2sAl%20Salemiyah%20Tower%20(SBK)!5e0!3m2!1sen!2sae!4v1782630978993!5m2!1sen!2sae"
-                  width="100%" height="220"
-                  style={{ border: 0, display: 'block', filter: 'invert(90%) hue-rotate(180deg)' }}
-                  allowFullScreen loading="lazy"
-                />
+                <div className="contact-map-wrap" style={{ position: 'relative' }}>
+                  <iframe
+                    title="Lazord Office Location"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.3684066212977!2d55.31978247538382!3d25.2581895776718!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5cd10170bd0f%3A0x33c038729b931804!2sAl%20Salemiyah%20Tower%20(SBK)!5e0!3m2!1sen!2sae!4v1782630978993!5m2!1sen!2sae"
+                    width="100%" height="220"
+                    style={{ border: 0, display: 'block', filter: 'invert(90%) hue-rotate(180deg)' }}
+                    allowFullScreen loading="lazy"
+                  />
+                  {/* Decorative pulsing pin marker overlay */}
+                  <div className="contact-map-pin" aria-hidden="true">
+                    <span className="contact-map-pin-pulse" />
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="#2d5fc4" stroke="#ffffff" strokeWidth="1.2">
+                      <path d="M12 21s-7-6.5-7-11.5A7 7 0 0112 2a7 7 0 017 7.5C19 14.5 12 21 12 21z"/>
+                      <circle cx="12" cy="9.5" r="2.4" fill="#ffffff" stroke="none"/>
+                    </svg>
+                  </div>
+                </div>
                 <div style={{ padding: '14px 18px', borderTop: '1px solid rgba(45,95,196,0.2)' }}>
                   <div style={{ color: '#ffffff', fontWeight: '600', fontSize: '0.88rem', marginBottom: '4px' }}>📍 Lazord Real Estate HQ</div>
-                  <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>Office 803, Al Salemiyah Tower, Rigga Al Butteen, Dubai, UAE</div>
+                  <div style={{ color: '#a9c4ea', fontSize: '0.8rem' }}>Office 803, Al Salemiyah Tower, Rigga Al Butteen, Dubai, UAE</div>
                 </div>
               </motion.div>
 
@@ -303,11 +363,92 @@ const Contact = () => {
         </Row>
       </Container>
 
+      {/* Sticky mobile Quick Call bar */}
+      <div className="contact-quickbar d-lg-none">
+        <a href="tel:+97142999088" className="contact-quickbar-btn contact-quickbar-call">
+          <span aria-hidden="true">📞</span> Call Now
+        </a>
+        <a href="https://wa.me/971561119233?text=Hello, I'm interested in a property from Lazord Real Estate."
+          target="_blank" rel="noopener noreferrer" className="contact-quickbar-btn contact-quickbar-wa">
+          <span aria-hidden="true">💬</span> WhatsApp
+        </a>
+      </div>
+
       <style>{`
         @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
         @keyframes spinSlow { from{transform:translateY(-50%) rotate(0deg)} to{transform:translateY(-50%) rotate(360deg)} }
         input::placeholder, textarea::placeholder { color: #4a5a7a; }
         select option { background-color: #0d1f4e; color: #ffffff; }
+
+        /* Form field icons — color shifts on focus via :focus-within, no JS needed */
+        .contact-field-box { position: relative; }
+        .contact-field-icon {
+          position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+          color: #5b7ba8; pointer-events: none; transition: color 0.2s ease; z-index: 1;
+        }
+        .contact-field-box-textarea .contact-field-icon-top { top: 18px; transform: none; }
+        .contact-field-box:focus-within .contact-field-icon { color: #4a90d9; }
+
+        /* Map pin overlay */
+        .contact-map-pin {
+          position: absolute; top: 50%; left: 50%;
+          transform: translate(-50%, -100%);
+          pointer-events: none; z-index: 2;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .contact-map-pin-pulse {
+          position: absolute; bottom: -3px; left: 50%; transform: translateX(-50%);
+          width: 14px; height: 14px; border-radius: 50%;
+          background: rgba(45,95,196,0.5);
+          animation: mapPinPulse 2s ease-out infinite;
+        }
+        @keyframes mapPinPulse {
+          0% { transform: translateX(-50%) scale(0.6); opacity: 0.7; }
+          70% { transform: translateX(-50%) scale(2.4); opacity: 0; }
+          100% { transform: translateX(-50%) scale(2.4); opacity: 0; }
+        }
+
+        /* Sticky mobile quick-call bar */
+        .contact-quickbar {
+          position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
+          display: flex;
+          background: #0d1f4e;
+          border-top: 1px solid rgba(74,144,217,0.25);
+          box-shadow: 0 -6px 24px rgba(0,0,0,0.35);
+        }
+        .contact-quickbar-btn {
+          flex: 1; text-align: center; padding: 14px 10px;
+          font-weight: 700; font-size: 0.9rem;
+          text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .contact-quickbar-call { background: #2d5fc4; color: #ffffff; }
+        .contact-quickbar-wa { background: #25d366; color: #ffffff; }
+
+        @media (max-width: 991.98px) {
+          .contact-page { padding-bottom: 140px !important; }
+        }
+
+        @media (max-width: 767.98px) {
+          .contact-hero { min-height: 300px !important; }
+          .contact-hero-container { padding: 44px 18px !important; text-align: center; }
+          .contact-hero-badge { margin-left: auto; margin-right: auto; }
+          .contact-hero-subtitle { margin-left: auto; margin-right: auto; }
+          .contact-hero-quickbadges { justify-content: center; }
+          .contact-hero-quickbadges span { font-size: 0.74rem !important; padding: 5px 11px !important; }
+
+          .contact-info-row { margin-bottom: 20px !important; }
+          .contact-info-card { padding: 16px 12px !important; text-align: center; }
+          .contact-info-card > div:first-child { margin-left: auto; margin-right: auto; }
+
+          .contact-social-block { padding: 18px !important; text-align: center; }
+          .contact-social-block > div { justify-content: center; }
+
+          .contact-form-card { padding: 22px 18px !important; border-radius: 16px !important; }
+
+          .contact-side-stack { margin-top: 4px; }
+          .contact-side-card { padding: 20px !important; }
+          .contact-call-card { flex-direction: row; text-align: left; }
+        }
       `}</style>
       </div>
     </>

@@ -100,38 +100,60 @@ const FeaturedAreas = () => {
           }}>
             From iconic waterfront towers to peaceful family communities — find your perfect Dubai neighbourhood.
           </p>
+          {/* Mobile swipe hint */}
+          <div className="d-lg-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '14px', opacity: 0.8 }}>
+            ← swipe to explore →
+          </div>
         </div>
 
-        {/* Areas Grid */}
-        <Row className="g-4">
-          {/* Large card - first item */}
-          <Col lg={6} md={12}>
-            <AreaCard area={areas[0]} height="420px" large />
-          </Col>
+        {/* ── DESKTOP/TABLET — original mosaic grid, untouched ── */}
+        <div className="d-none d-lg-block">
+          <Row className="g-4">
+            {/* Large card - first item */}
+            <Col lg={6} md={12}>
+              <AreaCard area={areas[0]} height="420px" large />
+            </Col>
 
-          {/* Two stacked cards */}
-          <Col lg={6} md={12}>
-            <Row className="g-4">
-              <Col md={6} sm={6}>
-                <AreaCard area={areas[1]} height="200px" />
-              </Col>
-              <Col md={6} sm={6}>
-                <AreaCard area={areas[2]} height="200px" />
-              </Col>
-              <Col md={6} sm={6}>
-                <AreaCard area={areas[3]} height="200px" />
-              </Col>
-              <Col md={6} sm={6}>
-                <AreaCard area={areas[4]} height="200px" />
-              </Col>
-            </Row>
-          </Col>
+            {/* Two stacked cards */}
+            <Col lg={6} md={12}>
+              <Row className="g-4">
+                <Col md={6} sm={6}>
+                  <AreaCard area={areas[1]} height="200px" />
+                </Col>
+                <Col md={6} sm={6}>
+                  <AreaCard area={areas[2]} height="200px" />
+                </Col>
+                <Col md={6} sm={6}>
+                  <AreaCard area={areas[3]} height="200px" />
+                </Col>
+                <Col md={6} sm={6}>
+                  <AreaCard area={areas[4]} height="200px" />
+                </Col>
+              </Row>
+            </Col>
 
-          {/* Bottom full-width card */}
-          <Col md={12}>
-            <AreaCard area={areas[5]} height="180px" wide />
-          </Col>
-        </Row>
+            {/* Bottom full-width card */}
+            <Col md={12}>
+              <AreaCard area={areas[5]} height="180px" wide />
+            </Col>
+          </Row>
+        </div>
+
+        {/* ── MOBILE — uniform horizontal swipeable slider ── */}
+        <div className="d-lg-none">
+          <div className="featured-areas-track">
+            {areas.map((area, i) => (
+              <div key={i} className="featured-areas-slide">
+                <AreaCard area={area} height="240px" wide />
+              </div>
+            ))}
+          </div>
+          <div className="featured-areas-dots">
+            {areas.map((area, i) => (
+              <span key={i} style={{ backgroundColor: area.tagColor }} />
+            ))}
+          </div>
+        </div>
 
         {/* CTA */}
         <div style={{ textAlign: 'center', marginTop: '48px' }}>
@@ -165,6 +187,37 @@ const FeaturedAreas = () => {
         </div>
 
       </Container>
+
+      <style>{`
+        .featured-areas-track {
+          display: flex;
+          gap: 16px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          padding: 4px 4px 8px;
+          margin: 0 -4px;
+        }
+        .featured-areas-track::-webkit-scrollbar { display: none; }
+        .featured-areas-slide {
+          flex: 0 0 82%;
+          scroll-snap-align: center;
+        }
+        .featured-areas-dots {
+          display: flex;
+          justify-content: center;
+          gap: 6px;
+          margin-top: 14px;
+        }
+        .featured-areas-dots span {
+          width: 6px; height: 6px; border-radius: 50%;
+          opacity: 0.35;
+        }
+        @media (min-width: 480px) {
+          .featured-areas-slide { flex-basis: 62%; }
+        }
+      `}</style>
     </section>
   )
 }

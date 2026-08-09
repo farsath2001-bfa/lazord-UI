@@ -233,7 +233,7 @@ const AdminLeads = () => {
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                 <div style={{ position: 'relative' }}>
                   <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#8aafd4', fontSize: '0.82rem' }}>🔍</span>
-                  <input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)}
+                  <input id="leads-search" name="search" type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)}
                     style={{ backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', color: '#ffffff', padding: '7px 12px 7px 30px', fontSize: '0.82rem', outline: 'none', width: '140px' }} />
                 </div>
                 {filtered.length > 0 && (
@@ -269,7 +269,7 @@ const AdminLeads = () => {
                             <div style={{ color: '#8aafd4', fontSize: '0.75rem' }}>{lead.phone}</div>
                           </div>
                         </div>
-                        <select value={lead.status} onChange={e => { e.stopPropagation(); updateStatus(lead._id, e.target.value) }}
+                        <select name="status" aria-label={`Status for ${lead.name}`} value={lead.status} onChange={e => { e.stopPropagation(); updateStatus(lead._id, e.target.value) }}
                           onClick={e => e.stopPropagation()}
                           style={{ backgroundColor: statusColor[lead.status]?.bg, color: statusColor[lead.status]?.color, border: `1px solid ${statusColor[lead.status]?.color}40`, borderRadius: '20px', padding: '3px 8px', fontSize: '0.7rem', fontWeight: '700', cursor: 'pointer', outline: 'none' }}>
                           {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => (
@@ -337,7 +337,7 @@ const AdminLeads = () => {
                           </td>
                           <td style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.8rem' }}>{lead.service}</td>
                           <td style={{ padding: '12px 16px' }} onClick={e => e.stopPropagation()}>
-                            <select value={lead.status} onChange={e => updateStatus(lead._id, e.target.value)}
+                            <select name="status" aria-label={`Status for ${lead.name}`} value={lead.status} onChange={e => updateStatus(lead._id, e.target.value)}
                               style={{ backgroundColor: statusColor[lead.status]?.bg, color: statusColor[lead.status]?.color, border: `1px solid ${statusColor[lead.status]?.color}40`, borderRadius: '20px', padding: '3px 10px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', outline: 'none' }}>
                               {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => (
                                 <option key={s} value={s} style={{ backgroundColor: '#0d1f4e', color: '#ffffff' }}>{s}</option>
@@ -404,8 +404,8 @@ const AdminLeads = () => {
               </div>
 
               <div className="no-print" style={{ marginBottom: '20px' }}>
-                <div style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>📊 Update Status</div>
-                <select value={selectedLead.status} onChange={e => updateStatus(selectedLead._id, e.target.value)}
+                <label htmlFor="lead-detail-status" style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>📊 Update Status</label>
+                <select id="lead-detail-status" name="status" value={selectedLead.status} onChange={e => updateStatus(selectedLead._id, e.target.value)}
                   style={{ width: '100%', backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', color: '#ffffff', padding: '10px 14px', fontSize: '0.88rem', outline: 'none', cursor: 'pointer' }}>
                   {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
