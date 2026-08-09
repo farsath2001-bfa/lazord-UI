@@ -10,9 +10,9 @@ const WhatsAppButton = () => {
   return (
     <div style={{ position: 'fixed', bottom: '30px', right: '30px', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
 
-      {/* Tooltip */}
+      {/* Tooltip — desktop only */}
       {showTooltip && (
-        <div style={{
+        <div className="whatsapp-tooltip" style={{
           backgroundColor: '#ffffff',
           color: '#1a1a2e',
           padding: '10px 16px',
@@ -84,6 +84,9 @@ const WhatsAppButton = () => {
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+          .whatsapp-tooltip { display: none; }
         }
       `}</style>
     </div>

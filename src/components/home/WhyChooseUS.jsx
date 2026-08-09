@@ -109,12 +109,16 @@ const WhyChooseUs = () => {
           <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '300', marginBottom: '6px' }}>{t('why.title1')}</h2>
           <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '800', marginBottom: '16px' }}>{t('why.title2')}</h2>
           <p style={{ color: '#8aafd4', fontSize: '1rem', maxWidth: '500px', margin: '0 auto', lineHeight: '1.7' }}>{t('why.subtitle')}</p>
+          {/* Mobile swipe hint */}
+          <div className="d-lg-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '14px', opacity: 0.8 }}>
+            ← swipe to explore →
+          </div>
         </motion.div>
 
         {/* Reason Cards */}
-        <Row className="g-4" style={{ marginBottom: '56px' }}>
+        <Row className="g-4 why-reasons-row" style={{ marginBottom: '56px' }}>
           {reasons.map((r, i) => (
-            <Col key={i} lg={3} md={6}>
+            <Col key={i} lg={3} md={6} className="why-reasons-col">
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -165,6 +169,13 @@ const WhyChooseUs = () => {
             </Col>
           ))}
         </Row>
+
+        {/* Mobile scroll dots */}
+        <div className="why-cards-dots">
+          {reasons.map((r, i) => (
+            <span key={i} style={{ backgroundColor: r.color }} />
+          ))}
+        </div>
 
         {/* Stats Strip */}
         <motion.div
@@ -259,6 +270,45 @@ const WhyChooseUs = () => {
         @keyframes orbFloat1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-15px,25px)} }
         @keyframes orbFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(25px,-15px)} }
         @keyframes orbFloat3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,20px)} }
+
+        /* ── Mobile only (<768px): override the Bootstrap Row into a
+           horizontal swipeable slider. Nothing here applies at md/lg,
+           so the original Row/Col grid renders completely untouched
+           on tablet and desktop. ── */
+        @media (max-width: 767.98px) {
+          .why-reasons-row {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding-bottom: 8px;
+          }
+          .why-reasons-row::-webkit-scrollbar { display: none; }
+          .why-reasons-row > .why-reasons-col {
+            flex: 0 0 78%;
+            max-width: 78%;
+            scroll-snap-align: center;
+          }
+        }
+        .why-cards-dots {
+          display: none;
+        }
+        @media (max-width: 767.98px) {
+          .why-cards-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: -40px;
+            margin-bottom: 56px;
+            position: relative;
+            z-index: 1;
+          }
+          .why-cards-dots span {
+            width: 6px; height: 6px; border-radius: 50%;
+            opacity: 0.35;
+          }
+        }
       `}</style>
     </section>
   )

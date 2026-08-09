@@ -114,6 +114,10 @@ const AdminLeads = () => {
     setTimeout(() => setMessage(''), 3000)
   }
 
+  const printLead = () => {
+    window.print()
+  }
+
   const statuses = ['All', 'New', 'Contacted', 'In Progress', 'Closed', 'Lost']
   const sources  = ['All', 'Website Popup', 'Contact Form', 'Property Inquiry', 'WhatsApp', 'Phone', 'Walk In']
 
@@ -221,7 +225,7 @@ const AdminLeads = () => {
         <div className={`leads-grid ${selectedLead ? 'leads-grid-open' : ''}`}>
 
           {/* Table / Cards */}
-          <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
+          <div className="no-print" style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
             <div style={{ padding: '14px 16px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
               <h2 style={{ color: '#ffffff', fontSize: '0.92rem', fontWeight: '700', margin: 0 }}>
                 {filter === 'All' && sourceFilter === 'All' ? 'All Leads' : 'Filtered'} ({filtered.length})
@@ -358,47 +362,59 @@ const AdminLeads = () => {
           {/* Lead Detail Panel */}
           {selectedLead && (
             <div className="lead-detail-panel">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <div className="no-print" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h3 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>📋 Lead Detail</h3>
                 <button onClick={() => setSelectedLead(null)} style={{ background: 'transparent', border: 'none', color: '#8aafd4', fontSize: '1.2rem', cursor: 'pointer' }}>✕</button>
               </div>
-              <div style={{ width: '52px', height: '52px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '2px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', fontWeight: '800', color: '#4a90d9', marginBottom: '14px' }}>
-                {selectedLead.name?.charAt(0).toUpperCase()}
-              </div>
-              <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.05rem', marginBottom: '4px' }}>{selectedLead.name}</div>
-              <div style={{ color: '#8aafd4', fontSize: '0.82rem', marginBottom: '20px' }}>
-                {new Date(selectedLead.createdAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-              </div>
-              {[
-                { icon: '📧', label: 'Email',    value: selectedLead.email },
-                { icon: '📞', label: 'Phone',    value: selectedLead.phone },
-                { icon: '🏷️', label: 'Source',   value: selectedLead.source },
-                { icon: '🏠', label: 'Property', value: selectedLead.property?.title || 'General Inquiry' },
-              ].map(row => (
-                <div key={row.label} style={{ marginBottom: '14px' }}>
-                  <div style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{row.icon} {row.label}</div>
-                  <div style={{ color: '#ffffff', fontSize: '0.88rem', fontWeight: '600', wordBreak: 'break-all' }}>{row.value}</div>
+
+              {/* Printable content */}
+              <div id="printable-lead">
+                <div className="print-header" style={{ display: 'none' }}>
+                  <div style={{ fontWeight: '800', fontSize: '1.2rem' }}>Lazord Real Estate</div>
+                  <div style={{ fontSize: '0.85rem' }}>Customer Lead Profile</div>
                 </div>
-              ))}
-              {selectedLead.message && (
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>💬 Message</div>
-                  <div style={{ backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '10px', padding: '12px', color: '#c0d4f0', fontSize: '0.86rem', lineHeight: '1.6' }}>
-                    {selectedLead.message}
+
+                <div style={{ width: '52px', height: '52px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '2px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', fontWeight: '800', color: '#4a90d9', marginBottom: '14px' }}>
+                  {selectedLead.name?.charAt(0).toUpperCase()}
+                </div>
+                <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.05rem', marginBottom: '4px' }}>{selectedLead.name}</div>
+                <div style={{ color: '#8aafd4', fontSize: '0.82rem', marginBottom: '20px' }}>
+                  {new Date(selectedLead.createdAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                </div>
+                {[
+                  { icon: '📧', label: 'Email',    value: selectedLead.email },
+                  { icon: '📞', label: 'Phone',    value: selectedLead.phone },
+                  { icon: '🏷️', label: 'Source',   value: selectedLead.source },
+                  { icon: '🏠', label: 'Property', value: selectedLead.property?.title || 'General Inquiry' },
+                  { icon: '📊', label: 'Status',   value: selectedLead.status },
+                ].map(row => (
+                  <div key={row.label} style={{ marginBottom: '14px' }}>
+                    <div style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{row.icon} {row.label}</div>
+                    <div style={{ color: '#ffffff', fontSize: '0.88rem', fontWeight: '600', wordBreak: 'break-all' }}>{row.value}</div>
                   </div>
-                </div>
-              )}
-              <div style={{ marginBottom: '20px' }}>
+                ))}
+                {selectedLead.message && (
+                  <div style={{ marginBottom: '20px' }}>
+                    <div style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>💬 Message</div>
+                    <div style={{ backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '10px', padding: '12px', color: '#c0d4f0', fontSize: '0.86rem', lineHeight: '1.6' }}>
+                      {selectedLead.message}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="no-print" style={{ marginBottom: '20px' }}>
                 <div style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>📊 Update Status</div>
                 <select value={selectedLead.status} onChange={e => updateStatus(selectedLead._id, e.target.value)}
                   style={{ width: '100%', backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', color: '#ffffff', padding: '10px 14px', fontSize: '0.88rem', outline: 'none', cursor: 'pointer' }}>
                   {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div className="no-print" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <a href={`mailto:${selectedLead.email}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.2)', color: '#4a90d9', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', padding: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem' }}>📧 Send Email</a>
                 <a href={`https://wa.me/${selectedLead.phone?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(37,211,102,0.15)', color: '#25d366', border: '1px solid rgba(37,211,102,0.3)', borderRadius: '8px', padding: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem' }}>💬 WhatsApp</a>
                 <a href={`tel:${selectedLead.phone}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(39,174,96,0.15)', color: '#27ae60', border: '1px solid rgba(39,174,96,0.3)', borderRadius: '8px', padding: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem' }}>📞 Call Now</a>
+                <button onClick={printLead} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(255,255,255,0.06)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '10px', fontWeight: '600', fontSize: '0.85rem', cursor: 'pointer' }}>🖨️ Print Profile</button>
               </div>
             </div>
           )}
@@ -427,6 +443,19 @@ const AdminLeads = () => {
           .leads-cards-mobile { display: none; }
           .leads-table-desktop { display: block; }
           .lead-detail-panel { position: sticky; top: 80px; }
+        }
+
+        /* ── PRINT ── */
+        @media print {
+          body * { visibility: hidden; }
+          #printable-lead, #printable-lead * { visibility: visible; }
+          #printable-lead {
+            position: absolute; top: 0; left: 0; width: 100%;
+            padding: 24px; background: #ffffff !important;
+          }
+          #printable-lead .print-header { display: block !important; margin-bottom: 20px; color: #000 !important; }
+          #printable-lead * { color: #000 !important; background: transparent !important; border-color: #ccc !important; }
+          .no-print { display: none !important; }
         }
       `}</style>
     </div>

@@ -168,6 +168,10 @@ const ProcessSection = () => {
           <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '300', marginBottom: '6px', textShadow: '0 0 40px rgba(74,144,217,0.3)' }}>{t('process.title1')}</h2>
           <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '800', marginBottom: '16px', textShadow: '0 0 40px rgba(74,144,217,0.4)' }}>{t('process.title2')}</h2>
           <p style={{ color: '#8aafd4', fontSize: '1rem', maxWidth: '520px', margin: '0 auto', lineHeight: '1.7' }}>{t('process.subtitle')}</p>
+          {/* Mobile swipe hint */}
+          <div className="d-lg-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '14px', opacity: 0.8 }}>
+            ← swipe to explore →
+          </div>
         </motion.div>
 
         {/* Steps */}
@@ -191,12 +195,7 @@ const ProcessSection = () => {
             zIndex: 1
           }} />
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '32px',
-            position: 'relative', zIndex: 1
-          }}>
+          <div className="process-steps-track" style={{ position: 'relative', zIndex: 1 }}>
             {steps.map((step, i) => (
               <motion.div
                 key={i}
@@ -204,6 +203,7 @@ const ProcessSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.15 }}
+                className="process-step-card"
                 style={{ textAlign: 'center' }}
               >
                 {/* Icon circle */}
@@ -246,11 +246,6 @@ const ProcessSection = () => {
                   }} />
                 </div>
 
-                {/* Mobile arrow */}
-                {i < steps.length - 1 && (
-                  <div className="d-lg-none" style={{ color: '#4a4a6a', fontSize: '1.5rem', marginBottom: '8px' }}>↓</div>
-                )}
-
                 <h3 style={{ color: '#ffffff', fontSize: '1.05rem', fontWeight: '700', marginBottom: '10px', textShadow: '0 0 20px rgba(74,144,217,0.2)' }}>
                   {t(step.titleKey)}
                 </h3>
@@ -258,6 +253,13 @@ const ProcessSection = () => {
                   {t(step.descKey)}
                 </p>
               </motion.div>
+            ))}
+          </div>
+
+          {/* Mobile scroll dots */}
+          <div className="d-lg-none process-steps-dots">
+            {steps.map((step, i) => (
+              <span key={i} style={{ backgroundColor: step.color }} />
             ))}
           </div>
         </div>
@@ -336,6 +338,53 @@ const ProcessSection = () => {
           5%{opacity:1}
           95%{opacity:1}
           100%{left:87.5%;opacity:0}
+        }
+
+        /* ── Mobile: horizontal swipeable slider ── */
+        .process-steps-track {
+          display: flex;
+          gap: 16px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          padding: 4px 4px 8px;
+          margin: 0 -4px;
+        }
+        .process-steps-track::-webkit-scrollbar { display: none; }
+        .process-step-card {
+          flex: 0 0 72%;
+          scroll-snap-align: center;
+        }
+        .process-steps-dots {
+          display: flex;
+          justify-content: center;
+          gap: 6px;
+          margin-top: 16px;
+        }
+        .process-steps-dots span {
+          width: 6px; height: 6px; border-radius: 50%;
+          opacity: 0.35;
+        }
+
+        @media (min-width: 480px) {
+          .process-step-card { flex-basis: 55%; }
+        }
+
+        /* ── Desktop: restore original static grid, untouched ── */
+        @media (min-width: 992px) {
+          .process-steps-track {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+            overflow: visible;
+            padding: 0;
+            margin: 0;
+          }
+          .process-step-card {
+            flex: none;
+            scroll-snap-align: none;
+          }
         }
       `}</style>
     </section>
