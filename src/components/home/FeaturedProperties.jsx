@@ -105,8 +105,8 @@ const FeaturedProperties = () => {
             ))}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ color: '#8aafd4', fontSize: '0.82rem', whiteSpace: 'nowrap', flexShrink: 0 }}>Sort by:</span>
-            <select value={activeSort} onChange={e => setActiveSort(e.target.value)}
+            <label htmlFor="featured-sort" style={{ color: '#8aafd4', fontSize: '0.82rem', whiteSpace: 'nowrap', flexShrink: 0 }}>Sort by:</label>
+            <select id="featured-sort" name="sort" value={activeSort} onChange={e => setActiveSort(e.target.value)}
               style={{ flex: 1, maxWidth: '220px', backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)', borderRadius: '8px', color: '#ffffff', padding: '8px 14px', fontSize: '0.85rem', outline: 'none', cursor: 'pointer' }}>
               {sortOptions.map(s => <option key={s.value} value={s.value} style={{ backgroundColor: '#0d1f4e' }}>{s.label}</option>)}
             </select>

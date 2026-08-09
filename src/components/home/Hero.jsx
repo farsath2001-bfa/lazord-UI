@@ -135,7 +135,11 @@ const Hero = () => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 8px 4px 8px' }}>
                   <span style={{ fontSize: '1.1rem', paddingLeft: '6px', flexShrink: 0 }}>🔍</span>
                   <input
+                    id="hero-search"
+                    name="search"
                     type="text"
+                    autoComplete="off"
+                    aria-label={t('hero.searchPlaceholder')}
                     placeholder={t('hero.searchPlaceholder')}
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
