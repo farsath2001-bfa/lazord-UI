@@ -78,10 +78,20 @@ const Footer = () => {
   ]
 
   return (
-    <footer style={{ backgroundColor: '#050b1f', color: '#ffffff', position: 'relative', overflow: 'hidden' }}>
+    <footer style={{ background: 'linear-gradient(180deg, #050b1f 0%, #071535 55%, #050b1f 100%)', color: '#ffffff', position: 'relative', overflow: 'hidden' }}>
 
-      {/* ambient glow, purely decorative */}
+      {/* Grid overlay, purely decorative */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: 'linear-gradient(rgba(45,95,196,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(45,95,196,0.05) 1px, transparent 1px)',
+        backgroundSize: '50px 50px',
+        pointerEvents: 'none'
+      }} />
+
+      {/* Glow blobs, purely decorative */}
       <div style={{ position: 'absolute', top: '-120px', left: '50%', transform: 'translateX(-50%)', width: '640px', height: '320px', background: 'radial-gradient(ellipse at center, rgba(45,95,196,0.16) 0%, rgba(45,95,196,0) 70%)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '-80px', left: '-100px', width: '360px', height: '360px', borderRadius: '50%', backgroundColor: '#2d5fc4', opacity: 0.07, filter: 'blur(90px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '30%', right: '-80px', width: '280px', height: '280px', borderRadius: '50%', backgroundColor: '#4a90d9', opacity: 0.06, filter: 'blur(80px)', pointerEvents: 'none' }} />
 
       {/* Newsletter Bar */}
       <div style={{ position: 'relative', borderBottom: '1px solid rgba(74,144,217,0.14)', padding: '30px 0' }}>
