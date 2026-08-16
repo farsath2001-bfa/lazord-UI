@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import axios from 'axios'
 import PropertyCard from '../common/PropertyCard'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination, Autoplay } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/pagination'
+
+const PropertyCardSlider = lazy(() => import('../common/PropertyCardSlider'))
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -126,34 +124,13 @@ const FeaturedProperties = () => {
           </div>
         ) : (
           <>
-            {/* ✅ MOBILE — Swiper slider */}
+            {/* ✅ MOBILE — Swiper slider, lazy-loaded */}
             <div className="d-block d-lg-none">
-              <Swiper
-                modules={[Pagination, Autoplay]}
-                spaceBetween={16}
-                slidesPerView={1.2}
-                centeredSlides={false}
-                pagination={{ clickable: true, dynamicBullets: true }}
-                autoplay={{ delay: 3500, disableOnInteraction: false }}
-                breakpoints={{
-                  480: { slidesPerView: 1.5 },
-                  640: { slidesPerView: 2.1 },
-                }}
-                style={{ paddingBottom: '40px' }}
-              >
-                {filtered.map((property, i) => (
-                  <SwiperSlide key={property._id}>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: i * 0.05 }}
-                    >
-                      <PropertyCard property={property} />
-                    </motion.div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+              <Suspense fallback={
+                <div style={{ textAlign: 'center', padding: '40px 0', color: '#8aafd4', fontSize: '0.85rem' }}>Loading properties…</div>
+              }>
+                <PropertyCardSlider properties={filtered} animated />
+              </Suspense>
             </div>
 
             {/* ✅ DESKTOP — Normal grid */}

@@ -1,15 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import PropertyCard from '../components/common/PropertyCard'
 import FeaturedAreas from '../components/home/FeaturedAreas'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination, Autoplay } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/pagination'
 import SEO from '../components/SEO'
+
+const PropertyCardSlider = lazy(() => import('../components/common/PropertyCardSlider'))
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -246,26 +244,13 @@ const Properties = () => {
           </div>
         ) : (
           <>
-            {/* ✅ MOBILE — Swiper slider */}
+            {/* ✅ MOBILE — Swiper slider, lazy-loaded */}
             <div className="d-block d-lg-none">
-              <Swiper
-                modules={[Pagination, Autoplay]}
-                spaceBetween={16}
-                slidesPerView={1.2}
-                pagination={{ clickable: true, dynamicBullets: true }}
-                autoplay={{ delay: 3500, disableOnInteraction: false }}
-                breakpoints={{
-                  480: { slidesPerView: 1.5 },
-                  640: { slidesPerView: 2.1 },
-                }}
-                style={{ paddingBottom: '40px' }}
-              >
-                {properties.map(property => (
-                  <SwiperSlide key={property._id}>
-                    <PropertyCard property={property} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+              <Suspense fallback={
+                <div style={{ textAlign: 'center', padding: '40px 0', color: '#8aafd4', fontSize: '0.85rem' }}>Loading properties…</div>
+              }>
+                <PropertyCardSlider properties={properties} />
+              </Suspense>
             </div>
 
             {/* ✅ DESKTOP — Normal grid */}

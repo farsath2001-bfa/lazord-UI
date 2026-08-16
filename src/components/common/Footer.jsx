@@ -220,20 +220,21 @@ const Footer = () => {
         </Row>
 
         {/* Bottom bar */}
-        <div className="footer-bottom-bar" style={{ borderTop: '1px solid rgba(74,144,217,0.14)', marginTop: '44px', paddingTop: '22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-          <p style={{ color: '#556b95', fontSize: '0.8rem', margin: 0 }}>
+        <div className="footer-bottom-bar" style={{ borderTop: '1px solid rgba(74,144,217,0.14)', marginTop: '44px', paddingTop: '22px', textAlign: 'center' }}>
+          <p style={{ color: '#7d94b8', fontSize: '0.85rem', margin: '0 0 10px' }}>
             {t('footer.rights')}
           </p>
-          <div style={{ display: 'flex', gap: '22px' }}>
-            <Link to="/legal" style={{ color: '#556b95', fontSize: '0.78rem', textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#5b8fd6'}
-              onMouseLeave={e => e.currentTarget.style.color = '#556b95'}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+            <Link to="/legal" style={{ color: '#4a90d9', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#ffffff'}
+              onMouseLeave={e => e.currentTarget.style.color = '#4a90d9'}>
               Privacy Policy
             </Link>
-            <Link to="/legal" style={{ color: '#556b95', fontSize: '0.78rem', textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#5b8fd6'}
-              onMouseLeave={e => e.currentTarget.style.color = '#556b95'}>
-              Terms of Use
+            <span style={{ color: '#3a4a6a', fontSize: '0.8rem' }}>|</span>
+            <Link to="/legal" style={{ color: '#4a90d9', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#ffffff'}
+              onMouseLeave={e => e.currentTarget.style.color = '#4a90d9'}>
+              Terms & Conditions
             </Link>
           </div>
         </div>

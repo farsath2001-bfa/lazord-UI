@@ -23,6 +23,7 @@ import BackToTop from './components/common/BackToTop'
 import NotFound from './pages/NotFound'
 import PageLoader from './components/common/PageLoader'
 import LegalPage from './pages/LegalPage'
+import CookieConsent from './components/CookieConsent'
 
 // ✅ Moved OUTSIDE App — defined once, uses useLocation safely inside BrowserRouter
 const ScrollToTop = () => {
@@ -52,6 +53,7 @@ function App() {
           <ScrollToTop />      {/* ✅ Now safely inside BrowserRouter */}
           <CustomCursor />
           <WhatsAppButton />
+          <CookieConsent />
           <LeadPopup />
           <BackToTop />
 

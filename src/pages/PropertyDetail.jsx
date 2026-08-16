@@ -1,17 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
 import axios from 'axios'
 
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-})
+const PropertyMap = lazy(() => import('../components/common/PropertyMap'))
 
 const DUBAI_LOCATIONS = {
   'downtown dubai':      [25.1972, 55.2744],
@@ -285,26 +277,25 @@ const PropertyDetail = () => {
               </div>
             )}
 
-            {/* Map */}
+            {/* Map — Leaflet lazy-loaded so it doesn't block initial page interactivity */}
             <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden', marginBottom: '20px' }}>
               <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h3 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>📍 Location</h3>
                 <span style={{ color: '#8aafd4', fontSize: '0.82rem' }}>{property.location}, Dubai</span>
               </div>
               <div style={{ height: '300px' }}>
-                <MapContainer center={coords} zoom={14} style={{ height: '100%', width: '100%' }} scrollWheelZoom={false}>
-                  <TileLayer
-                    attribution='&copy; OpenStreetMap'
-                    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                <Suspense fallback={
+                  <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8aafd4', fontSize: '0.85rem' }}>
+                    Loading map…
+                  </div>
+                }>
+                  <PropertyMap
+                    coords={coords}
+                    title={property.title}
+                    location={property.location}
+                    priceLabel={formatPrice(property.price, property.type)}
                   />
-                  <Marker position={coords}>
-                    <Popup>
-                      <strong>{property.title}</strong><br />
-                      📍 {property.location}<br />
-                      <span style={{ color: '#2d5fc4', fontWeight: '700' }}>{formatPrice(property.price, property.type)}</span>
-                    </Popup>
-                  </Marker>
-                </MapContainer>
+                </Suspense>
               </div>
             </div>
 
