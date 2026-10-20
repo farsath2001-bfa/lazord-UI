@@ -1,12 +1,14 @@
 import FAQ from '../components/home/FAQ'
 import SEO from '../components/SEO'
+import { useTranslation } from 'react-i18next'
 
 const FAQPage = () => {
+  const { t } = useTranslation()
   return (
     <>
       <SEO
-        title="Frequently Asked Questions"
-        description="Answers to common questions about buying, renting and investing in Dubai property with Lazord Real Estate."
+        title={t('faq.seoTitle')}
+        description={t('faq.seoDesc')}
         path="/faq"
       />
       <FAQ />

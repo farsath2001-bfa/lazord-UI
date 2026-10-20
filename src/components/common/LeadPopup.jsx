@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 import logo from '../../assets/image/lazordlogoo.png'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const LeadPopup = () => {
+  const { t } = useTranslation()
   const [show, setShow] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -57,6 +59,7 @@ const LeadPopup = () => {
         source: 'Website Popup',
         message: 'Registered interest via website popup'
       })
+      try { localStorage.setItem('lazord_lead_sent', '1') } catch { /* storage blocked */ }
     } catch (err) {
       console.error(err)
     } finally {
@@ -124,7 +127,7 @@ const LeadPopup = () => {
           <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', width: '200px', height: '200px', borderRadius: '50%', backgroundColor: '#2d5fc4', opacity: 0.08, filter: 'blur(60px)', pointerEvents: 'none' }} />
 
           {/* Close button */}
-          <button onClick={handleClose} style={{
+          <button onClick={handleClose} aria-label={t('common.close')} style={{
             position: 'absolute', top: '14px', right: '14px',
             backgroundColor: 'rgba(255,255,255,0.08)',
             border: '1px solid rgba(255,255,255,0.12)',
@@ -152,10 +155,10 @@ const LeadPopup = () => {
           <div style={{ width: '40px', height: '2px', backgroundColor: '#2d5fc4', margin: '0 auto 16px', borderRadius: '2px' }} />
 
           <h2 style={{ color: '#ffffff', fontSize: '1.3rem', fontWeight: '700', marginBottom: '6px' }}>
-            Register Your Interest
+            {t('popup.title')}
           </h2>
           <p style={{ color: '#8aafd4', fontSize: '0.83rem', margin: 0, lineHeight: '1.5' }}>
-            Fill in your details and our team will be in touch with you shortly.
+            {t('popup.subtitle')}
           </p>
         </div>
 
@@ -170,9 +173,9 @@ const LeadPopup = () => {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '2rem', margin: '0 auto 18px'
               }}>✅</div>
-              <h3 style={{ color: '#ffffff', fontWeight: '700', marginBottom: '8px', fontSize: '1.1rem' }}>Thank You!</h3>
+              <h3 style={{ color: '#ffffff', fontWeight: '700', marginBottom: '8px', fontSize: '1.1rem' }}>{t('popup.thanks')}</h3>
               <p style={{ color: '#8aafd4', fontSize: '0.88rem', lineHeight: '1.6', margin: 0 }}>
-                One of our agents will reach out to you very soon.
+                {t('popup.thanksDesc')}
               </p>
             </div>
           ) : (
@@ -181,20 +184,20 @@ const LeadPopup = () => {
               {/* Title + First Name */}
               <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
                 <div style={{ flex: '0 0 110px' }}>
-                  <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>Title *</label>
+                  <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>{t('popup.titleField')} *</label>
                   <select name="title" required value={form.title} onChange={handleChange}
                     onFocus={() => setFocused('title')} onBlur={() => setFocused('')}
                     style={fieldStyle('title')}>
                     <option value="">--</option>
-                    <option value="Mr">Mr</option>
-                    <option value="Mrs">Mrs</option>
-                    <option value="Ms">Ms</option>
-                    <option value="Dr">Dr</option>
+                    <option value="Mr">{t('popup.mr')}</option>
+                    <option value="Mrs">{t('popup.mrs')}</option>
+                    <option value="Ms">{t('popup.ms')}</option>
+                    <option value="Dr">{t('popup.dr')}</option>
                   </select>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>First Name *</label>
-                  <input type="text" name="firstName" required placeholder="First name"
+                  <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>{t('popup.first')} *</label>
+                  <input type="text" name="firstName" required placeholder={t('popup.firstPh')}
                     value={form.firstName} onChange={handleChange}
                     onFocus={() => setFocused('firstName')} onBlur={() => setFocused('')}
                     style={fieldStyle('firstName')} />
@@ -203,8 +206,8 @@ const LeadPopup = () => {
 
               {/* Last Name */}
               <div style={{ marginBottom: '12px' }}>
-                <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>Last Name *</label>
-                <input type="text" name="lastName" required placeholder="Last name"
+                <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>{t('popup.last')} *</label>
+                <input type="text" name="lastName" required placeholder={t('popup.lastPh')}
                   value={form.lastName} onChange={handleChange}
                   onFocus={() => setFocused('lastName')} onBlur={() => setFocused('')}
                   style={fieldStyle('lastName')} />
@@ -212,7 +215,7 @@ const LeadPopup = () => {
 
               {/* Email */}
               <div style={{ marginBottom: '12px' }}>
-                <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>Email Address *</label>
+                <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>{t('popup.email')} *</label>
                 <input type="email" name="email" required placeholder="your@email.com"
                   value={form.email} onChange={handleChange}
                   onFocus={() => setFocused('email')} onBlur={() => setFocused('')}
@@ -221,7 +224,7 @@ const LeadPopup = () => {
 
               {/* Phone */}
               <div style={{ marginBottom: '24px' }}>
-                <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>Phone Number *</label>
+                <label style={{ color: '#8aafd4', fontSize: '0.72rem', letterSpacing: '0.5px', display: 'block', marginBottom: '6px', textTransform: 'uppercase' }}>{t('popup.phone')} *</label>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <div style={{
                     display: 'flex', alignItems: 'center', gap: '6px',
@@ -255,13 +258,13 @@ const LeadPopup = () => {
                 onMouseLeave={e => { if (!loading) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(45,95,196,0.35)' } }}
               >
                 {loading
-                  ? <><span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</span> Submitting...</>
-                  : '📩 Submit'
+                  ? <><span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</span> {t('popup.submitting')}</>
+                  : t('popup.submit')
                 }
               </button>
 
               <p style={{ color: '#555f7a', fontSize: '0.72rem', textAlign: 'center', marginTop: '12px', marginBottom: 0 }}>
-                🔒 Your information is secure and will never be shared
+                {t('popup.secure')}
               </p>
             </form>
           )}

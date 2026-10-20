@@ -212,8 +212,10 @@ const AdminDashboard = () => {
             ) : (
               <MapContainer center={[25.1972, 55.2744]} zoom={10} style={{ height: '100%', width: '100%' }} scrollWheelZoom={false}>
                 <TileLayer
-                  attribution='&copy; OpenStreetMap'
-                  url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                  attribution='&copy; OpenStreetMap contributors'
+                  url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  className="osm-dark-tiles"
+                  maxZoom={19}
                 />
                 {filteredProperties.map(p => {
                   const coords = getCoords(p.location, p.community)
@@ -373,6 +375,7 @@ const AdminDashboard = () => {
 
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .leaflet-container { background: #060f26 !important; }
+        .osm-dark-tiles { filter: invert(1) hue-rotate(200deg) brightness(0.85) contrast(0.9) saturate(0.7); }
         .leaflet-popup-content-wrapper { border-radius: 10px; }
         .leaflet-popup-content { margin: 12px 14px; }
         .leaflet-tile-pane { filter: brightness(0.85); }

@@ -11,7 +11,13 @@
     "bookValuation": "Book Valuation",
     "properties": "Properties",
     "agents": "Agents",
-    "callUs": "Call Us"
+    "callUs": "Call Us",
+    "callNow": "Call now",
+    "whatsappUs": "WhatsApp us",
+    "areaGuides": "Area guides",
+    "areaGuidesDesc": "Explore Dubai neighbourhoods",
+    "tools": "Investment tools",
+    "toolsDesc": "Yield, payment plan & mortgage"
   },
   "hero": {
     "badge": "Dubai's Premium Properties",
@@ -30,7 +36,21 @@
       "properties": "Properties Listed",
       "clients": "Happy Clients",
       "experience": "Years Experience"
-    }
+    },
+    "mock": {
+      "title": "Luxury 2BR Apartment",
+      "price": "AED 2.8M"
+    },
+    "mini": {
+      "properties": "Properties",
+      "clients": "Happy Clients",
+      "rera": "RERA Licensed",
+      "since": "Established"
+    },
+    "anyPrice": "Any price",
+    "upTo": "Up to {{n}}",
+    "thousand": "K",
+    "popular": "Popular:"
   },
   "featured": {
     "badge": "Handpicked Listings",
@@ -60,7 +80,18 @@
         "title": "Global Vision",
         "desc": "Connecting international investors with Dubai's best property opportunities from 40+ nationalities."
       }
-    }
+    },
+    "stats": {
+      "years": "Years in Dubai Market",
+      "properties": "Properties Listed",
+      "nationalities": "Nationalities Served",
+      "rera": "RERA Compliant"
+    },
+    "trust1": "Trusted by investors from",
+    "trust2": "40+ countries",
+    "trustDesc": "From first-time buyers to seasoned investors, Lazord Real Estate has helped thousands find their perfect Dubai property since 2007.",
+    "start": "Start Your Journey →",
+    "viewProps": "View Properties"
   },
   "properties": {
     "title": "Dubai Properties",
@@ -74,77 +105,140 @@
     "activeFilters": "Active Filters:",
     "clearAll": "Clear All",
     "noResults": "No Properties Found",
-    "noResultsDesc": "Try adjusting your search or filters"
+    "noResultsDesc": "Try adjusting your search or filters",
+    "sort": {
+      "newest": "Newest First",
+      "price_asc": "Price: Low→High",
+      "price_desc": "Price: High→Low",
+      "area_desc": "Area: Largest"
+    },
+    "badgeType": "{{type}} Properties",
+    "headingType": "{{type}} Properties in Dubai",
+    "bedChip": "{{n}} bed",
+    "maxChip": "Max AED {{n}}"
   },
   "areas": {
-    "badge": "Dubai Communities",
+    "badge": "Area guides",
     "title1": "Browse by",
     "title2": "Area",
-    "viewAll": "View All"
+    "viewAll": "Search this area",
+    "seoTitle": "Dubai Area Guides",
+    "seoDesc": "Neighbourhood guides for Downtown, Marina, Palm Jumeirah, Business Bay, Creek Harbour and JVC.",
+    "title": "Find your Dubai neighbourhood",
+    "subtitle": "Quick guides to the areas buyers and renters ask about most.",
+    "read": "Read guide",
+    "all": "All areas",
+    "highlights": "Highlights",
+    "bestFor": "Best for",
+    "listings": "Available in {{area}}",
+    "noListings": "No listings here right now — tell us what you need and we will find options.",
+    "enquire": "Ask about this area",
+    "tools": "Run the numbers",
+    "toolsDesc": "Try our yield calculator and payment plan tool.",
+    "otherAreas": "Other areas",
+    "note": "General guidance only. Ask us for current prices and availability."
   },
- "services": {
-  "badge": "Our Services",
-  "title1": "What We",
-  "title2": "Offer You",
-  "subtitle": "Comprehensive real estate services tailored for the Dubai market",
-  "items": {
-    "buy": {
-      "title": "Buy Property",
-      "desc": "We help you find your dream property from over 1,500 listings across Dubai.",
-      "link": "Browse Properties"
-    },
-    "sell": {
-      "title": "Sell Your Property",
-      "desc": "We ensure the best price for your property through advanced marketing strategies.",
-      "link": "List Your Property"
-    },
-    "rent": {
-      "title": "Rent Property",
-      "desc": "Whether tenant or landlord, we provide the best rental solutions in Dubai.",
-      "link": "View Rentals"
-    },
-    "invest": {
-      "title": "Property Investment",
-      "desc": "Specialized investment consultancy to help you build a profitable real estate portfolio.",
-      "link": "Learn More"
-    },
-    "offplan": {
-      "title": "Off Plan Projects",
-      "desc": "Get the best prices on new projects with flexible payment plans.",
-      "link": "View Projects"
-    },
-    "commercial": {
-      "title": "Commercial Properties",
-      "desc": "Office spaces, retail units and commercial investments across Dubai's business districts.",
-      "link": "View Commercial"
-    },
-    "valuation": {
-      "title": "Free Valuation",
-      "desc": "Get an accurate valuation of your property from our certified market experts.",
-      "link": "Book Valuation"
+  "services": {
+    "badge": "Our Services",
+    "title1": "What We",
+    "title2": "Offer You",
+    "subtitle": "Comprehensive real estate services tailored for the Dubai market",
+    "items": {
+      "buy": {
+        "title": "Buy Property",
+        "desc": "We help you find your dream property from over 1,500 listings across Dubai.",
+        "link": "Browse Properties"
+      },
+      "sell": {
+        "title": "Sell Your Property",
+        "desc": "We ensure the best price for your property through advanced marketing strategies.",
+        "link": "List Your Property"
+      },
+      "rent": {
+        "title": "Rent Property",
+        "desc": "Whether tenant or landlord, we provide the best rental solutions in Dubai.",
+        "link": "View Rentals"
+      },
+      "invest": {
+        "title": "Property Investment",
+        "desc": "Specialized investment consultancy to help you build a profitable real estate portfolio.",
+        "link": "Learn More"
+      },
+      "offplan": {
+        "title": "Off Plan Projects",
+        "desc": "Get the best prices on new projects with flexible payment plans.",
+        "link": "View Projects"
+      },
+      "commercial": {
+        "title": "Commercial Properties",
+        "desc": "Office spaces, retail units and commercial investments across Dubai's business districts.",
+        "link": "View Commercial"
+      },
+      "valuation": {
+        "title": "Free Valuation",
+        "desc": "Get an accurate valuation of your property from our certified market experts.",
+        "link": "Book Valuation"
+      }
     }
-  }
-},
-"testimonials": {
-  "badge": "Client Reviews",
-  "title1": "What Our",
-  "title2": "Clients Say",
-  "subtitle": "What our happy clients say about their experience with Lazord Real Estate"
-},
+  },
+  "testimonials": {
+    "badge": "Client Reviews",
+    "title1": "What Our",
+    "title2": "Clients Say",
+    "subtitle": "What our happy clients say about their experience with Lazord Real Estate",
+    "items": {
+      "mansouri": {
+        "name": "Ahmed Al Mansouri",
+        "role": "Property Investor",
+        "location": "Dubai, UAE",
+        "text": "Lazord Real Estate helped me find the perfect investment property in Downtown Dubai. Their market knowledge is unmatched and the entire process was smooth and transparent."
+      },
+      "mitchell": {
+        "name": "Sarah Mitchell",
+        "role": "Homebuyer",
+        "location": "London, UK",
+        "text": "As an overseas buyer, I was nervous about purchasing in Dubai. The Lazord team guided me every step of the way — from property selection to mortgage and handover."
+      },
+      "patel": {
+        "name": "Rajesh Patel",
+        "role": "Business Owner",
+        "location": "Mumbai, India",
+        "text": "I have worked with many real estate agencies in Dubai but Lazord stands out. They found me a commercial space in Business Bay that perfectly suits my needs."
+      },
+      "zaabi": {
+        "name": "Fatima Al Zaabi",
+        "role": "First-time Buyer",
+        "location": "Abu Dhabi, UAE",
+        "text": "Buying my first apartment felt overwhelming but the Lazord team made it so easy. They explained everything clearly and found me a beautiful apartment in Dubai Marina."
+      },
+      "thornton": {
+        "name": "James Thornton",
+        "role": "Expat Resident",
+        "location": "Sydney, Australia",
+        "text": "Rented through Lazord and the experience was seamless. They matched me with the perfect apartment in JBR, handled all the paperwork, and even helped with utilities setup."
+      },
+      "wei": {
+        "name": "Chen Wei",
+        "role": "Portfolio Investor",
+        "location": "Shanghai, China",
+        "text": "I have purchased three off-plan properties through Lazord. Each time they delivered excellent advice on timing, location and developer reputation."
+      }
+    }
+  },
   "cta": {
-  "badge": "Free Consultation",
-  "title1": "Ready to Find Your",
-  "title2": "Dream Property?",
-  "subtitle": "Book a free consultation with our expert agents today. We'll help you find the perfect property, navigate the buying process, and get the best deal in Dubai's market.",
-  "whatsapp": "Chat on WhatsApp",
-  "book": "Book Free Valuation",
-  "call": "+971 42 999 088",
-  "badges": {
-    "rera": "RERA Licensed Agency",
-    "secure": "Secure Transactions",
-    "nationalities": "40+ Nationalities Served",
-    "rating": "4.9/5 Client Rating"
-  }
+    "badge": "Free Consultation",
+    "title1": "Ready to Find Your",
+    "title2": "Dream Property?",
+    "subtitle": "Book a free consultation with our expert agents today. We'll help you find the perfect property, navigate the buying process, and get the best deal in Dubai's market.",
+    "whatsapp": "Chat on WhatsApp",
+    "book": "Book Free Valuation",
+    "call": "+971 42 999 088",
+    "badges": {
+      "rera": "RERA Licensed Agency",
+      "secure": "Secure Transactions",
+      "nationalities": "40+ Nationalities Served",
+      "rating": "4.9/5 Client Rating"
+    }
   },
   "contact": {
     "badge": "Contact Us",
@@ -167,14 +261,199 @@
     },
     "whatsapp": {
       "title": "Chat on WhatsApp",
-      "desc": "For a quick response contact us directly on WhatsApp. Our team is available Monday to Saturday 9am to 7pm.",
+      "desc": "For a quick response contact us directly on WhatsApp. Our team is available Monday to Thursday 9am to 6:30pm, and Saturday to Sunday 9:30am to 3pm.",
       "btn": "💬 Start WhatsApp Chat"
     }
   },
   "about": {
     "badge": "About Lazord",
     "title1": "Dubai's Most Trusted",
-    "title2": "Real Estate Partner Since 2007"
+    "title2": "Real Estate Partner Since 2007",
+    "seoTitle": "About Us",
+    "seoDesc": "18+ years in Dubai real estate. Lazord Real Estate is RERA licensed and DED certified, based in Rigga Al Butteen, Deira.",
+    "heroDesc": "Lazord Real Estate LLC is a fully RERA registered and DED licensed brokerage, established in Dubai in 2007. With over 18 years of market experience, we specialize in residential sales, leasing, and investment consultancy.",
+    "hb1": "✅ RERA Licensed",
+    "hb2": "🏆 18+ Years",
+    "hb3": "🌍 40+ Nationalities",
+    "hb4": "📋 DED Certified",
+    "side": {
+      "years": "Years Experience",
+      "properties": "Properties",
+      "nationalities": "Nationalities"
+    },
+    "meetTeam": "Meet the Team",
+    "mission": {
+      "title": "Mission",
+      "desc": "Accurate, transparent, actionable advice for every client."
+    },
+    "values": {
+      "title": "Core Values",
+      "desc": "Professionalism, transparency, market knowledge, client-centricity."
+    },
+    "vision": {
+      "title": "Vision",
+      "desc": "Dubai's most trusted brokerage, built on integrity and lasting relationships."
+    },
+    "stats": {
+      "years": "Years of Experience",
+      "properties": "Properties Listed",
+      "clients": "Happy Clients",
+      "rera": "Registered & Licensed",
+      "nationalities": "Nationalities Served",
+      "established": "Established"
+    },
+    "story": {
+      "badge": "Our Story",
+      "h1": "18 Years of",
+      "h2": "Shaping Dubai Living",
+      "p1": "Founded in 2007, Lazord Real Estate LLC was established with a clear vision — to be the most trusted brokerage in Dubai, known for integrity and long-term client relationships.",
+      "p2": "As a fully licensed RERA and DED brokerage, we are trusted intermediaries for major UAE master developers including Nakheel and Dubai Properties.",
+      "p3": "Our unique approach moves beyond traditional transaction-based services to create a comprehensive experience including all aspects of property investment and lifestyle integration.",
+      "cta": "Get in Touch →",
+      "alt": "Dubai Skyline",
+      "place": "Dubai, UAE",
+      "serving": "18+ Years Serving This Market"
+    },
+    "journey": {
+      "badge": "Our Journey",
+      "h1": "From 2007",
+      "h2": "To Today"
+    },
+    "ms": {
+      "founded": {
+        "title": "Company Founded",
+        "desc": "Lazord Real Estate LLC established in Dubai as a trusted real estate brokerage serving the UAE market."
+      },
+      "expansion": {
+        "title": "Market Expansion",
+        "desc": "Expanded portfolio across key Dubai communities including Downtown, Marina and JBR."
+      },
+      "partners": {
+        "title": "Strategic Partnerships",
+        "desc": "Became registered brokers with major UAE developers including Nakheel and Dubai Properties."
+      },
+      "rera": {
+        "title": "RERA Certified",
+        "desc": "Achieved full RERA registration and DED licensing, ensuring fully compliant transactions."
+      },
+      "digital": {
+        "title": "Digital Transformation",
+        "desc": "Launched digital property platform to serve international investors remotely."
+      },
+      "today": {
+        "title": "Today",
+        "desc": "Continuing to grow with 1,500+ listings, 18+ years of expertise and dedicated professionals."
+      }
+    },
+    "why": {
+      "badge": "Why Choose Lazord",
+      "h1": "Our Competitive",
+      "h2": "Advantages",
+      "desc": "We analyze market trends, identify high potential opportunities, and provide strategic advice to help you build a strong and profitable investment portfolio.",
+      "longevity": {
+        "title": "Longevity",
+        "desc": "Operating since 2007 — stability and deep market knowledge."
+      },
+      "compliance": {
+        "title": "Compliance",
+        "desc": "Fully licensed by RERA and DED, ensuring safe, legal transactions."
+      },
+      "access": {
+        "title": "Access",
+        "desc": "Registered brokers with Nakheel and Dubai Properties."
+      },
+      "insight": {
+        "title": "Insight",
+        "desc": "Decades of data and experience to guide your decisions."
+      },
+      "alt": "Dubai Marina",
+      "trusted": "Trusted by 40+ Nationalities",
+      "tag1": "RERA Licensed",
+      "tag2": "DED Certified",
+      "tag3": "Since 2007"
+    },
+    "team": {
+      "badge": "Our Team",
+      "h1": "Meet the",
+      "h2": "Experts Behind Lazord",
+      "verified": "Verified Lazord Agent",
+      "waMsg": "Hi, I'd like to speak with {{name}} at Lazord Real Estate.",
+      "waTitle": "WhatsApp {{name}}",
+      "callTitle": "Call about {{name}}",
+      "nimer": {
+        "name": "Mohammed Al Nimer",
+        "role": "CEO",
+        "spec": "Luxury Villas & Penthouses",
+        "quote": "Building trust, one transaction at a time."
+      },
+      "khairy": {
+        "name": "Khairy",
+        "role": "Senior Sales",
+        "spec": "Off Plan & Investments",
+        "quote": "Turning off-plan opportunities into long-term wins."
+      },
+      "fethi": {
+        "name": "Fethi",
+        "role": "Property Management",
+        "spec": "Apartments & Rentals",
+        "quote": "Keeping every rental running smoothly, always."
+      },
+      "abdullah": {
+        "name": "Abdullah",
+        "role": "Accountant",
+        "spec": "Client Experience",
+        "quote": "Every number tells the story of your investment."
+      },
+      "ahmed": {
+        "name": "Ahmed",
+        "role": "Accountant",
+        "spec": "Client Experience",
+        "quote": "Precision today, peace of mind tomorrow."
+      },
+      "jardali": {
+        "name": "Jardali",
+        "role": "Investment Advisor",
+        "spec": "Commercial & Portfolio",
+        "quote": "Numbers matter, but relationships matter more."
+      },
+      "obada": {
+        "name": "Obada",
+        "role": "Property Consultant",
+        "spec": "Business Bay & Dubai Land",
+        "quote": "Business Bay to Dubai Land — I know every block."
+      },
+      "fadi": {
+        "name": "Fadi",
+        "role": "Administrative",
+        "spec": "Rigga Al Buteen & Dubai Land",
+        "quote": "Behind every smooth deal is solid paperwork."
+      }
+    },
+    "exp": {
+      "few": "{{n}} Years Experience",
+      "many": "{{n}} Years Experience"
+    },
+    "lang": {
+      "ar": "Arabic",
+      "en": "English",
+      "pt": "Brazilian"
+    },
+    "dots": {
+      "hero": "Overview",
+      "story": "Our Story",
+      "journey": "Our Journey",
+      "services": "Services",
+      "why": "Why Choose Us",
+      "testimonials": "Testimonials",
+      "team": "Our Team"
+    },
+    "cta": {
+      "h1": "Ready to Start Your",
+      "h2": "Dubai Property Journey?",
+      "desc": "Our team is ready to help you find, buy, rent or sell your property in Dubai.",
+      "browse": "Browse Properties",
+      "contact": "Contact Us"
+    }
   },
   "footer": {
     "tagline": "Your trusted partner in Dubai and UAE real estate.",
@@ -185,9 +464,25 @@
       "home": "Home",
       "properties": "Properties",
       "about": "About",
-      "contact": "Contact"
+      "contact": "Contact",
+      "mortgage": "Mortgage Calculator",
+      "faq": "FAQ"
     },
-    "legal": "Privacy & Terms"
+    "legal": "Privacy & Terms",
+    "newsTitle": "Stay ahead of Dubai's property market",
+    "newsSub": "New listings, price movement and off-plan launches — in your inbox.",
+    "emailLabel": "Email address",
+    "emailPh": "Enter your email",
+    "subscribe": "Subscribe",
+    "sending": "Sending…",
+    "subscribed": "Subscribed ✓",
+    "badgeRera": "RERA Licensed",
+    "badgeDed": "DED Certified",
+    "badgeEst": "Est. 2007",
+    "address": "Office 803, AlSalemiya Tower, Rigga Al Butteen, Dubai, UAE",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "mapTitle": "Lazord Real Estate Location"
   },
   "process": {
     "badge": "How It Works",
@@ -210,6 +505,10 @@
       "close": {
         "title": "Close the Deal",
         "desc": "We handle all paperwork, DLD registration, NOC and handover — a fully guided, stress-free process."
+      },
+      "handover": {
+        "title": "Handover",
+        "desc": "We hand you the keys, then stay on hand for utilities, tenancy and anything after the sale."
       }
     },
     "guarantee": {
@@ -227,5 +526,475 @@
         "support": "Post-Sale Support & Guidance"
       }
     }
+  },
+  "common": {
+    "loading": "Loading…",
+    "tryAgain": "Try again",
+    "aed": "AED",
+    "million": "M",
+    "perYear": "/ yr",
+    "perYearLong": "/ year",
+    "priceOnRequest": "Price on Request",
+    "swipe": "← swipe to explore →",
+    "close": "Close",
+    "any": "Any",
+    "nationalities": "Nationalities"
+  },
+  "values": {
+    "All": "All",
+    "Apartment": "Apartment",
+    "Villa": "Villa",
+    "Penthouse": "Penthouse",
+    "Townhouse": "Townhouse",
+    "Studio": "Studio",
+    "Buy": "Buy",
+    "Rent": "Rent",
+    "Off Plan": "Off Plan",
+    "Sell": "Sell",
+    "Commercial": "Commercial",
+    "Featured": "Featured",
+    "Hot Deal": "Hot Deal",
+    "New": "New",
+    "Family": "Family",
+    "Available": "Available",
+    "Sold": "Sold",
+    "Reserved": "Reserved"
+  },
+  "card": {
+    "viewDetails": "View Details",
+    "paymentPlan": "Payment plan available",
+    "bed": "{{n}} Bed",
+    "bath": "{{n}} Bath",
+    "sqft": "{{n}} sqft",
+    "studio": "Studio"
+  },
+  "fav": {
+    "save": "Save {{title}} to favorites",
+    "remove": "Remove {{title}} from favorites",
+    "saved": "Saved to favorites",
+    "removed": "Removed from favorites",
+    "navLabel": "Saved properties ({{count}})",
+    "navTitle": "Saved properties",
+    "seoTitle": "Saved Properties",
+    "title": "♥ Saved Properties",
+    "sub": "{{count}} saved · stored on this device only",
+    "clear": "Clear all",
+    "emptyTitle": "No saved properties yet",
+    "emptyDesc": "Tap the heart on any listing to keep it here for later.",
+    "browse": "Browse Properties"
+  },
+  "featuredList": {
+    "sortBy": "Sort by:",
+    "sort": {
+      "newest": "🕐 Newest",
+      "price_asc": "💰 Low → High",
+      "price_desc": "💰 High → Low",
+      "area_desc": "📐 Largest"
+    },
+    "waking": "⏳ Waking up our server… your properties will appear in a few seconds.",
+    "error": "We couldn't load the properties right now.",
+    "none": "No properties found",
+    "loadingSlider": "Loading properties…"
+  },
+  "areasSection": {
+    "badge": "Prime Locations",
+    "title1": "Explore Dubai's Most",
+    "title2": "Prestigious Communities",
+    "subtitle": "From iconic waterfront towers to peaceful family communities — find your perfect Dubai neighbourhood.",
+    "explore": "Explore All Areas →",
+    "view": "View properties",
+    "soon": "New listings soon",
+    "count": "{{n}} Properties",
+    "count1": "1 Property",
+    "items": {
+      "downtown": {
+        "name": "Downtown Dubai",
+        "tag": "Most Popular",
+        "desc": "Burj Khalifa, Dubai Mall & Opera District"
+      },
+      "palm": {
+        "name": "Palm Jumeirah",
+        "tag": "Luxury",
+        "desc": "Iconic island living with private beaches"
+      },
+      "marina": {
+        "name": "Dubai Marina",
+        "tag": "High ROI",
+        "desc": "Waterfront towers & vibrant promenade"
+      },
+      "bay": {
+        "name": "Business Bay",
+        "tag": "Investment",
+        "desc": "Dubai's thriving business & residential hub"
+      },
+      "creek": {
+        "name": "Creek Harbour",
+        "tag": "Off Plan",
+        "desc": "Future skyline — next to Creek Tower"
+      },
+      "jvc": {
+        "name": "Jumeirah Village",
+        "tag": "Affordable",
+        "desc": "Community living with high rental yields"
+      }
+    }
+  },
+  "cookie": {
+    "label": "Cookie consent",
+    "text": "We use cookies to improve your browsing experience on our website. By continuing to use this site, you agree to our use of cookies as described in our",
+    "link": "Privacy Policy",
+    "decline": "Decline",
+    "accept": "Accept"
+  },
+  "whatsapp": {
+    "tooltip": "💬 Chat with us on WhatsApp!",
+    "message": "Hello! I am interested in a property from Lazord Real Estate."
+  },
+  "notFound": {
+    "seoTitle": "Page Not Found",
+    "seoDesc": "The page you're looking for doesn't exist.",
+    "badge": "✦ Page Not Found",
+    "title": "This page doesn't exist",
+    "desc": "The page you're looking for may have been moved, renamed, or doesn't exist. Let's get you back on track.",
+    "home": "← Back to Home",
+    "browse": "Browse Properties"
+  },
+  "mortgage": {
+    "seoTitle": "Mortgage Calculator Dubai",
+    "seoDesc": "Estimate your monthly mortgage payment, down payment, DLD fee and upfront costs for buying property in Dubai with Lazord Real Estate.",
+    "badge": "✦ Plan Your Purchase",
+    "title": "Mortgage Calculator",
+    "subtitle": "See your monthly payment and the cash you need upfront.",
+    "cta": "Talk to a mortgage advisor",
+    "detailTitle": "🧮 Mortgage Calculator",
+    "price": "Property price",
+    "down": "Down payment",
+    "downHint": "UAE banks usually require at least 20% for expats.",
+    "rate": "Interest rate",
+    "term": "Loan term",
+    "years": "{{n}} years",
+    "monthly": "Estimated monthly payment",
+    "loan": "Loan",
+    "interest": "Interest",
+    "dld": "DLD fee (4%)",
+    "agency": "Agency fee (2%)",
+    "registration": "Mortgage registration (0.25%)",
+    "upfront": "Cash needed upfront",
+    "disclaimer": "Estimates only. Actual rates, fees and eligibility depend on the bank and your profile. Contact Lazord for a personalised mortgage consultation.",
+    "teaser1": "Live monthly payment as you move the sliders",
+    "teaser2": "DLD, agency and registration fees included",
+    "teaser3": "Instant — no sign-up needed",
+    "teaserFull": "Open full calculator →"
+  },
+  "popup": {
+    "title": "Register Your Interest",
+    "subtitle": "Fill in your details and our team will be in touch with you shortly.",
+    "titleField": "Title",
+    "mr": "Mr",
+    "mrs": "Mrs",
+    "ms": "Ms",
+    "dr": "Dr",
+    "first": "First Name",
+    "firstPh": "First name",
+    "last": "Last Name",
+    "lastPh": "Last name",
+    "email": "Email Address",
+    "emailPh": "your@email.com",
+    "phone": "Phone Number",
+    "submit": "📩 Submit",
+    "submitting": "Submitting...",
+    "secure": "🔒 Your information is secure and will never be shared",
+    "thanks": "Thank You!",
+    "thanksDesc": "One of our agents will reach out to you very soon."
+  },
+  "detail": {
+    "notFound": "Property Not Found",
+    "back": "← Back to Properties",
+    "loading": "Loading property...",
+    "featuredBadge": "⭐ Featured",
+    "fullscreen": "⤢ Fullscreen",
+    "viewFullscreen": "View fullscreen",
+    "photos": "Property photos",
+    "prev": "Previous photo",
+    "next": "Next photo",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "area": "Area",
+    "type": "Type",
+    "completion": "Completion",
+    "developer": "Developer",
+    "beds": "Beds",
+    "baths": "Baths",
+    "sqft": "sqft",
+    "about": "About This Property",
+    "amenities": "Amenities & Features",
+    "location": "📍 Location",
+    "locationDubai": "{{loc}}, Dubai",
+    "price": "Price",
+    "roi": "Expected ROI: {{roi}}",
+    "whatsappBtn": "💬 WhatsApp Enquiry",
+    "waText": "Hi, I'm interested in: {{title}}",
+    "enquiryTitle": "Send Enquiry",
+    "enquirySub": "Our agent will respond within 24 hours",
+    "enquirySent": "Enquiry Sent!",
+    "enquirySentDesc": "We'll be in touch soon.",
+    "yourName": "Your Name",
+    "emailPh": "Email Address",
+    "messagePh": "I'm interested in {{title}}...",
+    "sendBtn": "📤 Send Enquiry",
+    "sending": "⟳ Sending...",
+    "error": "❌ Something went wrong. Please try again.",
+    "needHelp": "Need Help?",
+    "talkExperts": "Talk to our experts",
+    "helpText": "Our RERA-licensed agents are available Mon–Thu 9AM–6:30PM and Sat–Sun 9:30AM–3PM to answer all your questions.",
+    "emailBtn": "📧 Email",
+    "contactBtn": "📋 Contact",
+    "share": "Share:",
+    "shareWhatsapp": "💬 WhatsApp",
+    "copyLink": "🔗 Copy link",
+    "more": "↗ More",
+    "linkCopied": "Link copied!",
+    "copyFail": "Could not copy the link",
+    "alsoLike": "You May Also Like",
+    "openMaps": "Open in Google Maps ↗",
+    "loadingMap": "Loading map…"
+  },
+  "faq": {
+    "seoTitle": "Frequently Asked Questions",
+    "seoDesc": "Answers to common questions about buying, renting and investing in Dubai property with Lazord Real Estate.",
+    "badge": "✦ FAQ",
+    "h1a": "Frequently Asked",
+    "h1b": "Questions",
+    "sub": "Everything you need to know about buying, renting, and investing in Dubai real estate.",
+    "statCategories": "Categories",
+    "statQuestions": "Questions",
+    "statYears": "Years Experience",
+    "browse": "Browse by Category",
+    "all": "All",
+    "still": "Still have questions?",
+    "stillDesc": "Our team is happy to answer any specific questions about Dubai real estate.",
+    "contact": "Contact Us →",
+    "whatsapp": "💬 WhatsApp",
+    "count": "{{n}} questions"
+  },
+  "contactPage": {
+    "seoTitle": "Contact Us",
+    "seoDesc": "Get in touch with Lazord Real Estate — Office 803, AlSalemiya Tower, Rigga Al Butteen, Dubai. Call, WhatsApp or visit us.",
+    "addressTitle": "Office Address",
+    "addr1": "Office 803,",
+    "addr2": "AlSalemiya Tower,",
+    "addr3": "Rigga Al Butteen,",
+    "addr4": "Dubai, UAE",
+    "phoneTitle": "Phone & WhatsApp",
+    "emailTitle": "Email Us",
+    "hoursTitle": "Working Hours",
+    "hoursMonThu": "Mon – Thu: 9:00 AM – 6:30 PM",
+    "hoursFri": "Friday: Closed",
+    "hoursSatSun": "Sat – Sun: 9:30 AM – 3:00 PM",
+    "badgeMonThu": "🕐 Mon–Thu 9AM–6:30PM",
+    "badgeSatSun": "🕐 Sat–Sun 9:30AM–3PM · Fri Closed",
+    "callDirect": "Call us directly",
+    "callLine": "Mon–Thu 9AM–6:30PM · Fri Closed · Sat–Sun 9:30AM–3PM",
+    "socialTitle": "Follow Us on Social Media",
+    "socialDesc": "Stay updated with our latest properties and news",
+    "namePh": "Your full name",
+    "selectService": "Select a service...",
+    "messagePh": "Tell us about your property requirements...",
+    "mapTitle": "Lazord Office Location",
+    "hq": "📍 Lazord Real Estate HQ",
+    "hqAddress": "Office 803, Al Salemiyah Tower, Rigga Al Butteen, Dubai, UAE",
+    "callNow": "Call Now",
+    "whatsapp": "WhatsApp",
+    "services": {
+      "Buy a Property": "Buy a Property",
+      "Rent a Property": "Rent a Property",
+      "Sell My Property": "Sell My Property",
+      "Off Plan Investment": "Off Plan Investment",
+      "Commercial Property": "Commercial Property",
+      "Free Valuation": "Free Valuation",
+      "General Inquiry": "General Inquiry"
+    }
+  },
+  "whyDubai": {
+    "badge": "Why Invest in Dubai",
+    "title1": "A Market Built",
+    "title2": "For Investors",
+    "subtitle": "Four reasons buyers from 40+ countries choose Dubai.",
+    "tax": {
+      "title": "Property tax",
+      "desc": "No annual property tax and no capital gains tax."
+    },
+    "income": {
+      "title": "Income tax",
+      "desc": "Keep what you earn — no personal income tax on rental income."
+    },
+    "visa": {
+      "title": "Golden Visa",
+      "unit": "years",
+      "desc": "Long-term residency for property investments from AED 2 million."
+    },
+    "own": {
+      "title": "Foreign ownership",
+      "desc": "Full freehold ownership for foreigners in designated areas."
+    },
+    "more": "Read the FAQ →",
+    "note": "Rules can change — confirm current requirements with our team."
+  },
+  "banner": {
+    "eyebrow": "Dubai awaits",
+    "quote": "Your Dubai story starts here.",
+    "sub": "Tell us what you're looking for — we'll handle the rest."
+  },
+  "compare": {
+    "seoTitle": "Compare Properties",
+    "seoDesc": "Compare Dubai properties side by side — price, size, bedrooms and price per sqft.",
+    "title": "Compare Properties",
+    "subtitle": "Side by side — up to 3 properties.",
+    "add": "Compare",
+    "addAria": "Add {{title}} to compare",
+    "removeAria": "Remove {{title}} from compare",
+    "added": "Added to compare",
+    "removed": "Removed from compare",
+    "full": "You can compare up to 3 properties",
+    "bar": "Compare ({{n}}/3)",
+    "viewBtn": "View →",
+    "clear": "Clear",
+    "emptyTitle": "Nothing to compare yet",
+    "emptyDesc": "Tap the compare icon on up to 3 property cards, then come back here.",
+    "browse": "Browse Properties",
+    "addMore": "Add at least one more property to compare.",
+    "loading": "Loading…",
+    "row": {
+      "price": "Price",
+      "type": "Type",
+      "category": "Category",
+      "location": "Area",
+      "community": "Community",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "size": "Size",
+      "ppsf": "Price per sqft",
+      "ppsfRent": "Rent per sqft / year",
+      "status": "Status"
+    },
+    "bestValue": "Best value",
+    "view": "View details →",
+    "remove": "Remove",
+    "na": "N/A"
+  },
+  "currency": {
+    "label": "Currency",
+    "note": "≈ Approx. rates · {{date}}",
+    "names": {
+      "AED": "UAE Dirham",
+      "USD": "US Dollar",
+      "EUR": "Euro",
+      "GBP": "British Pound",
+      "INR": "Indian Rupee",
+      "SAR": "Saudi Riyal"
+    }
+  },
+  "mobileBar": {
+    "call": "Call",
+    "whatsapp": "WhatsApp",
+    "enquire": "Enquire"
+  },
+  "exit": {
+    "title": "Wait — before you go",
+    "sub": "Get a free, no-obligation valuation of your Dubai property.",
+    "namePh": "Your name",
+    "phonePh": "50 123 4567",
+    "cta": "Get my free valuation",
+    "sending": "Sending…",
+    "thanks": "Thank you! We'll call you shortly.",
+    "no": "No thanks",
+    "error": "Something went wrong. Please call us instead."
+  },
+  "viewing": {
+    "title": "Schedule a viewing",
+    "sub": "Pick a day and time — we'll confirm by phone.",
+    "date": "Date",
+    "time": "Time",
+    "pickTime": "Select a time",
+    "closed": "We're closed on Fridays — please pick another day.",
+    "name": "Your name",
+    "phone": "Phone (UAE)",
+    "cta": "Request viewing",
+    "sending": "Sending…",
+    "done": "Viewing requested!",
+    "doneDesc": "We'll call you to confirm {{when}}.",
+    "error": "Something went wrong. Please call us instead."
+  },
+  "alert": {
+    "btn": "🔔 Notify me about similar listings",
+    "btnShort": "🔔 Alert me",
+    "title": "Get new listings first",
+    "sub": "Tell us how to reach you and we'll send matching properties as they arrive.",
+    "looking": "Looking for:",
+    "any": "All properties",
+    "viaEmail": "Email",
+    "viaWhatsapp": "WhatsApp",
+    "name": "Your name",
+    "email": "Email address",
+    "phone": "WhatsApp number with country code",
+    "cta": "Notify me",
+    "sending": "Sending…",
+    "done": "You're on the list! We'll be in touch.",
+    "error": "Something went wrong. Please try again."
+  },
+  "saved": {
+    "title": "Saved searches",
+    "save": "💾 Save this search",
+    "done": "Search saved",
+    "exists": "Already saved",
+    "remove": "Remove saved search"
+  },
+  "tools": {
+    "seoTitle": "Property Investment Tools Dubai",
+    "seoDesc": "Free rental yield calculator, off-plan payment plan visualiser and mortgage calculator for Dubai property.",
+    "badge": "Investment tools",
+    "title": "Plan your Dubai investment",
+    "subtitle": "Estimates to help you compare options. Figures are illustrative, not financial advice.",
+    "tabYield": "Rental yield",
+    "tabPlan": "Payment plan",
+    "tabMortgage": "Mortgage",
+    "cta": "Talk to an advisor",
+    "disclaimer": "Estimates only. Actual fees, rents and returns vary — speak to an advisor before investing."
+  },
+  "yield": {
+    "price": "Purchase price (AED)",
+    "rent": "Expected annual rent (AED)",
+    "service": "Annual service charge (AED)",
+    "mgmt": "Management fee (% of rent)",
+    "vacancy": "Vacancy (% of year empty)",
+    "costs": "Include purchase costs (DLD 4% + agency 2%)",
+    "gross": "Gross yield",
+    "net": "Net yield",
+    "netIncome": "Net income / year",
+    "monthly": "Net income / month",
+    "payback": "Payback period",
+    "years": "{{n}} years",
+    "invested": "Total invested",
+    "na": "n/a"
+  },
+  "plan": {
+    "price": "Property price (AED)",
+    "presets": "Common plans",
+    "booking": "Booking / down payment (%)",
+    "construction": "During construction (%)",
+    "handover": "On handover (%)",
+    "post": "Post-handover (%)",
+    "months": "Months until handover",
+    "monthsPost": "Post-handover months",
+    "monthlyBuild": "Approx. monthly during construction",
+    "monthlyPost": "Approx. monthly after handover",
+    "over": "Percentages exceed 100% — reduce one of them.",
+    "fees": "Estimated fees at purchase: DLD 4% + agency 2%",
+    "timeline": "Payment timeline",
+    "p2080": "20/80",
+    "p4060": "40/60",
+    "p6040": "60/40",
+    "p5050": "50/50",
+    "pPost": "Post-handover"
   }
 }

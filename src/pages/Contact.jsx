@@ -19,10 +19,10 @@ const socialMedia = [
 ]
 
 const contactInfo = [
-  { icon: '📍', title: 'Office Address',   lines: ['Office 803,', 'AlSalemiya Tower,', 'Rigga Al Butteen,', 'Dubai, UAE'], color: '#2d5fc4' },
-  { icon: '📞', title: 'Phone & WhatsApp', lines: ['+971 42 999 088', '+971 56 111 9233'],                                  color: '#25d366' },
-  { icon: '✉️', title: 'Email Us',          lines: ['info@lazordrealestate.ae', 'sales@lazordrealestate.ae'],                color: '#e67e22' },
-  { icon: '🕐', title: 'Working Hours',    lines: ['Mon – Thu: 9:00 AM – 6:30 PM', 'Friday: Closed', 'Sat – Sun: 9:30 AM – 3:00 PM'], color: '#8e44ad' },
+  { icon: '📍', titleKey: 'contactPage.addressTitle', lineKeys: ['contactPage.addr1', 'contactPage.addr2', 'contactPage.addr3', 'contactPage.addr4'], color: '#2d5fc4' },
+  { icon: '📞', titleKey: 'contactPage.phoneTitle', lines: ['+971 42 999 088', '+971 56 111 9233'], color: '#25d366' },
+  { icon: '✉️', titleKey: 'contactPage.emailTitle', lines: ['info@lazordrealestate.ae', 'sales@lazordrealestate.ae'], color: '#e67e22' },
+  { icon: '🕐', titleKey: 'contactPage.hoursTitle', lineKeys: ['contactPage.hoursMonThu', 'contactPage.hoursFri', 'contactPage.hoursSatSun'], color: '#8e44ad' },
 ]
 
 // Field icons for the form (color shifts via CSS :focus-within, not JS state)
@@ -48,7 +48,8 @@ const formatUAEPhone = (raw) => {
 }
 
 const Contact = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const isAr = i18n.language === 'ar'
   const [form, setForm] = useState({ name: '', email: '', phone: '', service: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -84,8 +85,8 @@ const Contact = () => {
   return (
     <>
       <SEO
-        title="Contact Us"
-        description="Get in touch with Lazord Real Estate — Office 803, AlSalemiya Tower, Rigga Al Butteen, Dubai. Call, WhatsApp or visit us."
+        title={t('contactPage.seoTitle')}
+        description={t('contactPage.seoDesc')}
         path="/contact"
       />
       <div className="contact-page" style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
@@ -122,8 +123,8 @@ const Contact = () => {
             <p className="contact-hero-subtitle" style={{ color: '#a9c4ea', fontSize: '0.95rem', lineHeight: '1.8', maxWidth: '540px', marginBottom: '24px' }}>{t('contact.subtitle')}</p>
             {/* Quick contact badges */}
             <div className="contact-hero-quickbadges" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {['📞 +971 42 999 088', '✉️ info@lazordrealestate.ae', '🕐 Mon–Thu 9AM–6:30PM', '🕐 Sat–Sun 9:30AM–3PM · Fri Closed'].map((item, i) => (
-                <motion.span key={i} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 + i * 0.1 }}
+              {['📞 +971 42 999 088', '✉️ info@lazordrealestate.ae', t('contactPage.badgeMonThu'), t('contactPage.badgeSatSun')].map((item, i) => (
+                <motion.span key={i} dir={i < 2 ? 'ltr' : undefined} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 + i * 0.1 }}
                   style={{ backgroundColor: 'rgba(45,95,196,0.2)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '20px', padding: '6px 14px', color: '#c9dcf5', fontSize: '0.8rem', fontWeight: '600' }}>
                   {item}
                 </motion.span>
@@ -149,8 +150,8 @@ const Contact = () => {
                 style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '14px', padding: '20px 16px', height: '100%' }}
               >
                 <div style={{ width: '44px', height: '44px', borderRadius: '10px', backgroundColor: `${info.color}20`, border: `1px solid ${info.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', marginBottom: '12px' }}>{info.icon}</div>
-                <h4 style={{ color: '#ffffff', fontSize: '0.88rem', fontWeight: '700', marginBottom: '8px' }}>{info.title}</h4>
-                {info.lines.map((line, j) => <p key={j} style={{ color: '#a9c4ea', fontSize: '0.82rem', margin: '0 0 3px', lineHeight: '1.5' }}>{line}</p>)}
+                <h4 style={{ color: '#ffffff', fontSize: '0.88rem', fontWeight: '700', marginBottom: '8px' }}>{t(info.titleKey)}</h4>
+                {(info.lineKeys ? info.lineKeys.map(k => t(k)) : info.lines).map((line, j) => <p key={j} dir={info.lineKeys ? undefined : 'ltr'} style={{ color: '#a9c4ea', fontSize: '0.82rem', margin: '0 0 3px', lineHeight: '1.5', ...(info.lineKeys ? {} : { textAlign: isAr ? 'right' : 'left' }) }}>{line}</p>)}
               </motion.div>
             </Col>
           ))}
@@ -164,8 +165,8 @@ const Contact = () => {
           className="contact-social-block"
           style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', padding: '24px', marginBottom: '28px' }}
         >
-          <h2 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', marginBottom: '6px' }}>Follow Us on Social Media</h2>
-          <p style={{ color: '#a9c4ea', fontSize: '0.85rem', marginBottom: '20px' }}>Stay updated with our latest properties and news</p>
+          <h2 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', marginBottom: '6px' }}>{t('contactPage.socialTitle')}</h2>
+          <p style={{ color: '#a9c4ea', fontSize: '0.85rem', marginBottom: '20px' }}>{t('contactPage.socialDesc')}</p>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             {socialMedia.map((social, i) => (
               <motion.a key={i} href={social.url} target="_blank" rel="noopener noreferrer"
@@ -221,7 +222,7 @@ const Contact = () => {
                       <label htmlFor="contact-name" style={{ color: '#a9c4ea', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.name')} *</label>
                       <div className="contact-field-box">
                         <span className="contact-field-icon">{FieldIcons.name}</span>
-                        <input id="contact-name" type="text" name="name" autoComplete="name" required placeholder="Your full name" value={form.name} onChange={handleChange} style={inputStyle}
+                        <input id="contact-name" type="text" name="name" autoComplete="name" required placeholder={t('contactPage.namePh')} value={form.name} onChange={handleChange} style={inputStyle}
                           onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
                           onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
                       </div>
@@ -251,8 +252,8 @@ const Contact = () => {
                         <select id="contact-service" name="service" value={form.service} onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}
                           onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
                           onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }}>
-                          <option value="">Select a service...</option>
-                          {services.map(s => <option key={s} value={s}>{s}</option>)}
+                          <option value="">{t('contactPage.selectService')}</option>
+                          {services.map(s => <option key={s} value={s}>{t(`contactPage.services.${s}`)}</option>)}
                         </select>
                       </div>
                     </Col>
@@ -260,7 +261,7 @@ const Contact = () => {
                       <label htmlFor="contact-message" style={{ color: '#a9c4ea', fontSize: '0.78rem', letterSpacing: '0.5px', marginBottom: '6px', display: 'block', textTransform: 'uppercase' }}>{t('contact.form.message')}</label>
                       <div className="contact-field-box contact-field-box-textarea">
                         <span className="contact-field-icon contact-field-icon-top">{FieldIcons.message}</span>
-                        <textarea id="contact-message" name="message" rows={5} placeholder="Tell us about your property requirements..." value={form.message} onChange={handleChange} style={{ ...inputStyle, resize: 'vertical' }}
+                        <textarea id="contact-message" name="message" rows={5} placeholder={t('contactPage.messagePh')} value={form.message} onChange={handleChange} style={{ ...inputStyle, resize: 'vertical' }}
                           onFocus={e => { e.target.style.borderColor = '#4a90d9'; e.target.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)' }}
                           onBlur={e => { e.target.style.borderColor = 'rgba(45,95,196,0.3)'; e.target.style.boxShadow = 'none' }} />
                       </div>
@@ -306,7 +307,7 @@ const Contact = () => {
                 <h3 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', marginBottom: '8px' }}>{t('contact.whatsapp.title')}</h3>
                 <p style={{ color: '#a9c4ea', fontSize: '0.85rem', lineHeight: '1.7', marginBottom: '16px' }}>{t('contact.whatsapp.desc')}</p>
                 <motion.a
-                  href="https://wa.me/971561119233?text=Hello, I'm interested in a property from Lazord Real Estate."
+                  href={`https://wa.me/971561119233?text=${encodeURIComponent(t('whatsapp.message'))}`}
                   target="_blank" rel="noopener noreferrer"
                   whileHover={{ scale: 1.02 }}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: '#25d366', color: '#fff', padding: '13px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.9rem', boxShadow: '0 6px 20px rgba(37,211,102,0.25)' }}
@@ -323,9 +324,9 @@ const Contact = () => {
               >
                 <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: 'rgba(45,95,196,0.2)', border: '1px solid rgba(74,144,217,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', flexShrink: 0 }}>📞</div>
                 <div>
-                  <div style={{ color: '#a9c4ea', fontSize: '0.75rem', marginBottom: '4px' }}>Call us directly</div>
+                  <div style={{ color: '#a9c4ea', fontSize: '0.75rem', marginBottom: '4px' }}>{t('contactPage.callDirect')}</div>
                   <a href="tel:+97142999088" style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.1rem', textDecoration: 'none' }}>+971 42 999 088</a>
-                  <div style={{ color: '#4a90d9', fontSize: '0.78rem', marginTop: '2px' }}>Mon–Thu 9AM–6:30PM · Fri Closed · Sat–Sun 9:30AM–3PM</div>
+                  <div style={{ color: '#4a90d9', fontSize: '0.78rem', marginTop: '2px' }}>{t('contactPage.callLine')}</div>
                 </div>
               </motion.div>
 
@@ -337,7 +338,7 @@ const Contact = () => {
               >
                 <div className="contact-map-wrap" style={{ position: 'relative' }}>
                   <iframe
-                    title="Lazord Office Location"
+                    title={t('contactPage.mapTitle')}
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.3684066212977!2d55.31978247538382!3d25.2581895776718!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5cd10170bd0f%3A0x33c038729b931804!2sAl%20Salemiyah%20Tower%20(SBK)!5e0!3m2!1sen!2sae!4v1782630978993!5m2!1sen!2sae"
                     width="100%" height="220"
                     style={{ border: 0, display: 'block', filter: 'invert(90%) hue-rotate(180deg)' }}
@@ -353,8 +354,8 @@ const Contact = () => {
                   </div>
                 </div>
                 <div style={{ padding: '14px 18px', borderTop: '1px solid rgba(45,95,196,0.2)' }}>
-                  <div style={{ color: '#ffffff', fontWeight: '600', fontSize: '0.88rem', marginBottom: '4px' }}>📍 Lazord Real Estate HQ</div>
-                  <div style={{ color: '#a9c4ea', fontSize: '0.8rem' }}>Office 803, Al Salemiyah Tower, Rigga Al Butteen, Dubai, UAE</div>
+                  <div style={{ color: '#ffffff', fontWeight: '600', fontSize: '0.88rem', marginBottom: '4px' }}>{t('contactPage.hq')}</div>
+                  <div style={{ color: '#a9c4ea', fontSize: '0.8rem' }}>{t('contactPage.hqAddress')}</div>
                 </div>
               </motion.div>
 
@@ -366,11 +367,11 @@ const Contact = () => {
       {/* Sticky mobile Quick Call bar */}
       <div className="contact-quickbar d-lg-none">
         <a href="tel:+97142999088" className="contact-quickbar-btn contact-quickbar-call">
-          <span aria-hidden="true">📞</span> Call Now
+          <span aria-hidden="true">📞</span> {t('contactPage.callNow')}
         </a>
-        <a href="https://wa.me/971561119233?text=Hello, I'm interested in a property from Lazord Real Estate."
+        <a href={`https://wa.me/971561119233?text=${encodeURIComponent(t('whatsapp.message'))}`}
           target="_blank" rel="noopener noreferrer" className="contact-quickbar-btn contact-quickbar-wa">
-          <span aria-hidden="true">💬</span> WhatsApp
+          <span aria-hidden="true">💬</span> {t('contactPage.whatsapp')}
         </a>
       </div>
 

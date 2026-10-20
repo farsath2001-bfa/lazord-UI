@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 
 const testimonials = [
-  { name: 'Ahmed Al Mansouri', role: 'Property Investor',    location: 'Dubai, UAE',      avatar: 'A', avatarColor: '#2d5fc4', rating: 5, text: 'Lazord Real Estate helped me find the perfect investment property in Downtown Dubai. Their market knowledge is unmatched and the entire process was smooth and transparent.' },
-  { name: 'Sarah Mitchell',    role: 'Homebuyer',            location: 'London, UK',      avatar: 'S', avatarColor: '#27ae60', rating: 5, text: 'As an overseas buyer, I was nervous about purchasing in Dubai. The Lazord team guided me every step of the way — from property selection to mortgage and handover.' },
-  { name: 'Rajesh Patel',      role: 'Business Owner',       location: 'Mumbai, India',   avatar: 'R', avatarColor: '#e67e22', rating: 5, text: 'I have worked with many real estate agencies in Dubai but Lazord stands out. They found me a commercial space in Business Bay that perfectly suits my needs.' },
-  { name: 'Fatima Al Zaabi',   role: 'First-time Buyer',     location: 'Abu Dhabi, UAE',  avatar: 'F', avatarColor: '#8e44ad', rating: 5, text: 'Buying my first apartment felt overwhelming but the Lazord team made it so easy. They explained everything clearly and found me a beautiful apartment in Dubai Marina.' },
-  { name: 'James Thornton',    role: 'Expat Resident',       location: 'Sydney, Australia',avatar: 'J', avatarColor: '#16a085', rating: 5, text: 'Rented through Lazord and the experience was seamless. They matched me with the perfect apartment in JBR, handled all the paperwork, and even helped with utilities setup.' },
-  { name: 'Chen Wei',          role: 'Portfolio Investor',   location: 'Shanghai, China', avatar: 'C', avatarColor: '#c0392b', rating: 5, text: 'I have purchased three off-plan properties through Lazord. Each time they delivered excellent advice on timing, location and developer reputation.' },
+  { id: 'mansouri', name: 'Ahmed Al Mansouri', role: 'Property Investor',    location: 'Dubai, UAE',      avatar: 'A', avatarColor: '#2d5fc4', rating: 5, text: 'Lazord Real Estate helped me find the perfect investment property in Downtown Dubai. Their market knowledge is unmatched and the entire process was smooth and transparent.' },
+  { id: 'mitchell', name: 'Sarah Mitchell',    role: 'Homebuyer',            location: 'London, UK',      avatar: 'S', avatarColor: '#27ae60', rating: 5, text: 'As an overseas buyer, I was nervous about purchasing in Dubai. The Lazord team guided me every step of the way — from property selection to mortgage and handover.' },
+  { id: 'patel', name: 'Rajesh Patel',      role: 'Business Owner',       location: 'Mumbai, India',   avatar: 'R', avatarColor: '#e67e22', rating: 5, text: 'I have worked with many real estate agencies in Dubai but Lazord stands out. They found me a commercial space in Business Bay that perfectly suits my needs.' },
+  { id: 'zaabi', name: 'Fatima Al Zaabi',   role: 'First-time Buyer',     location: 'Abu Dhabi, UAE',  avatar: 'F', avatarColor: '#8e44ad', rating: 5, text: 'Buying my first apartment felt overwhelming but the Lazord team made it so easy. They explained everything clearly and found me a beautiful apartment in Dubai Marina.' },
+  { id: 'thornton', name: 'James Thornton',    role: 'Expat Resident',       location: 'Sydney, Australia',avatar: 'J', avatarColor: '#16a085', rating: 5, text: 'Rented through Lazord and the experience was seamless. They matched me with the perfect apartment in JBR, handled all the paperwork, and even helped with utilities setup.' },
+  { id: 'wei', name: 'Chen Wei',          role: 'Portfolio Investor',   location: 'Shanghai, China', avatar: 'C', avatarColor: '#c0392b', rating: 5, text: 'I have purchased three off-plan properties through Lazord. Each time they delivered excellent advice on timing, location and developer reputation.' },
 ]
 
 const Stars = ({ count }) => (
@@ -18,7 +18,10 @@ const Stars = ({ count }) => (
   </div>
 )
 
-const TestimonialCard = ({ t2 }) => (
+const TestimonialCard = ({ t2 }) => {
+  const { t } = useTranslation()
+  const f = (field) => t(`testimonials.items.${t2.id}.${field}`)
+  return (
   <div style={{
     backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)',
     borderRadius: '16px', padding: '28px 24px', height: '100%',
@@ -29,18 +32,19 @@ const TestimonialCard = ({ t2 }) => (
   >
     <div style={{ color: '#2d5fc4', fontSize: '3.5rem', lineHeight: '1', marginBottom: '8px', opacity: 0.4, fontFamily: 'Georgia, serif' }}>"</div>
     <Stars count={t2.rating} />
-    <p style={{ color: '#b0c4de', fontSize: '0.9rem', lineHeight: '1.8', flex: 1, marginBottom: '24px', fontStyle: 'italic' }}>{t2.text}</p>
+    <p style={{ color: '#b0c4de', fontSize: '0.9rem', lineHeight: '1.8', flex: 1, marginBottom: '24px', fontStyle: 'italic' }}>{f('text')}</p>
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
       <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: t2.avatarColor, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', fontSize: '1.1rem', flexShrink: 0 }}>
         {t2.avatar}
       </div>
       <div>
-        <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.9rem' }}>{t2.name}</div>
-        <div style={{ color: '#a3c0e8', fontSize: '0.78rem', marginTop: '2px' }}>{t2.role} · {t2.location}</div>
+        <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.9rem' }}>{f('name')}</div>
+        <div style={{ color: '#a3c0e8', fontSize: '0.78rem', marginTop: '2px' }}>{f('role')} · {f('location')}</div>
       </div>
     </div>
   </div>
-)
+  )
+}
 
 const Testimonials = () => {
   const { t } = useTranslation()
@@ -68,7 +72,7 @@ const Testimonials = () => {
           <p style={{ color: '#a3c0e8', fontSize: '1rem', maxWidth: '480px', margin: '0 auto', lineHeight: '1.7' }}>{t('testimonials.subtitle')}</p>
           {/* Mobile swipe hint */}
           <div className="d-md-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '12px', opacity: 0.8 }}>
-            ← swipe to explore →
+            {t('common.swipe')}
           </div>
         </div>
 

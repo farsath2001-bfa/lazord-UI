@@ -1,14 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const WhatsAppButton = () => {
   const [hovered, setHovered] = useState(false)
   const [showTooltip, setShowTooltip] = useState(true)
 
+  // Auto-hide the tooltip bubble after 5 seconds
+  useEffect(() => {
+    const id = setTimeout(() => setShowTooltip(false), 5000)
+    return () => clearTimeout(id)
+  }, [])
+
   const phoneNumber = '971561119233'
-  const message = 'Hello! I am interested in a property from Lazord Real Estate.'
+  const { t } = useTranslation()
+  const message = t('whatsapp.message')
 
   return (
-    <div style={{ position: 'fixed', bottom: '30px', right: '30px', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
+    <div className="whatsapp-float" style={{ position: 'fixed', bottom: 'var(--fab-bottom, 30px)', right: '30px', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
 
       {/* Tooltip — desktop only */}
       {showTooltip && (
@@ -24,7 +32,7 @@ const WhatsAppButton = () => {
           position: 'relative',
           animation: 'fadeIn 0.3s ease'
         }}>
-          💬 Chat with us on WhatsApp!
+          {t('whatsapp.tooltip')}
           {/* Close tooltip */}
           <span
             onClick={() => setShowTooltip(false)}

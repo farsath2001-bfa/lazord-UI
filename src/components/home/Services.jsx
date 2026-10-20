@@ -58,7 +58,7 @@ const Services = () => {
           <p style={{ color: '#a3c0e8', fontSize: '1rem', maxWidth: '500px', margin: '0 auto', lineHeight: '1.7' }}>{t('services.subtitle')}</p>
           {/* Mobile swipe hint */}
           <div className="d-md-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '12px', opacity: 0.8 }}>
-            ← swipe to explore →
+            {t('common.swipe')}
           </div>
         </div>
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AdminNavbar from '../../components/admin/AdminNavbar'
 import { useAdmin } from '../../context/AdminContext'
+import { useToast } from '../../components/common/useToast'
 
 const statusColor = {
   'New':         { bg: 'rgba(74,144,217,0.2)',  color: '#4a90d9' },
@@ -22,36 +23,40 @@ const sourceColor = {
 
 const AdminLeads = () => {
   const { token } = useAdmin()
+  const { showToast } = useToast()
   const [leads, setLeads] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('All')
   const [sourceFilter, setSourceFilter] = useState('All')
   const [search, setSearch] = useState('')
-  const [message, setMessage] = useState('')
   const [deletingSource, setDeletingSource] = useState(null)
   const [selectedLead, setSelectedLead] = useState(null)
 
   const config = { headers: { Authorization: `Bearer ${token}` } }
 
-  const fetchLeads = async () => {
-    if (!token) { setLoading(false); return }
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/leads`, config)
-      setLeads(res.data.data)
-    } catch (err) { console.error(err) }
-    finally { setLoading(false) }
-  }
-
-  useEffect(() => { fetchLeads() }, [token])
+  // fetchLeads defined inside the effect — fully satisfies react-hooks/exhaustive-deps
+  // with just [token] as the dependency, no separate function reference needed.
+  useEffect(() => {
+    const fetchLeads = async () => {
+      if (!token) { setLoading(false); return }
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/leads`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        setLeads(res.data.data)
+      } catch (err) { console.error(err) }
+      finally { setLoading(false) }
+    }
+    fetchLeads()
+  }, [token])
 
   const updateStatus = async (id, status) => {
     try {
       await axios.put(`${import.meta.env.VITE_API_URL}/api/leads/${id}`, { status }, config)
       setLeads(prev => prev.map(l => l._id === id ? { ...l, status } : l))
       if (selectedLead?._id === id) setSelectedLead(prev => ({ ...prev, status }))
-      setMessage('✅ Status updated!')
-    } catch { setMessage('❌ Update failed') }
-    setTimeout(() => setMessage(''), 2000)
+      showToast('Status updated!', 'success')
+    } catch { showToast('Update failed', 'error') }
   }
 
   const deleteLead = async (id) => {
@@ -60,9 +65,8 @@ const AdminLeads = () => {
       await axios.delete(`${import.meta.env.VITE_API_URL}/api/leads/${id}`, config)
       setLeads(prev => prev.filter(l => l._id !== id))
       if (selectedLead?._id === id) setSelectedLead(null)
-      setMessage('✅ Lead deleted!')
-    } catch { setMessage('❌ Delete failed') }
-    setTimeout(() => setMessage(''), 2000)
+      showToast('Lead deleted!', 'success')
+    } catch { showToast('Delete failed', 'error') }
   }
 
   const deleteAllBySource = async (source) => {
@@ -75,9 +79,9 @@ const AdminLeads = () => {
         axios.delete(`${import.meta.env.VITE_API_URL}/api/leads/${l._id}`, config)
       ))
       setLeads(prev => prev.filter(l => l.source !== source))
-      setMessage(`✅ Deleted all ${count} ${source} leads!`)
-    } catch { setMessage('❌ Delete failed') }
-    finally { setDeletingSource(null); setTimeout(() => setMessage(''), 3000) }
+      showToast(`Deleted all ${count} ${source} leads!`, 'success')
+    } catch { showToast('Delete failed', 'error') }
+    finally { setDeletingSource(null) }
   }
 
   const deleteAllFiltered = async () => {
@@ -90,13 +94,13 @@ const AdminLeads = () => {
       ))
       const ids = new Set(filtered.map(l => l._id))
       setLeads(prev => prev.filter(l => !ids.has(l._id)))
-      setMessage(`✅ Deleted ${filtered.length} leads!`)
-    } catch { setMessage('❌ Delete failed') }
-    finally { setDeletingSource(null); setTimeout(() => setMessage(''), 3000) }
+      showToast(`Deleted ${filtered.length} leads!`, 'success')
+    } catch { showToast('Delete failed', 'error') }
+    finally { setDeletingSource(null) }
   }
 
   const exportToCSV = (leadsToExport, filename = 'lazord-leads') => {
-    if (leadsToExport.length === 0) { setMessage('❌ No leads to export'); setTimeout(() => setMessage(''), 2000); return }
+    if (leadsToExport.length === 0) { showToast('No leads to export', 'error'); return }
     const headers = ['Name', 'Email', 'Phone', 'Source', 'Service', 'Message', 'Status', 'Property', 'Date']
     const rows = leadsToExport.map(l => [
       l.name || '', l.email || '', l.phone || '', l.source || '', l.service || '',
@@ -110,8 +114,7 @@ const AdminLeads = () => {
     const link = document.createElement('a')
     link.href = url; link.download = `${filename}-${new Date().toISOString().split('T')[0]}.csv`
     link.click(); URL.revokeObjectURL(url)
-    setMessage(`✅ Exported ${leadsToExport.length} leads!`)
-    setTimeout(() => setMessage(''), 3000)
+    showToast(`Exported ${leadsToExport.length} leads!`, 'success')
   }
 
   const printLead = () => {
@@ -192,13 +195,6 @@ const AdminLeads = () => {
             })}
           </div>
         </div>
-
-        {/* Message */}
-        {message && (
-          <div style={{ backgroundColor: message.includes('✅') ? 'rgba(39,174,96,0.15)' : 'rgba(231,76,60,0.15)', border: `1px solid ${message.includes('✅') ? 'rgba(39,174,96,0.3)' : 'rgba(231,76,60,0.3)'}`, borderRadius: '10px', padding: '10px 16px', color: message.includes('✅') ? '#27ae60' : '#e74c3c', marginBottom: '16px', fontWeight: '600', fontSize: '0.88rem' }}>
-            {message}
-          </div>
-        )}
 
         {/* Status Filters */}
         <div style={{ display: 'flex', gap: '6px', marginBottom: '8px', flexWrap: 'wrap' }}>
@@ -404,8 +400,8 @@ const AdminLeads = () => {
               </div>
 
               <div className="no-print" style={{ marginBottom: '20px' }}>
-                <label htmlFor="lead-detail-status" style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', display: 'block' }}>📊 Update Status</label>
-                <select id="lead-detail-status" name="status" value={selectedLead.status} onChange={e => updateStatus(selectedLead._id, e.target.value)}
+                <div style={{ color: '#8aafd4', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>📊 Update Status</div>
+                <select name="status" value={selectedLead.status} onChange={e => updateStatus(selectedLead._id, e.target.value)}
                   style={{ width: '100%', backgroundColor: '#060f26', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', color: '#ffffff', padding: '10px 14px', fontSize: '0.88rem', outline: 'none', cursor: 'pointer' }}>
                   {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => <option key={s} value={s}>{s}</option>)}
                 </select>

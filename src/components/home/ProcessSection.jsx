@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
+import ProcessTimeline from './ProcessTimeline'
 
 const ParticleCanvas = () => {
   const canvasRef = useRef(null)
@@ -121,7 +122,8 @@ const ProcessSection = () => {
     { number: '01', icon: '🤝', color: '#2d5fc4', glow: 'rgba(45,95,196,0.4)',  titleKey: 'process.steps.consultation.title', descKey: 'process.steps.consultation.desc' },
     { number: '02', icon: '🔍', color: '#27ae60', glow: 'rgba(39,174,96,0.4)',  titleKey: 'process.steps.search.title',       descKey: 'process.steps.search.desc' },
     { number: '03', icon: '🏠', color: '#e67e22', glow: 'rgba(230,126,34,0.4)', titleKey: 'process.steps.viewing.title',      descKey: 'process.steps.viewing.desc' },
-    { number: '04', icon: '🔑', color: '#8e44ad', glow: 'rgba(142,68,173,0.4)', titleKey: 'process.steps.close.title',        descKey: 'process.steps.close.desc' },
+    { number: '04', icon: '✍️', color: '#8e44ad', glow: 'rgba(142,68,173,0.4)', titleKey: 'process.steps.close.title',        descKey: 'process.steps.close.desc' },
+    { number: '05', icon: '🔑', color: '#c9a24b', glow: 'rgba(201,162,75,0.45)', titleKey: 'process.steps.handover.title',    descKey: 'process.steps.handover.desc' },
   ]
 
   const guarantees = [
@@ -168,100 +170,10 @@ const ProcessSection = () => {
           <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '300', marginBottom: '6px', textShadow: '0 0 40px rgba(74,144,217,0.3)' }}>{t('process.title1')}</h2>
           <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: '800', marginBottom: '16px', textShadow: '0 0 40px rgba(74,144,217,0.4)' }}>{t('process.title2')}</h2>
           <p style={{ color: '#8aafd4', fontSize: '1rem', maxWidth: '520px', margin: '0 auto', lineHeight: '1.7' }}>{t('process.subtitle')}</p>
-          {/* Mobile swipe hint */}
-          <div className="d-lg-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '14px', opacity: 0.8 }}>
-            ← swipe to explore →
-          </div>
         </motion.div>
 
-        {/* Steps */}
-        <div style={{ position: 'relative', marginBottom: '80px' }}>
-
-          {/* Connecting line desktop */}
-          <div className="d-none d-lg-block" style={{
-            position: 'absolute', top: '47px', left: '12.5%', right: '12.5%',
-            height: '2px',
-            background: 'linear-gradient(to right, #2d5fc4, #27ae60, #e67e22, #8e44ad)',
-            opacity: 0.4, zIndex: 0
-          }} />
-
-          {/* Animated dots on line */}
-          <div className="d-none d-lg-block" style={{
-            position: 'absolute', top: '43px', left: '12.5%',
-            width: '10px', height: '10px', borderRadius: '50%',
-            backgroundColor: '#4a90d9',
-            boxShadow: '0 0 10px #4a90d9',
-            animation: 'slideAlong 4s linear infinite',
-            zIndex: 1
-          }} />
-
-          <div className="process-steps-track" style={{ position: 'relative', zIndex: 1 }}>
-            {steps.map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.15 }}
-                className="process-step-card"
-                style={{ textAlign: 'center' }}
-              >
-                {/* Icon circle */}
-                <div style={{ position: 'relative', display: 'inline-block', marginBottom: '24px' }}>
-                  <motion.div
-                    whileHover={{ scale: 1.12 }}
-                    animate={{ boxShadow: [`0 0 20px ${step.glow}`, `0 0 50px ${step.glow}`, `0 0 20px ${step.glow}`] }}
-                    transition={{ boxShadow: { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 } }}
-                    style={{
-                      width: '96px', height: '96px', borderRadius: '50%',
-                      backgroundColor: 'rgba(13,31,78,0.8)',
-                      backdropFilter: 'blur(10px)',
-                      border: `2px solid ${step.color}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '2.2rem', margin: '0 auto', cursor: 'default'
-                    }}
-                  >
-                    {step.icon}
-                  </motion.div>
-
-                  {/* Step number badge */}
-                  <div style={{
-                    position: 'absolute', top: '-6px', right: '-6px',
-                    width: '28px', height: '28px', borderRadius: '50%',
-                    backgroundColor: step.color,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#ffffff', fontSize: '0.7rem', fontWeight: '800',
-                    boxShadow: `0 0 12px ${step.glow}`
-                  }}>
-                    {step.number}
-                  </div>
-
-                  {/* Pulse ring */}
-                  <div style={{
-                    position: 'absolute', inset: '-8px', borderRadius: '50%',
-                    border: `1px solid ${step.color}`,
-                    opacity: 0.3,
-                    animation: `pulseRing 2.5s ease-in-out infinite`,
-                    animationDelay: `${i * 0.3}s`
-                  }} />
-                </div>
-
-                <h3 style={{ color: '#ffffff', fontSize: '1.05rem', fontWeight: '700', marginBottom: '10px', textShadow: '0 0 20px rgba(74,144,217,0.2)' }}>
-                  {t(step.titleKey)}
-                </h3>
-                <p style={{ color: '#8aafd4', fontSize: '0.88rem', lineHeight: '1.7', margin: '0 auto', maxWidth: '220px' }}>
-                  {t(step.descKey)}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Mobile scroll dots */}
-          <div className="d-lg-none process-steps-dots">
-            {steps.map((step, i) => (
-              <span key={i} style={{ backgroundColor: step.color }} />
-            ))}
-          </div>
+        <div style={{ marginBottom: '80px' }}>
+          <ProcessTimeline steps={steps} />
         </div>
 
         {/* Service Guarantee */}
@@ -340,52 +252,6 @@ const ProcessSection = () => {
           100%{left:87.5%;opacity:0}
         }
 
-        /* ── Mobile: horizontal swipeable slider ── */
-        .process-steps-track {
-          display: flex;
-          gap: 16px;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          -webkit-overflow-scrolling: touch;
-          scrollbar-width: none;
-          padding: 4px 4px 8px;
-          margin: 0 -4px;
-        }
-        .process-steps-track::-webkit-scrollbar { display: none; }
-        .process-step-card {
-          flex: 0 0 72%;
-          scroll-snap-align: center;
-        }
-        .process-steps-dots {
-          display: flex;
-          justify-content: center;
-          gap: 6px;
-          margin-top: 16px;
-        }
-        .process-steps-dots span {
-          width: 6px; height: 6px; border-radius: 50%;
-          opacity: 0.35;
-        }
-
-        @media (min-width: 480px) {
-          .process-step-card { flex-basis: 55%; }
-        }
-
-        /* ── Desktop: restore original static grid, untouched ── */
-        @media (min-width: 992px) {
-          .process-steps-track {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 32px;
-            overflow: visible;
-            padding: 0;
-            margin: 0;
-          }
-          .process-step-card {
-            flex: none;
-            scroll-snap-align: none;
-          }
-        }
       `}</style>
     </section>
   )

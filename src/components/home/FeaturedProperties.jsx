@@ -1,22 +1,23 @@
-import { useState, useEffect, lazy, Suspense } from 'react'
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
-import { useTranslation } from 'react-i18next'
+import { useLocalize } from '../../utils/useLocalize'
 import { motion } from 'framer-motion'
-import axios from 'axios'
 import PropertyCard from '../common/PropertyCard'
+import PropertyCardSkeleton from '../common/PropertyCardSkeleton'
+import { fetchProperties } from '../../utils/propertiesApi'
 
 const PropertyCardSlider = lazy(() => import('../common/PropertyCardSlider'))
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-
 const FeaturedProperties = () => {
-  const { t } = useTranslation()
+  const { t, tv } = useLocalize()
   const [properties, setProperties] = useState([])
-  const [filtered, setFiltered] = useState([])
   const [activeFilter, setActiveFilter] = useState('All')
   const [activeSort, setActiveSort] = useState('newest')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const [slow, setSlow] = useState(false)
+  const [attempt, setAttempt] = useState(0)
 
   const filters = ['All', 'Buy', 'Rent', 'Off Plan']
   const sortOptions = [
@@ -27,18 +28,24 @@ const FeaturedProperties = () => {
   ]
 
   useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/api/properties`)
-        setProperties(res.data.data || [])
-      } catch (err) { console.error(err) }
-      finally { setLoading(false) }
-    }
-    fetchProperties()
-  }, [])
+    let cancelled = false
+    // After 3.5s still waiting -> the server is probably waking up, tell the visitor
+    const slowTimer = setTimeout(() => { if (!cancelled) setSlow(true) }, 3500)
+    fetchProperties({ force: attempt > 0 })
+      .then(data => { if (!cancelled) { setProperties(data); setError(false) } })
+      .catch(err => { console.error(err); if (!cancelled) setError(true) })
+      .finally(() => { if (!cancelled) { setLoading(false); setSlow(false) } })
+    return () => { cancelled = true; clearTimeout(slowTimer) }
+  }, [attempt])
 
-  useEffect(() => {
-    let result = activeFilter === 'All'
+  const handleRetry = () => {
+    setLoading(true)
+    setError(false)
+    setAttempt(a => a + 1)
+  }
+
+  const filtered = useMemo(() => {
+    const result = activeFilter === 'All'
       ? [...properties]
       : properties.filter(p => p.type === activeFilter)
     switch (activeSort) {
@@ -47,7 +54,7 @@ const FeaturedProperties = () => {
       case 'area_desc':  result.sort((a, b) => (b.area || 0) - (a.area || 0)); break
       default:           result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); break
     }
-    setFiltered(result.slice(0, 6))
+    return result.slice(0, 6)
   }, [properties, activeFilter, activeSort])
 
   const btnStyle = (active) => ({
@@ -98,36 +105,60 @@ const FeaturedProperties = () => {
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '8px', marginBottom: '12px', scrollbarWidth: 'none' }}>
             {filters.map(f => (
               <motion.button key={f} onClick={() => setActiveFilter(f)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={btnStyle(activeFilter === f)}>
-                {f}
+                {tv(f)}
               </motion.button>
             ))}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <label htmlFor="featured-sort" style={{ color: '#8aafd4', fontSize: '0.82rem', whiteSpace: 'nowrap', flexShrink: 0 }}>Sort by:</label>
+            <label htmlFor="featured-sort" style={{ color: '#8aafd4', fontSize: '0.82rem', whiteSpace: 'nowrap', flexShrink: 0 }}>{t('featuredList.sortBy')}</label>
             <select id="featured-sort" name="sort" value={activeSort} onChange={e => setActiveSort(e.target.value)}
               style={{ flex: 1, maxWidth: '220px', backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.35)', borderRadius: '8px', color: '#ffffff', padding: '8px 14px', fontSize: '0.85rem', outline: 'none', cursor: 'pointer' }}>
-              {sortOptions.map(s => <option key={s.value} value={s.value} style={{ backgroundColor: '#0d1f4e' }}>{s.label}</option>)}
+              {sortOptions.map(s => <option key={s.value} value={s.value} style={{ backgroundColor: '#0d1f4e' }}>{t(`featuredList.sort.${s.value}`)}</option>)}
             </select>
           </div>
         </motion.div>
 
         {/* Properties */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px 0' }}>
-            <div style={{ color: '#4a90d9', fontSize: '2.5rem', animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</div>
-            <p style={{ color: '#8aafd4', marginTop: '12px' }}>Loading properties...</p>
+          <>
+            {slow && (
+              <p style={{ textAlign: 'center', color: '#8aafd4', fontSize: '0.85rem', margin: '0 0 16px' }}>
+                {t('featuredList.waking')}
+              </p>
+            )}
+            {/* Skeleton — mobile: one wide card row */}
+            <div className="d-flex d-lg-none" style={{ gap: '16px', overflowX: 'hidden' }}>
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} style={{ flex: '0 0 78%' }}><PropertyCardSkeleton /></div>
+              ))}
+            </div>
+            {/* Skeleton — desktop: grid of 3 */}
+            <div className="d-none d-lg-block">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+                {Array.from({ length: 3 }).map((_, i) => <PropertyCardSkeleton key={i} />)}
+              </div>
+            </div>
+          </>
+        ) : error ? (
+          <div style={{ textAlign: 'center', padding: '50px 0' }}>
+            <div style={{ fontSize: '2.2rem', marginBottom: '10px' }}>📡</div>
+            <p style={{ color: '#8aafd4', marginBottom: '16px' }}>{t('featuredList.error')}</p>
+            <button onClick={handleRetry}
+              style={{ backgroundColor: '#2d5fc4', color: '#fff', border: 'none', borderRadius: '10px', padding: '11px 28px', fontWeight: '700', fontSize: '0.88rem', cursor: 'pointer' }}>
+              {t('common.tryAgain')}
+            </button>
           </div>
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 0' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>🏠</div>
-            <p style={{ color: '#8aafd4' }}>No properties found</p>
+            <p style={{ color: '#8aafd4' }}>{t('featuredList.none')}</p>
           </div>
         ) : (
           <>
             {/* ✅ MOBILE — Swiper slider, lazy-loaded */}
             <div className="d-block d-lg-none">
               <Suspense fallback={
-                <div style={{ textAlign: 'center', padding: '40px 0', color: '#8aafd4', fontSize: '0.85rem' }}>Loading properties…</div>
+                <div style={{ textAlign: 'center', padding: '40px 0', color: '#8aafd4', fontSize: '0.85rem' }}>{t('featuredList.loadingSlider')}</div>
               }>
                 <PropertyCardSlider properties={filtered} animated />
               </Suspense>

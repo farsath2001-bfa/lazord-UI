@@ -1,31 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-
-const MOUNT_DELAY_MS = 500
+import { useTranslation } from 'react-i18next'
 
 const CookieConsent = () => {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), MOUNT_DELAY_MS)
-    return () => clearTimeout(timer)
-  }, [])
+  const [visible, setVisible] = useState(true)
+  const { t } = useTranslation()
 
   if (!visible) return null
 
   return (
-    <div className="cookie-consent" role="dialog" aria-label="Cookie consent" aria-live="polite">
+    <div className="cookie-consent" role="dialog" aria-label={t('cookie.label')} aria-live="polite">
       <div className="cookie-consent-inner">
         <p className="cookie-consent-text">
-          We use cookies to improve your browsing experience on our website. By continuing to use this site, you agree to our use of cookies as described in our{' '}
-          <Link to="/legal" className="cookie-consent-link">Privacy Policy</Link>.
+          {t('cookie.text')}{' '}
+          <Link to="/legal" className="cookie-consent-link">{t('cookie.link')}</Link>.
         </p>
         <div className="cookie-consent-actions">
           <button type="button" onClick={() => setVisible(false)} className="cookie-btn cookie-btn-decline">
-            Decline
+            {t('cookie.decline')}
           </button>
           <button type="button" onClick={() => setVisible(false)} className="cookie-btn cookie-btn-accept">
-            Accept
+            {t('cookie.accept')}
           </button>
         </div>
       </div>
@@ -45,6 +40,8 @@ const CookieConsent = () => {
           from { transform: translateY(100%); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
         }
+        [dir="rtl"] .cookie-consent-actions { margin-right: 0 !important; }
+        @media (min-width: 768px) { [dir="rtl"] .cookie-consent-text { padding-right: 90px; } }
         .cookie-consent-inner {
           max-width: 1400px;
           margin: 0 auto;
@@ -96,11 +93,20 @@ const CookieConsent = () => {
         }
         .cookie-btn-accept:hover { background: #1a3a7c; }
 
+        /* Desktop: shift the button group left so it clears the floating
+           WhatsApp button sitting fixed at bottom-right (~30px + ~60px diameter). */
+        @media (min-width: 768px) {
+          .cookie-consent-actions {
+            margin-right: 90px;
+          }
+        }
+
         @media (max-width: 767.98px) {
-          .cookie-consent { padding: 16px 18px; }
-          .cookie-consent-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
-          .cookie-consent-actions { width: 100%; }
-          .cookie-btn { flex: 1; text-align: center; padding: 12px 16px; }
+          .cookie-consent { padding: 12px 14px; }
+          .cookie-consent-text { font-size: 0.8rem !important; line-height: 1.5 !important; }
+          .cookie-consent-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
+          .cookie-consent-actions { width: 100%; margin-right: 0; }
+          .cookie-btn { flex: 1; text-align: center; padding: 9px 14px; font-size: 0.85rem; }
         }
       `}</style>
     </div>

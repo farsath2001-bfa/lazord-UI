@@ -1,0 +1,148 @@
+// Legal page content (EN + AR). Section shape: { h, p, list, listBold, after, emailLine, contact }
+// NOTE: the Arabic legal text is a good-faith translation — have a qualified UAE lawyer / native
+// Arabic speaker review it before relying on it.
+
+export const legalContent = {
+  en: {
+    ui: {
+      seoTitle: 'Privacy Policy & Terms of Use',
+      seoDesc: "Lazord Real Estate's privacy policy and terms of use.",
+      badge: '✦ Legal',
+      title: 'Privacy Policy & Terms',
+      updated: 'Last updated: July 2026 · Lazord Real Estate LLC, Dubai, UAE',
+      tabPrivacy: '🔒 Privacy Policy',
+      tabTerms: '📋 Terms of Use',
+      back: '← Back to Home',
+      contactLink: 'Contact Us →',
+      company: 'Lazord Real Estate LLC',
+      address: 'Office 803, Al Salemiyah Tower, Rigga Al Butteen, Dubai, UAE',
+    },
+    privacy: {
+      title: 'Privacy Policy',
+      intro: 'Lazord Real Estate LLC ("we", "our", or "us") is committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you visit our website or use our services.',
+      sections: [
+        { h: '1. Information We Collect', p: 'We collect the following types of information:', listBold: [
+          ['Personal Information:', ' Name, email address, phone number when you submit an enquiry or contact form.'],
+          ['Property Preferences:', ' Search queries, property types, budget ranges and location preferences.'],
+          ['Usage Data:', ' Pages visited, time spent on site, browser type and device information.'],
+          ['Communication Data:', ' Messages sent through our enquiry forms or WhatsApp.'],
+        ] },
+        { h: '2. How We Use Your Information', p: 'We use your information to:', list: [
+          'Respond to your property enquiries and connect you with our agents',
+          'Send property listings and market updates (only if you have opted in)',
+          'Improve our website and services based on usage patterns',
+          'Comply with legal obligations under UAE law and RERA regulations',
+          'Prevent fraud and ensure the security of our platform',
+        ] },
+        { h: '3. Data Sharing', p: 'We do not sell, trade, or rent your personal information to third parties. We may share your data with:', list: [
+          'Our licensed real estate agents to facilitate property transactions',
+          'Service providers who assist in operating our website (hosting, analytics)',
+          'Government or regulatory authorities when required by UAE law or RERA',
+        ] },
+        { h: '4. Data Security', p: 'We implement industry-standard security measures to protect your personal data including encrypted connections (HTTPS), secure servers, and restricted access controls. However, no method of transmission over the internet is 100% secure.' },
+        { h: '5. Cookies', p: 'Our website uses essential cookies to ensure proper functionality. We do not use tracking cookies or sell your browsing data to advertisers. You can disable cookies in your browser settings, though this may affect some site features.' },
+        { h: '6. Your Rights', p: 'You have the right to:', list: [
+          'Access the personal data we hold about you',
+          'Request correction of inaccurate information',
+          'Request deletion of your data (subject to legal obligations)',
+          'Opt out of marketing communications at any time',
+        ], emailLine: 'To exercise these rights, contact us at ' },
+        { h: '7. Third Party Links', p: 'Our website may contain links to third-party sites (Google Maps, WhatsApp, social media). We are not responsible for the privacy practices of these external platforms.' },
+        { h: '8. Contact Us', p: 'For any privacy-related questions or concerns, please contact:', contact: true },
+      ],
+    },
+    terms: {
+      title: 'Terms of Use',
+      intro: 'By accessing and using the Lazord Real Estate website, you agree to be bound by these Terms of Use. Please read them carefully before using our services.',
+      sections: [
+        { h: '1. About Lazord Real Estate', p: 'Lazord Real Estate LLC is a fully licensed real estate brokerage registered with RERA (Real Estate Regulatory Agency) and the Dubai Department of Economic Development (DED). We operate in full compliance with UAE real estate laws and regulations.' },
+        { h: '2. Use of Website', p: 'You agree to use this website only for lawful purposes. You must not:', list: [
+          'Use the site in any way that violates UAE law or regulations',
+          'Submit false or misleading information in enquiry forms',
+          'Attempt to gain unauthorized access to any part of the website',
+          'Copy, reproduce or distribute our property listings without permission',
+          'Use automated tools to scrape or harvest data from our website',
+        ] },
+        { h: '3. Property Listings', p: 'All property listings on this website are for informational purposes only. While we strive to ensure accuracy, Lazord Real Estate does not guarantee the completeness or accuracy of listing information including prices, availability, and specifications. Property details are subject to change without notice.' },
+        { h: '4. No Investment Advice', p: 'Information provided on this website, including ROI estimates and market insights, is for general informational purposes only and does not constitute financial or investment advice. You should seek independent professional advice before making any property investment decisions.' },
+        { h: '5. Intellectual Property', p: 'All content on this website including text, images, logos, and design elements are the property of Lazord Real Estate LLC or used with permission. You may not reproduce, distribute or create derivative works without our express written consent.' },
+        { h: '6. Limitation of Liability', p: 'Lazord Real Estate LLC shall not be liable for any direct, indirect, incidental or consequential damages arising from your use of this website or reliance on any information contained herein. We do not guarantee uninterrupted access to the website.' },
+        { h: '7. RERA Compliance', p: 'All real estate transactions facilitated through Lazord Real Estate are conducted in full compliance with RERA regulations and UAE Federal Law No. 26 of 2007 regulating real estate brokers. Our RERA license number is available upon request.' },
+        { h: '8. Governing Law', p: 'These Terms of Use are governed by the laws of the United Arab Emirates. Any disputes arising from the use of this website shall be subject to the exclusive jurisdiction of the courts of Dubai, UAE.' },
+        { h: '9. Changes to Terms', p: 'We reserve the right to update these terms at any time. Continued use of the website after changes constitutes acceptance of the revised terms. The date of the last update is shown at the top of this page.' },
+        { h: '10. Contact', p: 'For any questions regarding these terms:', contact: true },
+      ],
+    },
+  },
+  ar: {
+    ui: {
+      seoTitle: 'سياسة الخصوصية وشروط الاستخدام',
+      seoDesc: 'سياسة الخصوصية وشروط الاستخدام الخاصة بلازورد للعقارات.',
+      badge: '✦ قانوني',
+      title: 'سياسة الخصوصية والشروط',
+      updated: 'آخر تحديث: يوليو 2026 · لازورد للعقارات ذ.م.م، دبي، الإمارات',
+      tabPrivacy: '🔒 سياسة الخصوصية',
+      tabTerms: '📋 شروط الاستخدام',
+      back: 'العودة إلى الرئيسية →',
+      contactLink: '← تواصل معنا',
+      company: 'لازورد للعقارات ذ.م.م',
+      address: 'مكتب 803، برج السالمية، ريغة البطين، دبي، الإمارات',
+    },
+    privacy: {
+      title: 'سياسة الخصوصية',
+      intro: 'تلتزم لازورد للعقارات ذ.م.م («نحن» أو «الشركة») بحماية معلوماتك الشخصية. توضح سياسة الخصوصية هذه كيفية جمع بياناتك واستخدامها وحمايتها عند زيارتك لموقعنا الإلكتروني أو استخدامك لخدماتنا.',
+      sections: [
+        { h: '1. المعلومات التي نجمعها', p: 'نجمع الأنواع التالية من المعلومات:', listBold: [
+          ['المعلومات الشخصية:', ' الاسم والبريد الإلكتروني ورقم الهاتف عند إرسالك استفساراً أو نموذج تواصل.'],
+          ['تفضيلات العقار:', ' عمليات البحث وأنواع العقارات ونطاقات الميزانية وتفضيلات الموقع.'],
+          ['بيانات الاستخدام:', ' الصفحات التي تمت زيارتها والوقت المقضي في الموقع ونوع المتصفح ومعلومات الجهاز.'],
+          ['بيانات التواصل:', ' الرسائل المرسلة عبر نماذج الاستفسار أو واتساب.'],
+        ] },
+        { h: '2. كيف نستخدم معلوماتك', p: 'نستخدم معلوماتك من أجل:', list: [
+          'الرد على استفساراتك العقارية وربطك بوكلائنا',
+          'إرسال قوائم العقارات وتحديثات السوق (فقط إذا وافقت على ذلك)',
+          'تحسين موقعنا وخدماتنا بناءً على أنماط الاستخدام',
+          'الامتثال للالتزامات القانونية بموجب قوانين دولة الإمارات وأنظمة ريرا',
+          'منع الاحتيال وضمان أمن منصتنا',
+        ] },
+        { h: '3. مشاركة البيانات', p: 'نحن لا نبيع معلوماتك الشخصية ولا نتاجر بها ولا نؤجرها لأطراف ثالثة. وقد نشارك بياناتك مع:', list: [
+          'وكلائنا العقاريين المرخصين لتيسير الصفقات العقارية',
+          'مزودي الخدمات الذين يساعدون في تشغيل موقعنا (الاستضافة والتحليلات)',
+          'الجهات الحكومية أو التنظيمية عند اشتراط ذلك بموجب قانون دولة الإمارات أو ريرا',
+        ] },
+        { h: '4. أمن البيانات', p: 'نطبّق إجراءات أمنية وفق المعايير المتعارف عليها لحماية بياناتك الشخصية، تشمل الاتصالات المشفرة (HTTPS) والخوادم الآمنة وضوابط الوصول المقيّدة. ومع ذلك، لا توجد وسيلة نقل عبر الإنترنت آمنة بنسبة 100%.' },
+        { h: '5. ملفات تعريف الارتباط', p: 'يستخدم موقعنا ملفات تعريف الارتباط الضرورية لضمان عمله بشكل سليم. ولا نستخدم ملفات تتبّع ولا نبيع بيانات تصفحك للمعلنين. يمكنك تعطيل ملفات تعريف الارتباط من إعدادات متصفحك، وقد يؤثر ذلك على بعض ميزات الموقع.' },
+        { h: '6. حقوقك', p: 'يحق لك:', list: [
+          'الاطلاع على البيانات الشخصية التي نحتفظ بها عنك',
+          'طلب تصحيح المعلومات غير الدقيقة',
+          'طلب حذف بياناتك (مع مراعاة الالتزامات القانونية)',
+          'إلغاء الاشتراك في الرسائل التسويقية في أي وقت',
+        ], emailLine: 'لممارسة هذه الحقوق، تواصل معنا عبر ' },
+        { h: '7. روابط الأطراف الثالثة', p: 'قد يحتوي موقعنا على روابط لمواقع أطراف ثالثة (خرائط جوجل وواتساب ووسائل التواصل الاجتماعي). ولسنا مسؤولين عن ممارسات الخصوصية لدى هذه المنصات الخارجية.' },
+        { h: '8. تواصل معنا', p: 'لأي أسئلة أو استفسارات تتعلق بالخصوصية، يرجى التواصل مع:', contact: true },
+      ],
+    },
+    terms: {
+      title: 'شروط الاستخدام',
+      intro: 'بدخولك إلى موقع لازورد للعقارات واستخدامه، فإنك توافق على الالتزام بشروط الاستخدام هذه. يرجى قراءتها بعناية قبل استخدام خدماتنا.',
+      sections: [
+        { h: '1. نبذة عن لازورد للعقارات', p: 'لازورد للعقارات ذ.م.م شركة وساطة عقارية مرخصة بالكامل ومسجلة لدى مؤسسة التنظيم العقاري (ريرا) ودائرة الاقتصاد والسياحة في دبي. ونعمل وفق قوانين وأنظمة العقارات في دولة الإمارات بالكامل.' },
+        { h: '2. استخدام الموقع', p: 'توافق على استخدام هذا الموقع للأغراض المشروعة فقط. ولا يجوز لك:', list: [
+          'استخدام الموقع بأي طريقة تخالف قوانين دولة الإمارات أو أنظمتها',
+          'تقديم معلومات كاذبة أو مضللة في نماذج الاستفسار',
+          'محاولة الوصول غير المصرح به إلى أي جزء من الموقع',
+          'نسخ قوائم العقارات لدينا أو إعادة إنتاجها أو توزيعها دون إذن',
+          'استخدام أدوات آلية لكشط البيانات أو جمعها من موقعنا',
+        ] },
+        { h: '3. قوائم العقارات', p: 'جميع قوائم العقارات في هذا الموقع لأغراض إعلامية فقط. ورغم حرصنا على الدقة، لا تضمن لازورد للعقارات اكتمال أو دقة معلومات القوائم، بما في ذلك الأسعار والتوفر والمواصفات. وتخضع تفاصيل العقارات للتغيير دون إشعار مسبق.' },
+        { h: '4. لا تُعد المعلومات نصيحة استثمارية', p: 'المعلومات الواردة في هذا الموقع، بما فيها تقديرات العائد على الاستثمار ورؤى السوق، هي لأغراض إعلامية عامة فقط ولا تشكل نصيحة مالية أو استثمارية. ينبغي لك طلب مشورة مهنية مستقلة قبل اتخاذ أي قرار استثماري عقاري.' },
+        { h: '5. الملكية الفكرية', p: 'جميع المحتويات في هذا الموقع، بما فيها النصوص والصور والشعارات وعناصر التصميم، مملوكة للازورد للعقارات ذ.م.م أو مستخدمة بإذن. ولا يجوز لك إعادة إنتاجها أو توزيعها أو إنشاء أعمال مشتقة منها دون موافقتنا الكتابية الصريحة.' },
+        { h: '6. حدود المسؤولية', p: 'لا تتحمل لازورد للعقارات ذ.م.م أي مسؤولية عن أي أضرار مباشرة أو غير مباشرة أو عرضية أو تبعية ناشئة عن استخدامك لهذا الموقع أو اعتمادك على أي معلومات واردة فيه. ولا نضمن إتاحة الموقع دون انقطاع.' },
+        { h: '7. الامتثال لأنظمة ريرا', p: 'تُجرى جميع الصفقات العقارية التي تتم عبر لازورد للعقارات وفقاً لأنظمة ريرا والقانون الاتحادي لدولة الإمارات رقم 26 لسنة 2007 بشأن تنظيم مهنة الوسطاء العقاريين. ويتوفر رقم رخصة ريرا الخاص بنا عند الطلب.' },
+        { h: '8. القانون الواجب التطبيق', p: 'تخضع شروط الاستخدام هذه لقوانين دولة الإمارات العربية المتحدة. وتخضع أي نزاعات تنشأ عن استخدام هذا الموقع للاختصاص القضائي الحصري لمحاكم دبي، الإمارات.' },
+        { h: '9. التعديلات على الشروط', p: 'نحتفظ بالحق في تحديث هذه الشروط في أي وقت. ويُعد استمرارك في استخدام الموقع بعد التعديلات قبولاً للشروط المعدّلة. ويظهر تاريخ آخر تحديث في أعلى هذه الصفحة.' },
+        { h: '10. التواصل', p: 'لأي أسئلة بخصوص هذه الشروط:', contact: true },
+      ],
+    },
+  },
+}

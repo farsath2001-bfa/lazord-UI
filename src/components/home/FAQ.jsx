@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { faqsAr } from '../../data/faqAr'
 
 const faqs = [
   {
@@ -104,14 +106,29 @@ const faqs = [
   },
 ]
 
+// #hash -> [category index, question index] so other pages can deep-link to an answer
+const FAQ_LINKS = { ownership: [0, 0], tax: [3, 1], visa: [3, 2] }
+
 const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState(null)
-  const [activeCategory, setActiveCategory] = useState('All')
+  const { hash } = useLocation()
+  const target = FAQ_LINKS[hash.replace('#', '')]
+  const { t, i18n } = useTranslation()
+  const isAr = i18n.language === 'ar'
+  const [openIndex, setOpenIndex] = useState(target ? `0-${target[1]}` : null)
+  const [activeCategory, setActiveCategory] = useState(target ? target[0] : -1)
+
+  useEffect(() => {
+    if (!target) return undefined
+    const id = setTimeout(() => document.getElementById('faq-open')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 600)
+    return () => clearTimeout(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const toggle = (key) => setOpenIndex(openIndex === key ? null : key)
 
-  const categories = ['All', ...faqs.map(f => f.category)]
-  const filtered = activeCategory === 'All' ? faqs : faqs.filter(f => f.category === activeCategory)
+  const data = isAr ? faqsAr : faqs
+  const categories = [-1, ...data.map((_, i) => i)]
+  const filtered = activeCategory === -1 ? data : [data[activeCategory] || data[0]]
 
   return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
@@ -121,16 +138,16 @@ const FAQ = () => {
         <div style={{ position: 'absolute', top: '-80px', right: '-80px', width: '400px', height: '400px', borderRadius: '50%', backgroundColor: '#2d5fc4', opacity: 0.06, filter: 'blur(100px)' }} />
         <Container>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '16px' }}>
-            <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>✦ FAQ</span>
+            <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>{t('faq.badge')}</span>
           </div>
-          <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: '300', marginBottom: '6px' }}>Frequently Asked</h1>
-          <h1 style={{ color: '#4a90d9', fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '16px' }}>Questions</h1>
+          <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: '300', marginBottom: '6px' }}>{t('faq.h1a')}</h1>
+          <h1 style={{ color: '#4a90d9', fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: '800', marginBottom: '16px' }}>{t('faq.h1b')}</h1>
           <p style={{ color: '#8aafd4', fontSize: '1rem', lineHeight: '1.7', maxWidth: '560px', margin: '0 0 24px' }}>
-            Everything you need to know about buying, renting, and investing in Dubai real estate.
+            {t('faq.sub')}
           </p>
           {/* Quick stats */}
           <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-            {[['5', 'Categories'], ['15+', 'Questions'], ['18+', 'Years Experience']].map(([num, label]) => (
+            {[['5', t('faq.statCategories')], ['15+', t('faq.statQuestions')], ['18+', t('faq.statYears')]].map(([num, label]) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ color: '#4a90d9', fontWeight: '800', fontSize: '1.1rem' }}>{num}</span>
                 <span style={{ color: '#8aafd4', fontSize: '0.82rem' }}>{label}</span>
@@ -147,10 +164,10 @@ const FAQ = () => {
           <Col lg={3}>
             <div style={{ position: 'sticky', top: '80px' }}>
               <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '14px', padding: '16px', marginBottom: '16px' }}>
-                <h3 style={{ color: '#8aafd4', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', fontWeight: '600' }}>Browse by Category</h3>
+                <h3 style={{ color: '#8aafd4', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', fontWeight: '600' }}>{t('faq.browse')}</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {categories.map(cat => {
-                    const faqItem = faqs.find(f => f.category === cat)
+                    const faqItem = cat === -1 ? null : data[cat]
                     const isActive = activeCategory === cat
                     return (
                       <button key={cat} onClick={() => setActiveCategory(cat)}
@@ -158,8 +175,8 @@ const FAQ = () => {
                         onMouseEnter={e => { if (!isActive) e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.15)' }}
                         onMouseLeave={e => { if (!isActive) e.currentTarget.style.backgroundColor = 'transparent' }}>
                         <span>{faqItem?.icon || '📋'}</span>
-                        <span style={{ flex: 1 }}>{cat}</span>
-                        {cat !== 'All' && <span style={{ fontSize: '0.72rem', color: isActive ? 'rgba(255,255,255,0.7)' : '#4a4a6a' }}>{faqItem?.questions.length}</span>}
+                        <span style={{ flex: 1 }}>{cat === -1 ? t('faq.all') : faqItem.category}</span>
+                        {cat !== -1 && <span style={{ fontSize: '0.72rem', color: isActive ? 'rgba(255,255,255,0.7)' : '#4a4a6a' }}>{faqItem?.questions.length}</span>}
                       </button>
                     )
                   })}
@@ -169,19 +186,19 @@ const FAQ = () => {
               {/* Still have questions */}
               <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '14px', padding: '20px' }}>
                 <div style={{ fontSize: '1.8rem', marginBottom: '10px' }}>💬</div>
-                <h3 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', marginBottom: '8px' }}>Still have questions?</h3>
-                <p style={{ color: '#8aafd4', fontSize: '0.82rem', lineHeight: '1.6', marginBottom: '14px' }}>Our team is happy to answer any specific questions about Dubai real estate.</p>
+                <h3 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', marginBottom: '8px' }}>{t('faq.still')}</h3>
+                <p style={{ color: '#8aafd4', fontSize: '0.82rem', lineHeight: '1.6', marginBottom: '14px' }}>{t('faq.stillDesc')}</p>
                 <Link to="/contact"
                   style={{ display: 'block', textAlign: 'center', backgroundColor: '#2d5fc4', color: '#ffffff', borderRadius: '8px', padding: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.85rem', transition: 'background 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1a3a7c'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = '#2d5fc4'}>
-                  Contact Us →
+                  {t('faq.contact')}
                 </Link>
                 <a href="https://wa.me/971561119233" target="_blank" rel="noopener noreferrer"
                   style={{ display: 'block', textAlign: 'center', backgroundColor: 'rgba(37,211,102,0.15)', color: '#25d366', border: '1px solid rgba(37,211,102,0.3)', borderRadius: '8px', padding: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.85rem', transition: 'all 0.2s', marginTop: '8px' }}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(37,211,102,0.25)'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(37,211,102,0.15)'}>
-                  💬 WhatsApp
+                  {t('faq.whatsapp')}
                 </a>
               </div>
             </div>
@@ -198,7 +215,7 @@ const FAQ = () => {
                   </div>
                   <h2 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', margin: 0 }}>{section.category}</h2>
                   <span style={{ color: section.color, fontSize: '0.75rem', fontWeight: '700', backgroundColor: `${section.color}15`, border: `1px solid ${section.color}30`, borderRadius: '20px', padding: '2px 10px' }}>
-                    {section.questions.length} questions
+                    {t('faq.count', { n: section.questions.length })}
                   </span>
                 </div>
 
@@ -208,9 +225,9 @@ const FAQ = () => {
                     const key = `${si}-${qi}`
                     const isOpen = openIndex === key
                     return (
-                      <div key={qi} style={{ backgroundColor: '#0d1f4e', border: `1px solid ${isOpen ? section.color + '50' : 'rgba(45,95,196,0.2)'}`, borderRadius: '12px', overflow: 'hidden', transition: 'border-color 0.2s ease' }}>
+                      <div key={qi} id={isOpen ? 'faq-open' : undefined} style={{ backgroundColor: '#0d1f4e', border: `1px solid ${isOpen ? section.color + '50' : 'rgba(45,95,196,0.2)'}`, borderRadius: '12px', overflow: 'hidden', transition: 'border-color 0.2s ease' }}>
                         <button onClick={() => toggle(key)}
-                          style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', padding: '18px 20px', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
+                          style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', padding: '18px 20px', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'start' }}>
                           <span style={{ color: isOpen ? '#ffffff' : '#c0d4f0', fontSize: '0.92rem', fontWeight: isOpen ? '700' : '500', lineHeight: '1.4', flex: 1 }}>
                             {item.q}
                           </span>

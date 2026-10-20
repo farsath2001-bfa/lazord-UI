@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+import FavoriteButton from './FavoriteButton'
+import CompareButton from './CompareButton'
+import { useLocalize } from '../../utils/useLocalize'
 
 const tagColors = {
   'Featured':  { bg: '#2d5fc4', color: '#fff' },
@@ -9,22 +12,13 @@ const tagColors = {
   'Family':    { bg: '#16a085', color: '#fff' },
 }
 
-const formatPrice = (price, type) => {
-  if (type === 'Rent') {
-    return `AED ${price.toLocaleString()} / yr`
-  }
-  if (price >= 1000000) {
-    return `AED ${(price / 1000000).toFixed(2)}M`
-  }
-  return `AED ${price.toLocaleString()}`
-}
-
 const PropertyCard = ({ property }) => {
   const {
   _id, title, type, category, price, location,
-  bedrooms, bathrooms, area, image, tag, roi, status
+  bedrooms, bathrooms, area, image, tag, status
 } = property
 
+  const { t, tv, num, formatPrice } = useLocalize()
   const tagStyle = tagColors[tag] || { bg: '#2d5fc4', color: '#fff' }
 
   return (
@@ -77,7 +71,7 @@ const PropertyCard = ({ property }) => {
           padding: '4px 10px',
           borderRadius: '20px',
         }}>
-          {tag}
+          {tv(tag)}
         </div>
 
         {/* Type badge */}
@@ -95,8 +89,12 @@ const PropertyCard = ({ property }) => {
           borderRadius: '20px',
           border: '1px solid rgba(74,144,217,0.3)',
         }}>
-          {category}
+          {tv(category)}
         </div>
+
+        {/* Save to favorites */}
+        <FavoriteButton id={_id} title={title} size={36} style={{ position: 'absolute', bottom: '12px', right: '12px' }} />
+        <CompareButton id={_id} title={title} size={36} style={{ position: 'absolute', bottom: '12px', right: '56px' }} />
 
         {/* ROI Badge */}
         {/* {roi && (
@@ -153,9 +151,9 @@ const PropertyCard = ({ property }) => {
           borderBottom: '1px solid rgba(45,95,196,0.2)'
         }}>
           {[
-            { icon: '🛏️', value: bedrooms === 0 ? 'Studio' : `${bedrooms} Bed` },
-            { icon: '🚿', value: `${bathrooms} Bath` },
-            { icon: '📐', value: `${area.toLocaleString()} sqft` },
+            { icon: '🛏️', value: bedrooms === 0 ? t('card.studio') : t('card.bed', { n: bedrooms }) },
+            { icon: '🚿', value: t('card.bath', { n: bathrooms }) },
+            { icon: '📐', value: t('card.sqft', { n: num(area) }) },
           ].map(stat => (
             <div key={stat.value} style={{
               display: 'flex',
@@ -178,7 +176,7 @@ const PropertyCard = ({ property }) => {
             </div>
             {status === 'Off Plan' && (
               <div style={{ color: '#8e44ad', fontSize: '0.72rem', marginTop: '2px' }}>
-                Payment plan available
+                {t('card.paymentPlan')}
               </div>
             )}
           </div>
@@ -199,7 +197,7 @@ const PropertyCard = ({ property }) => {
             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1a3a7c'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#2d5fc4'}
           >
-            View Details
+            {t('card.viewDetails')}
           </Link>
         </div>
 

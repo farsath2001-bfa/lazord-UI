@@ -65,10 +65,10 @@ const WhyChooseUs = () => {
  ]
 
  const stats = [
-  { target: 18,   suffix: '+', label: 'Years in Dubai Market', Icon: RiTrophyLine,        color: '#f1c40f' },
-  { target: 1500, suffix: '+', label: 'Properties Listed',     Icon: RiBuilding2Line,     color: '#4a90d9' },
-  { target: 40,   suffix: '+', label: 'Nationalities Served',  Icon: RiGlobalLine,        color: '#27ae60' },
-  { target: 100,  suffix: '%', label: 'RERA Compliant',        Icon: RiVerifiedBadgeLine, color: '#e67e22' },
+  { target: 18,   suffix: '+', labelKey: 'why.stats.years', Icon: RiTrophyLine,        color: '#f1c40f' },
+  { target: 1500, suffix: '+', labelKey: 'why.stats.properties', Icon: RiBuilding2Line,     color: '#4a90d9' },
+  { target: 40,   suffix: '+', labelKey: 'why.stats.nationalities', Icon: RiGlobalLine,        color: '#27ae60' },
+  { target: 100,  suffix: '%', labelKey: 'why.stats.rera', Icon: RiVerifiedBadgeLine, color: '#e67e22' },
 ]
 
   return (
@@ -111,7 +111,7 @@ const WhyChooseUs = () => {
           <p style={{ color: '#8aafd4', fontSize: '1rem', maxWidth: '500px', margin: '0 auto', lineHeight: '1.7' }}>{t('why.subtitle')}</p>
           {/* Mobile swipe hint */}
           <div className="d-lg-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '14px', opacity: 0.8 }}>
-            ← swipe to explore →
+            {t('common.swipe')}
           </div>
         </motion.div>
 
@@ -198,11 +198,11 @@ const WhyChooseUs = () => {
           <Row className="g-4 align-items-center" style={{ position: 'relative', zIndex: 1 }}>
             <Col lg={5}>
               <h3 style={{ color: '#ffffff', fontSize: 'clamp(1.2rem, 2.5vw, 1.7rem)', fontWeight: '700', marginBottom: '10px', lineHeight: '1.3' }}>
-                Trusted by investors from{' '}
-                <span style={{ color: '#4a90d9' }}>40+ countries</span>
+                {t('why.trust1')}{' '}
+                <span style={{ color: '#4a90d9' }}>{t('why.trust2')}</span>
               </h3>
               <p style={{ color: '#8aafd4', fontSize: '0.92rem', lineHeight: '1.7', marginBottom: '24px' }}>
-                From first-time buyers to seasoned investors, Lazord Real Estate has helped thousands find their perfect Dubai property since 2007.
+                {t('why.trustDesc')}
               </p>
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                 <motion.div whileHover={{ scale: 1.03 }}>
@@ -210,7 +210,7 @@ const WhyChooseUs = () => {
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#2d5fc4', color: '#fff', padding: '12px 24px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.9rem', boxShadow: '0 6px 20px rgba(45,95,196,0.3)' }}
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1a3a7c'}
                     onMouseLeave={e => e.currentTarget.style.backgroundColor = '#2d5fc4'}>
-                    Start Your Journey →
+                    {t('why.start')}
                   </Link>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.03 }}>
@@ -218,7 +218,7 @@ const WhyChooseUs = () => {
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'transparent', color: '#8aafd4', padding: '12px 24px', borderRadius: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.9rem', border: '1px solid rgba(74,144,217,0.3)' }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = '#4a90d9'; e.currentTarget.style.color = '#4a90d9' }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(74,144,217,0.3)'; e.currentTarget.style.color = '#8aafd4' }}>
-                    View Properties
+                    {t('why.viewProps')}
                   </Link>
                 </motion.div>
               </div>
@@ -254,7 +254,7 @@ const WhyChooseUs = () => {
                     <div style={{ color: s.color, fontSize: 'clamp(1.6rem, 3vw, 2rem)', fontWeight: '800', lineHeight: '1', marginBottom: '6px' }}>
                       <AnimatedNumber target={s.target} suffix={s.suffix} />
                     </div>
-                    <div style={{ color: '#8aafd4', fontSize: '0.78rem', lineHeight: '1.4' }}>{s.label}</div>
+                    <div style={{ color: '#8aafd4', fontSize: '0.78rem', lineHeight: '1.4' }}>{t(s.labelKey)}</div>
                   </motion.div>
                 ))}
               </div>

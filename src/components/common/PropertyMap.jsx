@@ -14,9 +14,13 @@ L.Icon.Default.mergeOptions({
 const PropertyMap = ({ coords, title, location, priceLabel }) => {
   return (
     <MapContainer center={coords} zoom={14} style={{ height: '100%', width: '100%' }} scrollWheelZoom={false}>
+      {/* CARTO's free dark tiles now need an API key, so use standard OSM tiles
+          and darken them with a CSS filter (see .osm-dark-tiles in PropertyDetail). */}
       <TileLayer
-        attribution='&copy; OpenStreetMap'
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        className="osm-dark-tiles"
+        maxZoom={19}
       />
       <Marker position={coords}>
         <Popup>

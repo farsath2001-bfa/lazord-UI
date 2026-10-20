@@ -4,6 +4,10 @@ import FeaturedProperties from '../components/home/FeaturedProperties'
 import WhyChooseUs from '../components/home/WhyChooseUS'
 import CTABanner from '../components/home/CtaBanner'
 import ProcessSection from '../components/home/ProcessSection'
+import WhyDubai from '../components/home/WhyDubai'
+import FeaturedAreas from '../components/home/FeaturedAreas'
+import ParallaxBanner from '../components/home/ParallaxBanner'
+import MortgageTeaser from '../components/home/MortgageTeaser'
 import SEO from '../components/SEO'
 
 const Home = () => {
@@ -28,9 +32,17 @@ const Home = () => {
         <FeaturedProperties />
       </div>
 
+      <WhyDubai />
+
+      <FeaturedAreas />
+
       <div data-cursor="process" ref={processRef}>
         <ProcessSection />
       </div>
+
+      <ParallaxBanner />
+
+      <MortgageTeaser />
 
       <div data-cursor="whychoose" ref={whyChooseRef}>
         <WhyChooseUs />

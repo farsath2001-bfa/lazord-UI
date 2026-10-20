@@ -66,7 +66,10 @@ const Footer = () => {
     { label: t('nav.properties'), path: '/properties' },
     { label: t('nav.about'),      path: '/about' },
     { label: t('nav.contact'),    path: '/contact' },
-    { label: 'FAQ',               path: '/faq' },
+    { label: t('footer.links.faq'), path: '/faq' },
+    { label: t('footer.links.mortgage'), path: '/mortgage-calculator' },
+    { label: t('nav.areaGuides'), path: '/areas' },
+    { label: t('nav.tools'), path: '/investment-tools' },
     { label: t('footer.legal') || 'Privacy & Terms', path: '/legal' },
   ]
 
@@ -103,17 +106,17 @@ const Footer = () => {
           }}>
             <div className="footer-newsletter-copy">
               <h3 style={{ color: '#ffffff', fontSize: '1.02rem', fontWeight: '700', margin: 0, letterSpacing: '-0.01em' }}>
-                Stay ahead of Dubai's property market
+                {t('footer.newsTitle')}
               </h3>
               <p style={{ color: '#7d9fce', fontSize: '0.83rem', margin: '5px 0 0', fontWeight: '400' }}>
-                New listings, price movement and off-plan launches — in your inbox.
+                {t('footer.newsSub')}
               </p>
             </div>
             <form onSubmit={handleSubscribe} className="footer-newsletter-form" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <label htmlFor="newsletter-email" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
-                Email address
+                {t('footer.emailLabel')}
               </label>
-              <input id="newsletter-email" name="email" type="email" autoComplete="email" required placeholder="Enter your email"
+              <input id="newsletter-email" name="email" type="email" autoComplete="email" required placeholder={t('footer.emailPh')}
                 value={email} onChange={e => setEmail(e.target.value)}
                 className="footer-newsletter-input"
                 style={{ backgroundColor: 'rgba(5,11,31,0.6)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '10px', color: '#ffffff', padding: '11px 16px', fontSize: '0.87rem', outline: 'none', minWidth: '230px', transition: 'border-color 0.2s' }}
@@ -124,7 +127,7 @@ const Footer = () => {
                 style={{ background: 'linear-gradient(135deg, #2d5fc4 0%, #1a3a7c 100%)', color: '#fff', border: 'none', borderRadius: '10px', padding: '11px 22px', fontSize: '0.87rem', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'opacity 0.2s, transform 0.15s' }}
                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-                {subStatus === 'loading' ? 'Sending…' : subStatus === 'done' ? 'Subscribed ✓' : subStatus === 'error' ? 'Try again' : 'Subscribe'}
+                {subStatus === 'loading' ? t('footer.sending') : subStatus === 'done' ? t('footer.subscribed') : subStatus === 'error' ? t('common.tryAgain') : t('footer.subscribe')}
               </button>
             </form>
           </div>
@@ -144,7 +147,7 @@ const Footer = () => {
               {t('footer.tagline')}
             </p>
             <div className="footer-brand-badges" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '22px' }}>
-              {['RERA Licensed', 'DED Certified', 'Est. 2007'].map(tag => (
+              {[t('footer.badgeRera'), t('footer.badgeDed'), t('footer.badgeEst')].map(tag => (
                 <span key={tag} style={{ backgroundColor: 'rgba(74,144,217,0.08)', border: '1px solid rgba(74,144,217,0.22)', borderRadius: '20px', padding: '5px 13px', color: '#9db8dd', fontSize: '0.71rem', fontWeight: '600', letterSpacing: '0.01em' }}>
                   {tag}
                 </span>
@@ -214,14 +217,14 @@ const Footer = () => {
                     <span style={{ width: '26px', height: '26px', flexShrink: 0, borderRadius: '8px', backgroundColor: 'rgba(74,144,217,0.1)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#5b8fd6' }}>
                       {row.icon}
                     </span>
-                    <span style={{ paddingTop: '4px' }}>{row.text}</span>
+                    <span style={{ paddingTop: '4px' }}>{row.label === 'address' ? t('footer.address') : row.text}</span>
                   </a>
                 </li>
               ))}
             </ul>
             {/* Map */}
             <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(74,144,217,0.2)' }}>
-              <iframe title="Lazord Real Estate Location"
+              <iframe title={t('footer.mapTitle')}
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7216.7368119157045!2d55.3223574!3d25.258189599999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f5cd10170bd0f%3A0x33c038729b931804!2sAl%20Salemiyah%20Tower%20(SBK)!5e0!3m2!1sen!2sae!4v1782656168293!5m2!1sen!2sae"
                 width="100%" height="140" style={{ border: 0, display: 'block', filter: 'grayscale(0.3) contrast(1.1)' }}
                 allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
@@ -238,13 +241,13 @@ const Footer = () => {
             <Link to="/legal" style={{ color: '#4a90d9', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none', transition: 'color 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.color = '#ffffff'}
               onMouseLeave={e => e.currentTarget.style.color = '#4a90d9'}>
-              Privacy Policy
+              {t('footer.privacy')}
             </Link>
             <span style={{ color: '#3a4a6a', fontSize: '0.8rem' }}>|</span>
             <Link to="/legal" style={{ color: '#4a90d9', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none', transition: 'color 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.color = '#ffffff'}
               onMouseLeave={e => e.currentTarget.style.color = '#4a90d9'}>
-              Terms & Conditions
+              {t('footer.terms')}
             </Link>
           </div>
         </div>

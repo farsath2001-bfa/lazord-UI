@@ -1,50 +1,60 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
+import { fetchProperties } from '../../utils/propertiesApi'
+import { useLocalize } from '../../utils/useLocalize'
+import Tilt from '../common/Tilt'
 
 const areas = [
   {
+    key: 'downtown',
     name: 'Downtown Dubai',
-    properties: 142,
+    keyword: 'Downtown',
     image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
     tag: 'Most Popular',
     tagColor: '#2d5fc4',
     desc: 'Burj Khalifa, Dubai Mall & Opera District'
   },
   {
+    key: 'palm',
     name: 'Palm Jumeirah',
-    properties: 98,
+    keyword: 'Palm Jumeirah',
     image: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&q=80',
     tag: 'Luxury',
     tagColor: '#e67e22',
     desc: 'Iconic island living with private beaches'
   },
   {
+    key: 'marina',
     name: 'Dubai Marina',
-    properties: 215,
+    keyword: 'Marina',
     image: 'https://images.unsplash.com/photo-1580674684081-7617fbf3d745?w=800&q=80',
     tag: 'High ROI',
     tagColor: '#27ae60',
     desc: 'Waterfront towers & vibrant promenade'
   },
   {
+    key: 'bay',
     name: 'Business Bay',
-    properties: 176,
+    keyword: 'Business Bay',
     image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
     tag: 'Investment',
     tagColor: '#8e44ad',
     desc: 'Dubai\'s thriving business & residential hub'
   },
   {
+    key: 'creek',
     name: 'Creek Harbour',
-    properties: 64,
+    keyword: 'Creek',
     image: 'https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=800&q=80',
     tag: 'Off Plan',
     tagColor: '#c0392b',
     desc: 'Future skyline — next to Creek Tower'
   },
   {
+    key: 'jvc',
     name: 'Jumeirah Village',
-    properties: 189,
+    keyword: 'Jumeirah Village',
     image: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80',
     tag: 'Affordable',
     tagColor: '#16a085',
@@ -52,7 +62,32 @@ const areas = [
   },
 ]
 
+const matchesArea = (property, keyword) => {
+  const k = keyword.toLowerCase()
+  return [property.title, property.location, property.community]
+    .some(v => typeof v === 'string' && v.toLowerCase().includes(k))
+}
+
 const FeaturedAreas = () => {
+  const [counts, setCounts] = useState(null)
+  const { t } = useLocalize()
+
+  // Real listing counts from the API (same matching the Properties search uses)
+  useEffect(() => {
+    let cancelled = false
+    fetchProperties()
+      .then(list => {
+        if (cancelled) return
+        const next = {}
+        areas.forEach(a => { next[a.name] = list.filter(p => matchesArea(p, a.keyword)).length })
+        setCounts(next)
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
+
+  const areasWithCounts = areas.map(a => ({ ...a, count: counts ? counts[a.name] : null }))
+
   return (
     <section style={{ backgroundColor: '#060f26',  padding: '32px 0 60px' }}>
       <Container>
@@ -70,7 +105,7 @@ const FeaturedAreas = () => {
             marginBottom: '16px'
           }}>
             <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>
-              ✦ Prime Locations
+              ✦ {t('areasSection.badge')}
             </span>
           </div>
           <h2 style={{
@@ -80,7 +115,7 @@ const FeaturedAreas = () => {
             lineHeight: '1.2',
             marginBottom: '6px'
           }}>
-            Explore Dubai's Most
+            {t('areasSection.title1')}
           </h2>
           <h2 style={{
             color: '#4a90d9',
@@ -89,7 +124,7 @@ const FeaturedAreas = () => {
             lineHeight: '1.2',
             marginBottom: '16px'
           }}>
-            Prestigious Communities
+            {t('areasSection.title2')}
           </h2>
           <p style={{
             color: '#8aafd4',
@@ -98,11 +133,11 @@ const FeaturedAreas = () => {
             margin: '0 auto',
             lineHeight: '1.7'
           }}>
-            From iconic waterfront towers to peaceful family communities — find your perfect Dubai neighbourhood.
+            {t('areasSection.subtitle')}
           </p>
           {/* Mobile swipe hint */}
           <div className="d-lg-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '14px', opacity: 0.8 }}>
-            ← swipe to explore →
+            {t('common.swipe')}
           </div>
         </div>
 
@@ -111,30 +146,30 @@ const FeaturedAreas = () => {
           <Row className="g-4">
             {/* Large card - first item */}
             <Col lg={6} md={12}>
-              <AreaCard area={areas[0]} height="420px" large />
+              <AreaCard area={areasWithCounts[0]} height="420px" large />
             </Col>
 
             {/* Two stacked cards */}
             <Col lg={6} md={12}>
               <Row className="g-4">
                 <Col md={6} sm={6}>
-                  <AreaCard area={areas[1]} height="200px" />
+                  <AreaCard area={areasWithCounts[1]} height="200px" />
                 </Col>
                 <Col md={6} sm={6}>
-                  <AreaCard area={areas[2]} height="200px" />
+                  <AreaCard area={areasWithCounts[2]} height="200px" />
                 </Col>
                 <Col md={6} sm={6}>
-                  <AreaCard area={areas[3]} height="200px" />
+                  <AreaCard area={areasWithCounts[3]} height="200px" />
                 </Col>
                 <Col md={6} sm={6}>
-                  <AreaCard area={areas[4]} height="200px" />
+                  <AreaCard area={areasWithCounts[4]} height="200px" />
                 </Col>
               </Row>
             </Col>
 
             {/* Bottom full-width card */}
             <Col md={12}>
-              <AreaCard area={areas[5]} height="180px" wide />
+              <AreaCard area={areasWithCounts[5]} height="180px" wide />
             </Col>
           </Row>
         </div>
@@ -142,7 +177,7 @@ const FeaturedAreas = () => {
         {/* ── MOBILE — uniform horizontal swipeable slider ── */}
         <div className="d-lg-none">
           <div className="featured-areas-track">
-            {areas.map((area, i) => (
+            {areasWithCounts.map((area, i) => (
               <div key={i} className="featured-areas-slide">
                 <AreaCard area={area} height="240px" wide />
               </div>
@@ -182,7 +217,7 @@ const FeaturedAreas = () => {
               e.currentTarget.style.borderColor = '#4a90d9'
             }}
           >
-            Explore All Areas →
+            {t('areasSection.explore')}
           </Link>
         </div>
 
@@ -222,10 +257,12 @@ const FeaturedAreas = () => {
   )
 }
 
-const AreaCard = ({ area, height, large, wide }) => {
+const AreaCardInner = ({ area, height, large, wide }) => {
+  const { t } = useLocalize()
+  const areaName = t(`areasSection.items.${area.key}.name`)
   return (
     <Link
-      to={`/properties?location=${encodeURIComponent(area.name)}`}
+      to={`/properties?search=${encodeURIComponent(area.keyword)}`}
       style={{ textDecoration: 'none', display: 'block', height: '100%' }}
     >
       <div style={{
@@ -251,7 +288,7 @@ const AreaCard = ({ area, height, large, wide }) => {
         <img
           className="area-img"
           src={area.image}
-          alt={area.name}
+          alt={areaName}
           style={{
             width: '100%',
             height: '100%',
@@ -275,7 +312,7 @@ const AreaCard = ({ area, height, large, wide }) => {
         <div style={{
           position: 'absolute',
           top: '14px',
-          left: '14px',
+          insetInlineStart: '14px',
           backgroundColor: area.tagColor,
           color: '#fff',
           fontSize: '0.7rem',
@@ -285,7 +322,7 @@ const AreaCard = ({ area, height, large, wide }) => {
           padding: '4px 10px',
           borderRadius: '20px'
         }}>
-          {area.tag}
+          {t(`areasSection.items.${area.key}.tag`)}
         </div>
 
         {/* Content */}
@@ -303,7 +340,7 @@ const AreaCard = ({ area, height, large, wide }) => {
             marginBottom: '4px',
             lineHeight: '1.2'
           }}>
-            {area.name}
+            {areaName}
           </h3>
           {(large || wide) && (
             <p style={{
@@ -312,7 +349,7 @@ const AreaCard = ({ area, height, large, wide }) => {
               marginBottom: '8px',
               lineHeight: '1.4'
             }}>
-              {area.desc}
+              {t(`areasSection.items.${area.key}.desc`)}
             </p>
           )}
           <div style={{
@@ -326,7 +363,11 @@ const AreaCard = ({ area, height, large, wide }) => {
             padding: '4px 12px',
           }}>
             <span style={{ color: '#4a90d9', fontSize: '0.75rem', fontWeight: '600' }}>
-              {area.properties} Properties
+              {area.count === null || area.count === undefined
+                ? t('areasSection.view')
+                : area.count === 0 ? t('areasSection.soon')
+                : area.count === 1 ? t('areasSection.count1')
+                : t('areasSection.count', { n: area.count })}
             </span>
           </div>
         </div>
@@ -334,5 +375,11 @@ const AreaCard = ({ area, height, large, wide }) => {
     </Link>
   )
 }
+
+const AreaCard = (props) => (
+  <Tilt max={4}>
+    <AreaCardInner {...props} />
+  </Tilt>
+)
 
 export default FeaturedAreas

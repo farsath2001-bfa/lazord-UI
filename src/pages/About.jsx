@@ -5,43 +5,45 @@ import { motion, useInView, useMotionValue, useSpring, useTransform } from 'fram
 import Services from '../components/home/Services'
 import Testimonials from '../components/home/Testimonials'
 import SEO from '../components/SEO'
+import { useLocalize } from '../utils/useLocalize'
 
 const IMAGE_HERO  = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1400&q=80'
 const IMAGE_STORY = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80'
 const IMAGE_WHY   = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&q=80'
 
 const team = [
-  { name: 'Mohammed Al Nimer', role: 'CEO',                  exp: '15 Years Experience', avatar: 'M', color: '#2d5fc4',   langs: 'Arabic, English',            spec: 'Luxury Villas & Penthouses', quote: 'Building trust, one transaction at a time.' },
-  { name: 'Khairy',            role: 'Senior Sales',         exp: '14 Years Experience', avatar: 'K', color: '#27ae60',   langs: 'English, Arabic',            spec: 'Off Plan & Investments', quote: 'Turning off-plan opportunities into long-term wins.' },
-  { name: 'Fethi',             role: 'Property Management',  exp: '10 Years Experience', avatar: 'F', color: '#0bee31cc', langs: 'English, Arabic',            spec: 'Apartments & Rentals', quote: 'Keeping every rental running smoothly, always.' },
-  { name: 'Abdullah',          role: 'Accountant',           exp: '14 Years Experience', avatar: 'G', color: '#8e44ad',   langs: 'Arabic, English',            spec: 'Client Experience', quote: 'Every number tells the story of your investment.' },
-  { name: 'Ahmed',             role: 'Accountant',           exp: '05 Years Experience', avatar: 'A', color: '#8e44ad',   langs: 'Arabic, English',            spec: 'Client Experience', quote: 'Precision today, peace of mind tomorrow.' },
-  { name: 'Jardali',           role: 'Investment Advisor',   exp: '11 Years Experience', avatar: 'J', color: '#c0e90c',   langs: 'English, Brazilian, Arabic', spec: 'Commercial & Portfolio', quote: 'Numbers matter, but relationships matter more.' },
-  { name: 'Obada',             role: 'Property Consultant ', exp: '4 Years Experience',  avatar: 'O', color: '#c0392b',   langs: 'Arabic, English',            spec: 'Business Bay & Dubai Land', quote: 'Business Bay to Dubai Land — I know every block.' },
-  { name: 'Fadi',              role: 'Adminstrative',        exp: '4 Years Experience',  avatar: 'F', color: '#c02b82',   langs: 'Arabic, English',            spec: 'Rigga Al Buteen & Dubai Land', quote: 'Behind every smooth deal is solid paperwork.' },
+  { id: 'nimer',    exp: 15, avatar: 'M', color: '#2d5fc4',   langs: ['ar', 'en'] },
+  { id: 'khairy',   exp: 14, avatar: 'K', color: '#27ae60',   langs: ['en', 'ar'] },
+  { id: 'fethi',    exp: 10, avatar: 'F', color: '#0bee31cc', langs: ['en', 'ar'] },
+  { id: 'abdullah', exp: 14, avatar: 'A', color: '#8e44ad',   langs: ['ar', 'en'] },
+  { id: 'ahmed',    exp: 5,  avatar: 'A', color: '#8e44ad',   langs: ['ar', 'en'] },
+  { id: 'jardali',  exp: 11, avatar: 'J', color: '#c0e90c',   langs: ['en', 'pt', 'ar'] },
+  { id: 'obada',    exp: 4,  avatar: 'O', color: '#c0392b',   langs: ['ar', 'en'] },
+  { id: 'fadi',     exp: 4,  avatar: 'F', color: '#c02b82',   langs: ['ar', 'en'] },
 ]
 
 const milestones = [
-  { year: '2007', title: 'Company Founded',        desc: 'Lazord Real Estate LLC established in Dubai as a trusted real estate brokerage serving the UAE market.', icon: '🏗️' },
-  { year: '2010', title: 'Market Expansion',       desc: 'Expanded portfolio across key Dubai communities including Downtown, Marina and JBR.', icon: '📈' },
-  { year: '2015', title: 'Strategic Partnerships', desc: 'Became registered brokers with major UAE developers including Nakheel and Dubai Properties.', icon: '🤝' },
-  { year: '2019', title: 'RERA Certified',         desc: 'Achieved full RERA registration and DED licensing, ensuring fully compliant transactions.', icon: '📋' },
-  { year: '2024', title: 'Digital Transformation', desc: 'Launched digital property platform to serve international investors remotely.', icon: '💻' },
-  { year: '2026', title: 'Today',                  desc: 'Continuing to grow with 1,500+ listings, 18+ years of expertise and dedicated professionals.', icon: '🚀' },
+  { year: '2007', key: 'founded',   icon: '🏗️' },
+  { year: '2010', key: 'expansion', icon: '📈' },
+  { year: '2015', key: 'partners',  icon: '🤝' },
+  { year: '2019', key: 'rera',      icon: '📋' },
+  { year: '2024', key: 'digital',   icon: '💻' },
+  { year: '2026', key: 'today',     icon: '🚀' },
 ]
 
 // Section dots for desktop scroll-spy navigation
 const sectionDotItems = [
-  { id: 'section-hero',         label: 'Overview' },
-  { id: 'section-story',        label: 'Our Story' },
-  { id: 'section-journey',      label: 'Our Journey' },
-  { id: 'section-services',     label: 'Services' },
-  { id: 'section-whychoose',    label: 'Why Choose Us' },
-  { id: 'section-testimonials', label: 'Testimonials' },
-  { id: 'section-team',         label: 'Our Team' },
+  { id: 'section-hero',         key: 'hero' },
+  { id: 'section-story',        key: 'story' },
+  { id: 'section-journey',      key: 'journey' },
+  { id: 'section-services',     key: 'services' },
+  { id: 'section-whychoose',    key: 'why' },
+  { id: 'section-testimonials', key: 'testimonials' },
+  { id: 'section-team',         key: 'team' },
 ]
 
 const SectionDots = () => {
+  const { t } = useLocalize()
   const [active, setActive] = useState('section-hero')
 
   useEffect(() => {
@@ -65,9 +67,9 @@ const SectionDots = () => {
   return (
     <div className="d-none d-lg-flex section-dots">
       {sectionDotItems.map(item => (
-        <button key={item.id} onClick={() => scrollTo(item.id)} className="section-dot-btn" aria-label={item.label} type="button">
+        <button key={item.id} onClick={() => scrollTo(item.id)} className="section-dot-btn" aria-label={t('about.dots.' + item.key)} type="button">
           <span className={`section-dot ${active === item.id ? 'active' : ''}`} />
-          <span className="section-dot-label">{item.label}</span>
+          <span className="section-dot-label">{t('about.dots.' + item.key)}</span>
         </button>
       ))}
     </div>
@@ -80,7 +82,7 @@ const AnimatedStatNumber = ({ target, suffix = '', duration = 1.6 }) => {
   const inView = useInView(ref, { once: true })
   const count = useMotionValue(0)
   const spring = useSpring(count, { duration: duration * 1000, bounce: 0 })
-  const display = useTransform(spring, v => Math.round(v).toLocaleString() + suffix)
+  const display = useTransform(spring, v => Math.round(v).toLocaleString('en-US') + suffix)
 
   useEffect(() => {
     if (inView) count.set(target)
@@ -155,11 +157,15 @@ const cardStyle = {
 }
 
 const About = () => {
+  const { t, isAr } = useLocalize()
+  const mt = (m, f) => t(`about.team.${m.id}.${f}`)
+  const expText = (m) => t(m.exp <= 10 ? 'about.exp.few' : 'about.exp.many', { n: m.exp })
+  const langText = (m) => m.langs.map(l => t('about.lang.' + l)).join(isAr ? '، ' : ', ')
   return (
     <>
       <SEO
-        title="About Us"
-        description="18+ years in Dubai real estate. Lazord Real Estate is RERA licensed and DED certified, based in Rigga Al Butteen, Deira."
+        title={t('about.seoTitle')}
+        description={t('about.seoDesc')}
         path="/about"
       />
       <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>
@@ -228,18 +234,18 @@ const About = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
               >
-                <div style={badgeStyle}><span style={badgeTextStyle}>✦ About Lazord</span></div>
+                <div style={badgeStyle}><span style={badgeTextStyle}>✦ {t('about.badge')}</span></div>
                 <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 4vw, 3.2rem)', fontWeight: '300', marginBottom: '6px', lineHeight: 1.2 }}>
-                  Dubai's Most Trusted
+                  {t('about.title1')}
                 </h1>
                 <h1 style={{ color: '#4a90d9', fontSize: 'clamp(1.8rem, 4vw, 3.2rem)', fontWeight: '800', marginBottom: '20px', lineHeight: 1.2 }}>
-                  Real Estate Partner Since 2007
+                  {t('about.title2')}
                 </h1>
                 <p style={{ color: '#8aafd4', fontSize: '1rem', lineHeight: '1.8', maxWidth: '580px', marginBottom: '28px' }}>
-                  Lazord Real Estate LLC is a fully RERA registered and DED licensed brokerage, established in Dubai in 2007. With over 18 years of market experience, we specialize in residential sales, leasing, and investment consultancy.
+                  {t('about.heroDesc')}
                 </p>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                  {['✅ RERA Licensed', '🏆 18+ Years', '🌍 40+ Nationalities', '📋 DED Certified'].map((badge, i) => (
+                  {[t('about.hb1'), t('about.hb2'), t('about.hb3'), t('about.hb4')].map((badge, i) => (
                     <motion.span
                       key={i}
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -263,7 +269,7 @@ const About = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
               >
-                {[['18+', 'Years Experience', '🏆'], ['1,500+', 'Properties', '🏠'], ['40+', 'Nationalities', '🌍']].map(([num, label, icon], i) => (
+                {[['18+', t('about.side.years'), '🏆'], ['1,500+', t('about.side.properties'), '🏠'], ['40+', t('about.side.nationalities'), '🌍']].map(([num, label, icon], i) => (
                   <motion.div
                     key={label}
                     whileHover={{ scale: 1.05, borderColor: '#4a90d9' }}
@@ -305,7 +311,7 @@ const About = () => {
             cursor: 'pointer'
           }}
         >
-          👥 Meet the Team ↓
+          👥 {t('about.meetTeam')} ↓
         </motion.button>
       </div>
 
@@ -314,9 +320,9 @@ const About = () => {
         <Container>
           <Row className="g-3">
             {[
-              { icon: '🎯', title: 'Mission',     color: '#4a90d9', desc: 'Accurate, transparent, actionable advice for every client.' },
-              { icon: '💎', title: 'Core Values', color: '#f1c40f', desc: 'Professionalism, transparency, market knowledge, client-centricity.' },
-              { icon: '🔭', title: 'Vision',      color: '#4a90d9', desc: "Dubai's most trusted brokerage, built on integrity and lasting relationships." },
+              { icon: '🎯', title: t('about.mission.title'),     color: '#4a90d9', desc: t('about.mission.desc') },
+              { icon: '💎', title: t('about.values.title'), color: '#f1c40f', desc: t('about.values.desc') },
+              { icon: '🔭', title: t('about.vision.title'),      color: '#4a90d9', desc: t('about.vision.desc') },
             ].map((item, i) => (
               <Col key={i} md={4}>
                 <motion.div
@@ -344,12 +350,12 @@ const About = () => {
         <div className="d-lg-none" style={sectionGap}>
           <Row className="g-3">
             {[
-              { number: 18,   suffix: '+', label: 'Years of Experience',   icon: '🏆', color: '#f1c40f' },
-              { number: 1500, suffix: '+', label: 'Properties Listed',     icon: '🏙️', color: '#4a90d9' },
-              { number: 1200, suffix: '+', label: 'Happy Clients',         icon: '👥', color: '#27ae60' },
-              { text: 'RERA',              label: 'Registered & Licensed', icon: '📋', color: '#8e44ad' },
-              { number: 40,   suffix: '+', label: 'Nationalities Served',  icon: '🌍', color: '#e67e22' },
-              { number: 2007, suffix: '',  label: 'Established',           icon: '🏗️', color: '#16a085' },
+              { number: 18,   suffix: '+', label: t('about.stats.years'),   icon: '🏆', color: '#f1c40f' },
+              { number: 1500, suffix: '+', label: t('about.stats.properties'),     icon: '🏙️', color: '#4a90d9' },
+              { number: 1200, suffix: '+', label: t('about.stats.clients'),         icon: '👥', color: '#27ae60' },
+              { text: 'RERA',              label: t('about.stats.rera'), icon: '📋', color: '#8e44ad' },
+              { number: 40,   suffix: '+', label: t('about.stats.nationalities'),  icon: '🌍', color: '#e67e22' },
+              { number: 2007, suffix: '',  label: t('about.stats.established'),           icon: '🏗️', color: '#16a085' },
             ].map((stat, i) => (
               <Col key={i} xs={6} sm={4}>
                 <motion.div
@@ -397,33 +403,33 @@ const About = () => {
         <Row id="section-story" className="align-items-center g-5" style={sectionGap}>
           <Col lg={6}>
             <FadeLeft>
-              <div style={badgeStyle}><span style={badgeTextStyle}>✦ Our Story</span></div>
-              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: '300', marginBottom: '6px' }}>18 Years of</h2>
-              <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: '800', marginBottom: '20px' }}>Shaping Dubai Living</h2>
+              <div style={badgeStyle}><span style={badgeTextStyle}>✦ {t('about.story.badge')}</span></div>
+              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: '300', marginBottom: '6px' }}>{t('about.story.h1')}</h2>
+              <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: '800', marginBottom: '20px' }}>{t('about.story.h2')}</h2>
               <p style={{ color: '#8aafd4', fontSize: '0.95rem', lineHeight: '1.9', marginBottom: '14px' }}>
-                Founded in 2007, Lazord Real Estate LLC was established with a clear vision — to be the most trusted brokerage in Dubai, known for integrity and long-term client relationships.
+                {t('about.story.p1')}
               </p>
               <p style={{ color: '#8aafd4', fontSize: '0.95rem', lineHeight: '1.9', marginBottom: '14px' }}>
-                As a fully licensed RERA and DED brokerage, we are trusted intermediaries for major UAE master developers including Nakheel and Dubai Properties.
+                {t('about.story.p2')}
               </p>
               <p style={{ color: '#8aafd4', fontSize: '0.95rem', lineHeight: '1.9', marginBottom: '24px' }}>
-                Our unique approach moves beyond traditional transaction-based services to create a comprehensive experience including all aspects of property investment and lifestyle integration.
+                {t('about.story.p3')}
               </p>
               <Link to="/contact"
                 style={{ display: 'inline-block', backgroundColor: '#2d5fc4', color: '#fff', padding: '13px 28px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.92rem' }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#1a3a7c'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = '#2d5fc4'}>
-                Get in Touch →
+                {t('about.story.cta')}
               </Link>
             </FadeLeft>
           </Col>
           <Col lg={6}>
             <FadeRight>
               <div style={{ position: 'relative', height: 'clamp(260px, 40vw, 420px)', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(45,95,196,0.25)' }}>
-                <img src={IMAGE_STORY} alt="Dubai Skyline" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <img src={IMAGE_STORY} alt={t('about.story.alt')} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 <div style={{ position: 'absolute', bottom: '20px', left: '20px', backgroundColor: 'rgba(6,15,38,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '12px', padding: '12px 18px' }}>
-                  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.9rem' }}>Dubai, UAE</div>
-                  <div style={{ color: '#4a90d9', fontSize: '0.78rem', marginTop: '2px' }}>18+ Years Serving This Market</div>
+                  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.9rem' }}>{t('about.story.place')}</div>
+                  <div style={{ color: '#4a90d9', fontSize: '0.78rem', marginTop: '2px' }}>{t('about.story.serving')}</div>
                 </div>
               </div>
             </FadeRight>
@@ -434,12 +440,12 @@ const About = () => {
         <div id="section-journey" style={sectionGap}>
           <FadeUp>
             <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-              <div style={badgeStyle}><span style={badgeTextStyle}>✦ Our Journey</span></div>
-              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '4px' }}>From 2007</h2>
-              <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800' }}>To Today</h2>
+              <div style={badgeStyle}><span style={badgeTextStyle}>✦ {t('about.journey.badge')}</span></div>
+              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '4px' }}>{t('about.journey.h1')}</h2>
+              <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800' }}>{t('about.journey.h2')}</h2>
               {/* Mobile swipe hint */}
               <div className="d-md-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '10px', opacity: 0.8 }}>
-                ← swipe to explore →
+                {t('common.swipe')}
               </div>
             </div>
           </FadeUp>
@@ -518,8 +524,8 @@ const About = () => {
                       <span style={{ color: isLast ? '#ffffff' : '#4a90d9', fontWeight: '800', fontSize: '0.82rem' }}>{m.year}</span>
                     </div>
 
-                    <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.95rem', marginBottom: '6px' }}>{m.title}</div>
-                    <div style={{ color: '#8aafd4', fontSize: '0.82rem', lineHeight: '1.6' }}>{m.desc}</div>
+                    <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.95rem', marginBottom: '6px' }}>{t(`about.ms.${m.key}.title`)}</div>
+                    <div style={{ color: '#8aafd4', fontSize: '0.82rem', lineHeight: '1.6' }}>{t(`about.ms.${m.key}.desc`)}</div>
                   </motion.div>
                 </motion.div>
               )
@@ -557,8 +563,8 @@ const About = () => {
                         <span style={{ fontSize: '0.85rem' }}>{m.icon}</span>
                         <span style={{ color: isLast ? '#ffffff' : '#4a90d9', fontWeight: '800', fontSize: '0.82rem' }}>{m.year}</span>
                       </div>
-                      <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.92rem', marginBottom: '6px' }}>{m.title}</div>
-                      <div style={{ color: '#8aafd4', fontSize: '0.8rem', lineHeight: '1.6' }}>{m.desc}</div>
+                      <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.92rem', marginBottom: '6px' }}>{t(`about.ms.${m.key}.title`)}</div>
+                      <div style={{ color: '#8aafd4', fontSize: '0.8rem', lineHeight: '1.6' }}>{t(`about.ms.${m.key}.desc`)}</div>
                     </motion.div>
                   </div>
                 )
@@ -581,18 +587,18 @@ const About = () => {
         <Row id="section-whychoose" className="align-items-center g-5" style={sectionGap}>
           <Col lg={7}>
             <FadeLeft>
-              <div style={badgeStyle}><span style={badgeTextStyle}>✦ Why Choose Lazord</span></div>
-              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '4px' }}>Our Competitive</h2>
-              <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800', marginBottom: '18px' }}>Advantages</h2>
+              <div style={badgeStyle}><span style={badgeTextStyle}>✦ {t('about.why.badge')}</span></div>
+              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '4px' }}>{t('about.why.h1')}</h2>
+              <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800', marginBottom: '18px' }}>{t('about.why.h2')}</h2>
               <p style={{ color: '#8aafd4', fontSize: '0.95rem', lineHeight: '1.8', marginBottom: '20px' }}>
-                We analyze market trends, identify high potential opportunities, and provide strategic advice to help you build a strong and profitable investment portfolio.
+                {t('about.why.desc')}
               </p>
               <Row className="g-3">
                 {[
-                  { icon: '📅', title: 'Longevity',  desc: 'Operating since 2007 — stability and deep market knowledge.' },
-                  { icon: '✅', title: 'Compliance', desc: 'Fully licensed by RERA and DED, ensuring safe, legal transactions.' },
-                  { icon: '🤝', title: 'Access',     desc: 'Registered brokers with Nakheel and Dubai Properties.' },
-                  { icon: '💡', title: 'Insight',    desc: 'Decades of data and experience to guide your decisions.' },
+                  { icon: '📅', title: t('about.why.longevity.title'),  desc: t('about.why.longevity.desc') },
+                  { icon: '✅', title: t('about.why.compliance.title'), desc: t('about.why.compliance.desc') },
+                  { icon: '🤝', title: t('about.why.access.title'),     desc: t('about.why.access.desc') },
+                  { icon: '💡', title: t('about.why.insight.title'),    desc: t('about.why.insight.desc') },
                 ].map((v, i) => (
                   <Col key={i} md={6}>
                     <motion.div
@@ -613,12 +619,12 @@ const About = () => {
           <Col lg={5}>
             <FadeRight>
               <div style={{ position: 'relative', height: 'clamp(260px, 40vw, 400px)', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(45,95,196,0.25)' }}>
-                <img src={IMAGE_WHY} alt="Dubai Marina" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <img src={IMAGE_WHY} alt={t('about.why.alt')} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(6,15,38,0.65) 0%, transparent 60%)' }} />
                 <div style={{ position: 'absolute', bottom: '20px', left: '20px', right: '20px' }}>
-                  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px' }}>Trusted by 40+ Nationalities</div>
+                  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px' }}>{t('about.why.trusted')}</div>
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {['RERA Licensed', 'DED Certified', 'Since 2007'].map((tag, i) => (
+                    {[t('about.why.tag1'), t('about.why.tag2'), t('about.why.tag3')].map((tag, i) => (
                       <span key={i} style={{ backgroundColor: 'rgba(45,95,196,0.6)', color: '#ffffff', padding: '3px 10px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: '600' }}>{tag}</span>
                     ))}
                   </div>
@@ -637,11 +643,11 @@ const About = () => {
         <FadeUp>
           <div id="section-team" style={sectionGap}>
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-              <div style={badgeStyle}><span style={badgeTextStyle}>✦ Our Team</span></div>
-              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '4px' }}>Meet the</h2>
-              <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800' }}>Experts Behind Lazord</h2>
+              <div style={badgeStyle}><span style={badgeTextStyle}>✦ {t('about.team.badge')}</span></div>
+              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '4px' }}>{t('about.team.h1')}</h2>
+              <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800' }}>{t('about.team.h2')}</h2>
               <div className="d-md-none" style={{ color: '#4a90d9', fontSize: '0.78rem', fontWeight: '600', marginTop: '10px', opacity: 0.8 }}>
-                ← swipe to explore →
+                {t('common.swipe')}
               </div>
             </div>
             <Row className="g-4 team-row">
@@ -668,13 +674,13 @@ const About = () => {
 
                     {/* Contact icons */}
                     <div style={{ position: 'absolute', top: '16px', right: '16px', display: 'flex', gap: '6px', zIndex: 2 }}>
-                      <a href={`https://wa.me/971561119233?text=${encodeURIComponent(`Hi, I'd like to speak with ${member.name} at Lazord Real Estate.`)}`}
+                      <a href={`https://wa.me/971561119233?text=${encodeURIComponent(t('about.team.waMsg', { name: mt(member, 'name') }))}`}
                         target="_blank" rel="noopener noreferrer"
-                        title={`WhatsApp ${member.name}`}
+                        title={t('about.team.waTitle', { name: mt(member, 'name') })}
                         style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundColor: 'rgba(37,211,102,0.15)', border: '1px solid rgba(37,211,102,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#25d366', textDecoration: 'none', fontSize: '0.8rem' }}
                       >💬</a>
                       <a href="tel:+97142999088"
-                        title={`Call about ${member.name}`}
+                        title={t('about.team.callTitle', { name: mt(member, 'name') })}
                         style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', textDecoration: 'none', fontSize: '0.8rem' }}
                       >📞</a>
                     </div>
@@ -689,18 +695,18 @@ const About = () => {
                       </div>
                       <div>
                         <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                          {member.name}
+                          {mt(member, 'name')}
                           {/* Verified checkmark badge */}
-                          <span title="Verified Lazord Agent" style={{ display: 'inline-flex', width: '15px', height: '15px', borderRadius: '50%', backgroundColor: '#4a90d9', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <span title={t('about.team.verified')} style={{ display: 'inline-flex', width: '15px', height: '15px', borderRadius: '50%', backgroundColor: '#4a90d9', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                             <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                           </span>
                         </div>
-                        <div style={{ color: member.color, fontSize: '0.8rem', marginTop: '2px', fontWeight: '600' }}>{member.role}</div>
+                        <div style={{ color: member.color, fontSize: '0.8rem', marginTop: '2px', fontWeight: '600' }}>{mt(member, 'role')}</div>
                       </div>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {[{ icon: '🏆', text: member.exp }, { icon: '🌍', text: member.langs }, { icon: '🏠', text: member.spec }].map((item, j) => (
+                      {[{ icon: '🏆', text: expText(member) }, { icon: '🌍', text: langText(member) }, { icon: '🏠', text: mt(member, 'spec') }].map((item, j) => (
                         <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.08)', borderRadius: '8px', padding: '6px 10px' }}>
                           <span style={{ fontSize: '0.85rem' }}>{item.icon}</span>
                           <span style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{item.text}</span>
@@ -711,7 +717,7 @@ const About = () => {
                     {/* Hover-reveal quote (always visible on mobile via CSS) */}
                     <div className="team-quote-overlay">
                       <div style={{ fontSize: '0.8rem', color: '#c9dcf5', fontStyle: 'italic', lineHeight: '1.5' }}>
-                        "{member.quote}"
+                        "{mt(member, 'quote')}"
                       </div>
                     </div>
                   </motion.div>
@@ -736,19 +742,19 @@ const About = () => {
         >
           <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(45,95,196,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(45,95,196,0.05) 1px, transparent 1px)', backgroundSize: '40px 40px', pointerEvents: 'none' }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '6px' }}>Ready to Start Your</h2>
-            <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800', marginBottom: '14px' }}>Dubai Property Journey?</h2>
-            <p style={{ color: '#8aafd4', fontSize: '0.95rem', maxWidth: '500px', margin: '0 auto 10px' }}>Our team is ready to help you find, buy, rent or sell your property in Dubai.</p>
+            <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', marginBottom: '6px' }}>{t('about.cta.h1')}</h2>
+            <h2 style={{ color: '#4a90d9', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '800', marginBottom: '14px' }}>{t('about.cta.h2')}</h2>
+            <p style={{ color: '#8aafd4', fontSize: '0.95rem', maxWidth: '500px', margin: '0 auto 10px' }}>{t('about.cta.desc')}</p>
             <p style={{ color: '#4a90d9', fontSize: '0.88rem', marginBottom: '28px' }}>📞 +971 42 999 088 &nbsp;|&nbsp; ✉️ info@lazordrealestate.ae</p>
             <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <motion.div whileHover={{ scale: 1.04 }}>
                 <Link to="/properties" style={{ backgroundColor: '#2d5fc4', color: '#fff', padding: '13px 28px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.92rem', display: 'block' }}>
-                  Browse Properties
+                  {t('about.cta.browse')}
                 </Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.04 }}>
                 <Link to="/contact" style={{ backgroundColor: 'transparent', color: '#ffffff', padding: '13px 28px', borderRadius: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.92rem', border: '1.5px solid rgba(255,255,255,0.25)', display: 'block' }}>
-                  Contact Us
+                  {t('about.cta.contact')}
                 </Link>
               </motion.div>
             </div>

@@ -1,11 +1,13 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
-import { useTranslation } from 'react-i18next'
+import { useLocalize } from '../utils/useLocalize'
 import axios from 'axios'
 import PropertyCard from '../components/common/PropertyCard'
+import PropertyCardSkeleton from '../components/common/PropertyCardSkeleton'
 import FeaturedAreas from '../components/home/FeaturedAreas'
 import SEO from '../components/SEO'
+import SavedSearches from '../components/common/SavedSearches'
 
 const PropertyCardSlider = lazy(() => import('../components/common/PropertyCardSlider'))
 
@@ -23,20 +25,30 @@ const sortOptions   = [
 
 const Properties = () => {
   const [searchParams] = useSearchParams()
-  const { t } = useTranslation()
+  const { t, tv } = useLocalize()
 
   const [search, setSearch]         = useState(searchParams.get('search') || '')
   const [type, setType]             = useState(searchParams.get('type') || 'All')
-  const [category, setCategory]     = useState('All')
-  const [beds, setBeds]             = useState('All')
+  const [category, setCategory]     = useState(searchParams.get('category') || 'All')
+  const [beds, setBeds]             = useState(searchParams.get('beds') || 'All')
+  const [maxPrice, setMaxPrice]     = useState(searchParams.get('maxPrice') || '')
   const [sort, setSort]             = useState('newest')
   const [properties, setProperties] = useState([])
   const [loading, setLoading]       = useState(true)
   const [searchFocused, setSearchFocused] = useState(false)
 
   useEffect(() => {
-    setType(searchParams.get('type') || 'All')
-    setSearch(searchParams.get('search') || '')
+    const nextType = searchParams.get('type') || 'All'
+    const nextSearch = searchParams.get('search') || ''
+    const nextBeds = searchParams.get('beds') || 'All'
+    const nextCategory = searchParams.get('category') || 'All'
+    const nextMax = searchParams.get('maxPrice') || ''
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setType(prev => (prev !== nextType ? nextType : prev))
+    setSearch(prev => (prev !== nextSearch ? nextSearch : prev))
+    setBeds(prev => (prev !== nextBeds ? nextBeds : prev))
+    setCategory(prev => (prev !== nextCategory ? nextCategory : prev))
+    setMaxPrice(prev => (prev !== nextMax ? nextMax : prev))
   }, [searchParams])
 
   useEffect(() => {
@@ -48,6 +60,7 @@ const Properties = () => {
         if (type !== 'All')     params.type     = type
         if (category !== 'All') params.category = category
         if (beds !== 'All')     params.beds     = beds
+        if (maxPrice)           params.maxPrice = maxPrice
         if (sort)               params.sort     = sort
         const res = await axios.get(`${API_URL}/api/properties`, { params })
         setProperties(res.data.data || [])
@@ -59,7 +72,7 @@ const Properties = () => {
       }
     }
     fetchProperties()
-  }, [search, type, category, beds, sort])
+  }, [search, type, category, beds, maxPrice, sort])
 
   const inputStyle = {
     backgroundColor: '#0d1f4e',
@@ -69,7 +82,7 @@ const Properties = () => {
     outline: 'none', width: '100%', cursor: 'pointer'
   }
 
-  const hasActiveFilters = type !== 'All' || category !== 'All' || beds !== 'All' || search
+  const hasActiveFilters = type !== 'All' || category !== 'All' || beds !== 'All' || maxPrice || search
 
   return (
     <>
@@ -85,16 +98,16 @@ const Properties = () => {
         <Container>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.15)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '30px', padding: '5px 14px', marginBottom: '10px' }}>
             <span style={{ color: '#4a90d9', fontSize: '0.78rem', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>
-              ✦ {type !== 'All' ? `${type} Properties` : t('properties.title')}
+              ✦ {type !== 'All' ? t('properties.badgeType', { type: tv(type) }) : t('properties.title')}
             </span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '12px' }}>
             <div>
               <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: '700', marginBottom: '4px' }}>
-                {type !== 'All' ? `${type} Properties in Dubai` : t('properties.title')}
+                {type !== 'All' ? t('properties.headingType', { type: tv(type) }) : t('properties.title')}
               </h1>
               <p style={{ color: '#8aafd4', fontSize: '0.88rem', margin: 0 }}>
-                {loading ? 'Loading...' : `${properties.length} ${t('properties.found')}`}
+                {loading ? t('common.loading') : `${properties.length} ${t('properties.found')}`}
               </p>
             </div>
           </div>
@@ -168,7 +181,7 @@ const Properties = () => {
                 {t('properties.type')}
               </label>
               <select id="properties-type" name="type" value={type} onChange={e => setType(e.target.value)} style={inputStyle}>
-                {propertyTypes.map(t2 => <option key={t2} value={t2}>{t2}</option>)}
+                {propertyTypes.map(t2 => <option key={t2} value={t2}>{tv(t2)}</option>)}
               </select>
             </div>
 
@@ -178,7 +191,7 @@ const Properties = () => {
                 {t('properties.category')}
               </label>
               <select id="properties-category" name="category" value={category} onChange={e => setCategory(e.target.value)} style={inputStyle}>
-                {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                {categories.map(c => <option key={c} value={c}>{tv(c)}</option>)}
               </select>
             </div>
 
@@ -188,7 +201,7 @@ const Properties = () => {
                 {t('properties.bedrooms')}
               </label>
               <select id="properties-beds" name="beds" value={beds} onChange={e => setBeds(e.target.value)} style={inputStyle}>
-                {bedOptions.map(b => <option key={b} value={b}>{b === 'All' ? 'Any' : b}</option>)}
+                {bedOptions.map(b => <option key={b} value={b}>{b === 'All' ? t('common.any') : b === 'Studio' ? t('card.studio') : b}</option>)}
               </select>
             </div>
 
@@ -198,7 +211,7 @@ const Properties = () => {
                 {t('properties.sortBy')}
               </label>
               <select id="properties-sort" name="sort" value={sort} onChange={e => setSort(e.target.value)} style={inputStyle}>
-                {sortOptions.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                {sortOptions.map(s => <option key={s.value} value={s.value}>{t(`properties.sort.${s.value}`)}</option>)}
               </select>
             </div>
           </div>
@@ -211,9 +224,10 @@ const Properties = () => {
               </span>
               {[
                 search && { label: `"${search}"`, clear: () => setSearch('') },
-                type !== 'All' && { label: type, clear: () => setType('All') },
-                category !== 'All' && { label: category, clear: () => setCategory('All') },
-                beds !== 'All' && { label: `${beds} bed`, clear: () => setBeds('All') },
+                type !== 'All' && { label: tv(type), clear: () => setType('All') },
+                category !== 'All' && { label: tv(category), clear: () => setCategory('All') },
+                beds !== 'All' && { label: t('properties.bedChip', { n: beds }), clear: () => setBeds('All') },
+                maxPrice && { label: t('properties.maxChip', { n: Number(maxPrice).toLocaleString('en-US') }), clear: () => setMaxPrice('') },
               ].filter(Boolean).map((f, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(45,95,196,0.2)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '20px', padding: '3px 12px', color: '#4a90d9', fontSize: '0.8rem' }}>
                   {f.label}
@@ -221,7 +235,7 @@ const Properties = () => {
                 </div>
               ))}
               <div
-                onClick={() => { setSearch(''); setType('All'); setCategory('All'); setBeds('All') }}
+                onClick={() => { setSearch(''); setType('All'); setCategory('All'); setBeds('All'); setMaxPrice('') }}
                 style={{ color: '#e74c3c', fontSize: '0.8rem', cursor: 'pointer', alignSelf: 'center', marginLeft: '4px' }}
               >
                 {t('properties.clearAll')}
@@ -230,12 +244,28 @@ const Properties = () => {
           )}
         </div>
 
+        <SavedSearches filters={{ search, type, category, beds, maxPrice }} />
+
         {/* Results */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '80px 0' }}>
-            <div style={{ color: '#4a90d9', fontSize: '2.5rem', animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</div>
-            <p style={{ color: '#8aafd4', marginTop: '16px' }}>Loading properties...</p>
-          </div>
+          <>
+            {/* Skeleton — mobile: horizontal row of 3 cards */}
+            <div className="d-flex d-lg-none" style={{ gap: '16px', overflowX: 'hidden' }}>
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} style={{ flex: '0 0 78%' }}><PropertyCardSkeleton /></div>
+              ))}
+            </div>
+            {/* Skeleton — desktop: grid of 6 cards */}
+            <div className="d-none d-lg-block">
+              <Row className="g-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <Col key={i} lg={4} md={6}>
+                    <PropertyCardSkeleton />
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          </>
         ) : properties.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 0' }}>
             <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🔍</div>
@@ -247,7 +277,7 @@ const Properties = () => {
             {/* ✅ MOBILE — Swiper slider, lazy-loaded */}
             <div className="d-block d-lg-none">
               <Suspense fallback={
-                <div style={{ textAlign: 'center', padding: '40px 0', color: '#8aafd4', fontSize: '0.85rem' }}>Loading properties…</div>
+                <div style={{ textAlign: 'center', padding: '40px 0', color: '#8aafd4', fontSize: '0.85rem' }}>{t('featuredList.loadingSlider')}</div>
               }>
                 <PropertyCardSlider properties={properties} />
               </Suspense>

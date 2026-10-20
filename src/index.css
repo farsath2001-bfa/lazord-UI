@@ -74,3 +74,65 @@ html, body, #root {
 .navbar a:hover {
   color: #2d5fc4 !important;
 }
+
+/* ── Brand accents & display font ── */
+:root {
+  --gold: #c9a24b;
+  --gold-light: #e0bf6a;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+}
+.font-display,
+body:not(.is-admin) h1,
+body:not(.is-admin) h2 {
+  font-family: var(--font-display);
+  letter-spacing: -0.2px;
+}
+/* Playfair has no Arabic glyphs — keep the regular font in RTL */
+[dir="rtl"] .font-display,
+[dir="rtl"] body:not(.is-admin) h1,
+[dir="rtl"] body:not(.is-admin) h2,
+html[dir="rtl"] body:not(.is-admin) h1,
+html[dir="rtl"] body:not(.is-admin) h2 {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  letter-spacing: 0;
+}
+
+
+/* ── Thin gold line under centred two-line section headings (draws in on scroll where supported) ── */
+body:not(.is-admin) [style*="text-align: center"] > h2:nth-of-type(2)::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 14px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, #c9a24b, transparent);
+}
+@supports (animation-timeline: view()) {
+  body:not(.is-admin) [style*="text-align: center"] > h2:nth-of-type(2)::after {
+    animation: goldLineGrow linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 35%;
+  }
+  @keyframes goldLineGrow { from { width: 0; opacity: 0; } to { width: 64px; opacity: 1; } }
+}
+
+/* ── Subtle dotted texture over the dark site backgrounds ── */
+body:not(.is-admin)::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.9) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.025;
+}
+
+
+/* ── Mobile: room for the sticky action bar ── */
+@media (max-width: 767.98px) {
+  :root { --fab-bottom: 78px; }
+  .whatsapp-float { display: none !important; }
+  body:not(.is-admin) #root { padding-bottom: 62px; }
+}
