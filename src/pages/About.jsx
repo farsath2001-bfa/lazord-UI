@@ -5,10 +5,10 @@ import { motion, useInView, useMotionValue, useSpring, useTransform } from 'fram
 import Services from '../components/home/Services'
 import Testimonials from '../components/home/Testimonials'
 import SEO from '../components/SEO'
+import StoryVideo from '../components/common/StoryVideo'
 import { useLocalize } from '../utils/useLocalize'
 
 const IMAGE_HERO  = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1400&q=80'
-const IMAGE_STORY = 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80'
 const IMAGE_WHY   = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&q=80'
 
 const team = [
@@ -425,13 +425,12 @@ const About = () => {
           </Col>
           <Col lg={6}>
             <FadeRight>
-              <div style={{ position: 'relative', height: 'clamp(260px, 40vw, 420px)', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(45,95,196,0.25)' }}>
-                <img src={IMAGE_STORY} alt={t('about.story.alt')} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                <div style={{ position: 'absolute', bottom: '20px', left: '20px', backgroundColor: 'rgba(6,15,38,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '12px', padding: '12px 18px' }}>
-                  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.9rem' }}>{t('about.story.place')}</div>
-                  <div style={{ color: '#4a90d9', fontSize: '0.78rem', marginTop: '2px' }}>{t('about.story.serving')}</div>
+              <StoryVideo alt={t('about.story.alt')}>
+                <div style={{ position: 'absolute', top: '16px', insetInlineEnd: '16px', backgroundColor: 'rgba(6,15,38,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(74,144,217,0.3)', borderRadius: '12px', padding: '10px 14px' }}>
+                  <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '0.85rem' }}>{t('about.story.place')}</div>
+                  <div style={{ color: '#4a90d9', fontSize: '0.74rem', marginTop: '2px' }}>{t('about.story.serving')}</div>
                 </div>
-              </div>
+              </StoryVideo>
             </FadeRight>
           </Col>
         </Row>
