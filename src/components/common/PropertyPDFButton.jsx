@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import html2canvas from 'html2canvas'
 import lazordLogo from '../../assets/image/lazordlogoo.png'
 
@@ -7,6 +6,37 @@ const PropertyPDFButton = ({ property }) => {
     if (type === 'Rent') return `AED ${price?.toLocaleString()} / year`
     if (price >= 1000000) return `AED ${(price / 1000000).toFixed(2)}M`
     return `AED ${price?.toLocaleString()}`
+  }
+
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+
+  // Key facts shown as a quick-summary table (label / value pairs, two pairs per row).
+  const summaryRows = () => {
+    const p = property
+    const perSqft = p.type !== 'Rent' && p.price && p.area ? `AED ${Math.round(p.price / p.area).toLocaleString()}` : ''
+    const items = [
+      ['Listing', p.type],
+      ['Category', p.category],
+      ['Location', p.location],
+      ['Community', p.community],
+      ['Bedrooms', p.bedrooms === 0 ? 'Studio' : p.bedrooms],
+      ['Bathrooms', p.bathrooms],
+      ['Area', p.area ? `${p.area.toLocaleString()} sqft` : ''],
+      ['Price / sqft', perSqft],
+      ['Completion', p.completionYear || 'Ready'],
+      ['Developer', p.developer],
+      ['Status', p.status || 'Available'],
+      ['Expected ROI', p.roi],
+    ].filter(([, v]) => v !== undefined && v !== null && String(v).trim() !== '')
+    if (items.length % 2) items.push(['', ''])
+    const cell = (l, v, shade) => `
+      <td style="padding:7px 12px; width:15%; font-size:10px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#6a7fa8; background:${shade}; border-bottom:1px solid #e3e9f5;">${esc(l)}</td>
+      <td style="padding:7px 12px; width:35%; font-size:12.5px; font-weight:700; color:#0a1c50; border-bottom:1px solid #e3e9f5;">${esc(v)}</td>`
+    let html = ''
+    for (let i = 0; i < items.length; i += 2) {
+      html += `<tr>${cell(items[i][0], items[i][1], '#f3f6fd')}${cell(items[i + 1][0], items[i + 1][1], '#f3f6fd')}</tr>`
+    }
+    return html
   }
 
   const generatePDF = async () => {
@@ -26,13 +56,8 @@ div.innerHTML = `
       <!-- Left: Logo + Name -->
       <div style="display:flex; align-items:center; gap:12px;">
         <img src="${lazordLogo}" style="height:75px; width:auto; object-fit:contain;" crossorigin="anonymous" />
-        <div>
-          <div style="font-size:18px; font-weight:800; color:white; line-height:1.2;">LAZORD</div>
-          <div style="font-size:18px; font-weight:800; color:#4a90d9; line-height:1.2;">REAL ESTATE</div>
-        </div>
+        <div style="font-family:Calibri, 'Segoe UI', Arial, sans-serif; font-size:30px; font-weight:400; letter-spacing:0.5px; color:#a4b9e1; line-height:1; white-space:nowrap;">LAZORD REAL ESTATE</div>
       </div>
-
-     
 
     </div>
     <!-- Gold divider -->
@@ -40,7 +65,7 @@ div.innerHTML = `
 
     <!-- PROPERTY IMAGE -->
     ${property.image ? `
-    <div style="position:relative; height:350px; overflow:hidden;">
+    <div style="position:relative; height:290px; overflow:hidden;">
       <img src="${property.image}" style="width:100%; height:100%; object-fit:cover;" crossorigin="anonymous" />
       <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);"></div>
       ${property.tag ? `<div style="position:absolute; top:14px; left:20px; background:#2d5fc4; color:white; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700;">${property.tag.toUpperCase()}</div>` : ''}
@@ -61,20 +86,12 @@ div.innerHTML = `
             </div>
           </div>
 
-          <!-- SPECS -->
-          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px;">
-            ${[
-              { label: 'BEDROOMS',    value: property.bedrooms === 0 ? 'Studio' : String(property.bedrooms || '—'), icon: '🛏' },
-              { label: 'BATHROOMS',   value: String(property.bathrooms || '—'), icon: '🚿' },
-              { label: 'AREA (SQFT)', value: property.area ? property.area.toLocaleString() : '—', icon: '📐' },
-              { label: 'COMPLETION',  value: property.completionYear ? String(property.completionYear) : 'Ready', icon: '🏗' },
-            ].map(s => `
-              <div style="background:#f8faff; border:1px solid #dde4f0; border-radius:10px; padding:14px; text-align:center;">
-                <div style="font-size:20px; margin-bottom:6px;">${s.icon}</div>
-                <div style="font-size:18px; font-weight:800; color:#0a1c50;">${s.value}</div>
-                <div style="font-size:10px; color:#888; margin-top:4px; letter-spacing:0.5px;">${s.label}</div>
-              </div>
-            `).join('')}
+          <!-- QUICK SUMMARY TABLE -->
+          <div style="margin-bottom:16px;">
+            <div style="font-size:11px; font-weight:700; color:#2d5fc4; letter-spacing:1px; margin-bottom:8px; padding-bottom:6px; border-bottom:1.5px solid #2d5fc4;">QUICK SUMMARY</div>
+            <table style="width:100%; border-collapse:collapse; border:1px solid #dde4f0; border-radius:8px; overflow:hidden;">
+              ${summaryRows()}
+            </table>
           </div>
 
           <!-- ABOUT + DEVELOPER -->
@@ -174,7 +191,11 @@ document.body.appendChild(div)
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
       const W = 210
       const H = 297
-      pdf.addImage(imgData, 'JPEG', 0, 0, W, H)
+      // Keep the page proportions: if the content is taller than A4, shrink it to fit instead of stretching.
+      let w = W
+      let h = (W * canvas.height) / canvas.width
+      if (h > H) { w = (W * H) / h; h = H }
+      pdf.addImage(imgData, 'JPEG', (W - w) / 2, 0, w, h)
 
       const filename = `${(property.title || 'property').replace(/[^a-z0-9]/gi, '-').toLowerCase()}-lazord.pdf`
       pdf.save(filename)
