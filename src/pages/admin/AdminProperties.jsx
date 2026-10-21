@@ -9,7 +9,7 @@ const emptyForm = {
   location: '', community: '', bedrooms: 0, bathrooms: 1,
   area: '', image: '', gallery: '', featured: false,
   status: 'Available', completionYear: '', developer: '',
-  description: '', amenities: '', tag: 'New', roi: '', videoUrl: ''
+  description: '', amenities: '', tag: 'New', roi: '', videoUrl: '', agent: ''
 }
 
 const AdminProperties = () => {
@@ -26,8 +26,18 @@ const AdminProperties = () => {
   const [message, setMessage] = useState('')
   const [selectedEnquiry, setSelectedEnquiry] = useState(null)
   const [search, setSearch] = useState('')
+  const [agents, setAgents] = useState([])
 
   const config = { headers: { Authorization: `Bearer ${token}` } }
+
+  useEffect(() => {
+    if (!token) return undefined
+    let cancelled = false
+    axios.get(`${import.meta.env.VITE_API_URL}/api/agents/admin/all`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(res => { if (!cancelled) setAgents(res.data.data || []) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [token])
 
   const fetchProperties = async () => {
     try {
@@ -70,6 +80,7 @@ const AdminProperties = () => {
         price: Number(form.price), area: Number(form.area),
         bedrooms: Number(form.bedrooms), bathrooms: Number(form.bathrooms),
         completionYear: Number(form.completionYear),
+        agent: form.agent || null,
         gallery: form.gallery ? form.gallery.split(',').map(s => s.trim()) : [],
         amenities: form.amenities ? form.amenities.split(',').map(s => s.trim()) : [],
       }
@@ -91,7 +102,7 @@ const AdminProperties = () => {
   }
 
   const handleEdit = (property) => {
-    setForm({ ...property, gallery: property.gallery?.join(', ') || '', amenities: property.amenities?.join(', ') || '' })
+    setForm({ ...property, agent: property.agent?._id || property.agent || '', gallery: property.gallery?.join(', ') || '', amenities: property.amenities?.join(', ') || '' })
     setEditId(property._id); setShowForm(true); window.scrollTo(0, 0)
   }
 
@@ -290,6 +301,13 @@ const AdminProperties = () => {
                     <div style={{ gridColumn: '1 / -1' }}>
                       <label style={labelStyle}>Video / Virtual tour URL (YouTube, Vimeo, Matterport or .mp4)</label>
                       <input style={inputStyle} placeholder="https://www.youtube.com/watch?v=..." value={form.videoUrl || ''} onChange={e => setForm(p => ({ ...p, videoUrl: e.target.value }))} />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={labelStyle}>Assigned agent (shown on the listing, WhatsApp and call go to them)</label>
+                      <select style={inputStyle} value={form.agent || ''} onChange={e => setForm(p => ({ ...p, agent: e.target.value }))}>
+                        <option value="">Company default (main WhatsApp)</option>
+                        {agents.filter(a => a.active || a._id === form.agent).map(a => <option key={a._id} value={a._id}>{a.name}{a.title ? ` — ${a.title}` : ''}</option>)}
+                      </select>
                     </div>
                     <div className="adm-form-section">Extras</div>
                     <div style={{ gridColumn: '1 / -1' }}>

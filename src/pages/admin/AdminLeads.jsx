@@ -3,6 +3,7 @@ import axios from 'axios'
 import AdminNavbar from '../../components/admin/AdminNavbar'
 import { useAdmin } from '../../context/adminContextValue'
 import { useToast } from '../../components/common/useToast'
+import LeadExtras from '../../components/admin/LeadExtras'
 
 const statusColor = {
   'New':         { bg: 'rgba(74,144,217,0.2)',  color: '#4a90d9' },
@@ -31,6 +32,7 @@ const AdminLeads = () => {
   const [search, setSearch] = useState('')
   const [deletingSource, setDeletingSource] = useState(null)
   const [selectedLead, setSelectedLead] = useState(null)
+  const [agents, setAgents] = useState([])
 
   const config = { headers: { Authorization: `Bearer ${token}` } }
 
@@ -49,6 +51,26 @@ const AdminLeads = () => {
     }
     fetchLeads()
   }, [token])
+
+  useEffect(() => {
+    if (!token) return undefined
+    let cancelled = false
+    axios.get(`${import.meta.env.VITE_API_URL}/api/agents/admin/all`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(res => { if (!cancelled) setAgents(res.data.data || []) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [token])
+
+  const patchLead = async (id, fields, okMsg) => {
+    try {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/leads/${id}`, fields, config)
+      const local = { ...fields }
+      if ('assignedAgent' in fields) local.assignedAgent = agents.find(a => a._id === fields.assignedAgent) || null
+      setLeads(prev => prev.map(l => l._id === id ? { ...l, ...local } : l))
+      setSelectedLead(prev => (prev && prev._id === id ? { ...prev, ...local } : prev))
+      showToast(okMsg, 'success')
+    } catch { showToast('Update failed', 'error') }
+  }
 
   const updateStatus = async (id, status) => {
     try {
@@ -398,9 +420,10 @@ const AdminLeads = () => {
                   {['New', 'Contacted', 'In Progress', 'Closed', 'Lost'].map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
+              <LeadExtras key={selectedLead._id} lead={selectedLead} agents={agents} onPatch={patchLead} />
               <div className="no-print" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <a href={`mailto:${selectedLead.email}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.2)', color: '#4a90d9', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px', padding: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem' }}>📧 Send Email</a>
-                <a href={`https://wa.me/${selectedLead.phone?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(37,211,102,0.15)', color: '#25d366', border: '1px solid rgba(37,211,102,0.3)', borderRadius: '8px', padding: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem' }}>💬 WhatsApp</a>
+                <a href={`https://wa.me/${selectedLead.phone?.replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${selectedLead.name}, this is ${selectedLead.assignedAgent?.name || 'the team'} from Lazord Real Estate. Thank you for your enquiry${selectedLead.property?.title ? ` about ${selectedLead.property.title}` : ''}.`)}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(37,211,102,0.15)', color: '#25d366', border: '1px solid rgba(37,211,102,0.3)', borderRadius: '8px', padding: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem' }}>💬 WhatsApp</a>
                 <a href={`tel:${selectedLead.phone}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(39,174,96,0.15)', color: '#27ae60', border: '1px solid rgba(39,174,96,0.3)', borderRadius: '8px', padding: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem' }}>📞 Call Now</a>
                 <button onClick={printLead} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(255,255,255,0.06)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '10px', fontWeight: '600', fontSize: '0.85rem', cursor: 'pointer' }}>🖨️ Print Profile</button>
               </div>

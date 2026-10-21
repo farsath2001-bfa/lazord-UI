@@ -1,7 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
+import { fetchAgents } from '../utils/agentsApi'
 
-const agents = [
+const PALETTE = ['#2d5fc4', '#27ae60', '#e67e22', '#8e44ad', '#16a085', '#c0392b']
+
+// Maps an agent saved in the admin panel to the shape the card uses.
+const fromApi = (a, i) => ({
+  id: a._id, name: a.name, role: a.title || 'Property Consultant', exp: a.experience || '',
+  color: PALETTE[i % PALETTE.length], phone: a.phone, whatsapp: (a.whatsapp || a.phone || '').replace(/\D/g, ''),
+  email: a.email, languages: a.languages, speciality: a.speciality, listings: null, deals: null,
+  image: a.photo, areas: a.areas || [],
+})
+
+const fallbackAgents = [
   {
     id: 1,
     name: 'Mohammed Al ',
@@ -275,7 +286,9 @@ const AgentCard = ({ agent }) => {
       onMouseLeave={() => setHovered(false)}
     >
       <div style={{ position: 'relative', height: '260px', overflow: 'hidden' }}>
-        <img src={agent.image} alt={agent.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', transition: 'transform 0.4s ease', transform: hovered ? 'scale(1.05)' : 'scale(1)' }} />
+        {agent.image
+          ? <img src={agent.image} alt={agent.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', transition: 'transform 0.4s ease', transform: hovered ? 'scale(1.05)' : 'scale(1)' }} />
+          : <div style={{ width: '100%', height: '100%', background: `linear-gradient(145deg, ${agent.color}, #0a1630)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.85)', fontSize: '5rem', fontWeight: 800 }}>{agent.name.charAt(0).toUpperCase()}</div>}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(5,15,40,0.9) 0%, transparent 60%)' }} />
         <div style={{ position: 'absolute', top: '14px', left: '14px', backgroundColor: agent.color, color: '#fff', fontSize: '0.72rem', fontWeight: '700', padding: '4px 12px', borderRadius: '20px' }}>{agent.role}</div>
         <div style={{ position: 'absolute', bottom: '14px', left: '16px', right: '16px' }}>
@@ -284,16 +297,16 @@ const AgentCard = ({ agent }) => {
         </div>
       </div>
       <div style={{ padding: '20px' }}>
-        <div style={{ display: 'flex', marginBottom: '16px', backgroundColor: 'rgba(45,95,196,0.1)', borderRadius: '10px', overflow: 'hidden' }}>
+        {agent.listings != null && <div style={{ display: 'flex', marginBottom: '16px', backgroundColor: 'rgba(45,95,196,0.1)', borderRadius: '10px', overflow: 'hidden' }}>
           {[{ label: 'Listings', value: agent.listings }, { label: 'Deals', value: agent.deals }].map((stat, i) => (
             <div key={i} style={{ flex: 1, textAlign: 'center', padding: '12px 8px', borderRight: i === 0 ? '1px solid rgba(45,95,196,0.2)' : 'none' }}>
               <div style={{ color: '#ffffff', fontWeight: '800', fontSize: '1.2rem' }}>{stat.value}</div>
               <div style={{ color: '#8aafd4', fontSize: '0.72rem', marginTop: '2px' }}>{stat.label}</div>
             </div>
           ))}
-        </div>
+        </div>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '18px' }}>
-          {[{ icon: '🏠', text: agent.speciality }, { icon: '🌍', text: agent.languages }, { icon: '📍', text: agent.areas.join(', ') }].map((item, i) => (
+          {[{ icon: '🏠', text: agent.speciality }, { icon: '🌍', text: agent.languages }, { icon: '📍', text: (agent.areas || []).join(', ') }].filter(item => item.text).map((item, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
               <span style={{ fontSize: '0.85rem', flexShrink: 0, marginTop: '1px' }}>{item.icon}</span>
               <span style={{ color: '#8aafd4', fontSize: '0.82rem', lineHeight: '1.4' }}>{item.text}</span>
@@ -325,6 +338,15 @@ const AgentCard = ({ agent }) => {
 
 const Agents = () => {
   const [showApplyModal, setShowApplyModal] = useState(false)
+  const [dbAgents, setDbAgents] = useState([])
+
+  useEffect(() => {
+    let cancelled = false
+    fetchAgents().then(list => { if (!cancelled) setDbAgents(list) }).catch(() => {})
+    return () => { cancelled = true }
+  }, [])
+
+  const agents = dbAgents.length ? dbAgents.map(fromApi) : fallbackAgents
 
   return (
     <div style={{ backgroundColor: '#060f26', minHeight: '100vh', paddingBottom: '80px' }}>

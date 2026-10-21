@@ -463,7 +463,7 @@ const PropertyDetail = () => {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <a href={`https://wa.me/971561119233?text=${encodeURIComponent(`${t('detail.waText', { title: property.title })} - ${window.location.href}`)}`}
+                  <a href={`https://wa.me/${(property.agent?.whatsapp || property.agent?.phone || '971561119233').replace(/\D/g, '')}?text=${encodeURIComponent(`${t('detail.waText', { title: property.title })} - ${window.location.href}`)}`}
                     target="_blank" rel="noopener noreferrer"
                     onClick={() => trackLead('WhatsApp')}
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: '#25d366', color: '#fff', padding: '13px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.92rem', transition: 'all 0.2s', boxShadow: '0 6px 20px rgba(37,211,102,0.25)' }}
@@ -472,11 +472,11 @@ const PropertyDetail = () => {
                     {t('detail.whatsappBtn')}
                   </a>
 
-                  <a href="tel:+97142999088" onClick={() => trackLead('Phone')}
+                  <a href={`tel:${(property.agent?.phone || '+97142999088').replace(/\s/g, '')}`} onClick={() => trackLead('Phone')}
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', backgroundColor: 'rgba(45,95,196,0.2)', color: '#4a90d9', border: '1px solid rgba(45,95,196,0.4)', padding: '12px', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.92rem', transition: 'all 0.2s' }}
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.35)'}
                     onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.2)'}>
-                    📞 +971 42 999 088
+                    📞 {property.agent?.phone || '+971 42 999 088'}
                   </a>
                 </div>
 
@@ -496,6 +496,19 @@ const PropertyDetail = () => {
                   ))}
                 </div>
               </div>
+
+              {property.agent && (
+                <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '16px', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  {property.agent.photo
+                    ? <img src={property.agent.photo} alt={property.agent.name} width="52" height="52" loading="lazy" style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+                    : <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'linear-gradient(135deg, #2d5fc4, #4a90d9)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.2rem', flexShrink: 0 }}>{property.agent.name.charAt(0).toUpperCase()}</div>}
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ color: '#8aafd4', fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{t('detail.yourAgent')}</div>
+                    <div style={{ color: '#fff', fontWeight: 700 }}>{property.agent.name}</div>
+                    {property.agent.title && <div style={{ color: '#8aafd4', fontSize: '0.8rem' }}>{property.agent.title}</div>}
+                  </div>
+                </div>
+              )}
 
               <ViewingScheduler property={property} />
 
