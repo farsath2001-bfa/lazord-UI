@@ -9,7 +9,7 @@ const emptyForm = {
   location: '', community: '', bedrooms: 0, bathrooms: 1,
   area: '', image: '', gallery: '', featured: false,
   status: 'Available', completionYear: '', developer: '',
-  description: '', amenities: '', tag: 'New', roi: ''
+  description: '', amenities: '', tag: 'New', roi: '', videoUrl: ''
 }
 
 const AdminProperties = () => {
@@ -273,6 +273,10 @@ const AdminProperties = () => {
                     <div style={{ gridColumn: '1 / -1' }}>
                       <label style={labelStyle}>Gallery URLs (comma separated)</label>
                       <input style={inputStyle} placeholder="url1, url2, url3" value={form.gallery} onChange={e => setForm(p => ({ ...p, gallery: e.target.value }))} />
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={labelStyle}>Video / Virtual tour URL (YouTube, Vimeo, Matterport or .mp4)</label>
+                      <input style={inputStyle} placeholder="https://www.youtube.com/watch?v=..." value={form.videoUrl || ''} onChange={e => setForm(p => ({ ...p, videoUrl: e.target.value }))} />
                     </div>
                     <div style={{ gridColumn: '1 / -1' }}>
                       <label style={labelStyle}>Amenities (comma separated)</label>

@@ -765,7 +765,9 @@
     "copyFail": "Could not copy the link",
     "alsoLike": "You May Also Like",
     "openMaps": "Open in Google Maps ↗",
-    "loadingMap": "Loading map…"
+    "loadingMap": "Loading map…",
+    "video": "Video & virtual tour",
+    "openTour": "Open virtual tour"
   },
   "faq": {
     "seoTitle": "Frequently Asked Questions",

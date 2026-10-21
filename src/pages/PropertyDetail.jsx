@@ -11,6 +11,7 @@ import { useLocalize } from '../utils/useLocalize'
 import ViewingScheduler from '../components/common/ViewingScheduler'
 import PropertyAlert from '../components/common/PropertyAlert'
 import { optimizeImg } from '../utils/img'
+import { parseVideo } from '../utils/video'
 
 const PropertyMap = lazy(() => import('../components/common/PropertyMap'))
 
@@ -220,6 +221,7 @@ const PropertyDetail = () => {
   )
 
   const allImages = [property.image, ...(property.gallery || [])].filter(Boolean)
+  const video = parseVideo(property.videoUrl)
   const coords = getCoords(property.location, property.community)
   const inputStyle = {
     width: '100%', backgroundColor: '#060f26',
@@ -363,6 +365,29 @@ const PropertyDetail = () => {
                 </button>
               )}
             </div>
+
+            {/* Video / virtual tour */}
+            {video && (
+              <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', padding: '24px 28px', marginBottom: '20px' }}>
+                <h3 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px solid rgba(45,95,196,0.2)' }}>{t('detail.video')}</h3>
+                {video.kind === 'embed' && (
+                  <div style={{ position: 'relative', aspectRatio: '16 / 9', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#060f26' }}>
+                    <iframe
+                      src={video.src} title={property.title} loading="lazy" allowFullScreen
+                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }}
+                    />
+                  </div>
+                )}
+                {video.kind === 'file' && (
+                  <video src={video.src} controls playsInline preload="metadata" style={{ width: '100%', borderRadius: '12px', backgroundColor: '#060f26' }} />
+                )}
+                {video.kind === 'link' && (
+                  <a href={video.src} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', backgroundColor: '#2d5fc4', color: '#fff', padding: '12px 24px', borderRadius: '10px', textDecoration: 'none', fontWeight: 700, fontSize: '0.9rem' }}>{t('detail.openTour')} ↗</a>
+                )}
+              </div>
+            )}
 
             {/* Description */}
             {property.description && (
