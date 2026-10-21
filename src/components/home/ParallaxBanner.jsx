@@ -1,14 +1,25 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useLocalize } from '../../utils/useLocalize'
 
-const IMAGE = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1800&q=80'
+const VIDEO = '/lazord-tour.mp4'
+const POSTER = '/lazord-tour-poster.jpg'
+
+// Skip the video for people who prefer reduced motion or have Data Saver on.
+const canPlayVideo = () => {
+  try {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+    if (navigator.connection && navigator.connection.saveData) return false
+  } catch { /* ignore */ }
+  return true
+}
 
 const ParallaxBanner = () => {
   const { t } = useLocalize()
   const ref = useRef(null)
+  const [playVideo] = useState(canPlayVideo)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['-10%', '10%'])
 
@@ -16,9 +27,17 @@ const ParallaxBanner = () => {
     <section ref={ref} style={{ position: 'relative', overflow: 'hidden', minHeight: 'clamp(340px, 48vw, 460px)', display: 'flex', alignItems: 'center' }}>
       <motion.div
         aria-hidden="true"
-        style={{ position: 'absolute', top: '-14%', bottom: '-14%', left: 0, right: 0, backgroundImage: `url(${IMAGE})`, backgroundSize: 'cover', backgroundPosition: 'center', y, willChange: 'transform' }}
-      />
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(6,15,38,0.85) 0%, rgba(6,15,38,0.6) 50%, rgba(6,15,38,0.88) 100%)' }} />
+        style={{ position: 'absolute', top: '-14%', bottom: '-14%', left: 0, right: 0, backgroundImage: `url(${POSTER})`, backgroundSize: 'cover', backgroundPosition: 'center', y, willChange: 'transform' }}
+      >
+        {playVideo && (
+          <video
+            src={VIDEO} poster={POSTER}
+            autoPlay muted loop playsInline preload="metadata" tabIndex={-1}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        )}
+      </motion.div>
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(6,15,38,0.78) 0%, rgba(6,15,38,0.5) 50%, rgba(6,15,38,0.82) 100%)' }} />
       <Container style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '60px 20px' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
