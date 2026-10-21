@@ -42,6 +42,22 @@ import ScrollProgressBar from './components/common/ScrollProgressBar'
 import GlobalPolishStyles from './components/common/GlobalPolishStyles'
 import PageTransition from './components/common/PageTransition'
 
+// Public-site overlays (chat button, lead popup, cookie banner...) must not appear in the admin panel.
+const PublicOverlays = () => {
+  const { pathname } = useLocation()
+  if (pathname.startsWith('/admin')) return null
+  return (
+    <>
+      <ScrollProgressBar />
+      <CustomCursor />
+      <WhatsAppButton />
+      <CookieConsent />
+      <LeadPopup />
+      <BackToTop />
+    </>
+  )
+}
+
 // ✅ Moved OUTSIDE App — defined once, uses useLocation safely inside BrowserRouter
 const ScrollToTop = () => {
   const { pathname } = useLocation()
@@ -76,15 +92,10 @@ function App() {
       <BrowserRouter>
         <AdminProvider>
           <ScrollToTop />      {/* ✅ Now safely inside BrowserRouter */}
-          <ScrollProgressBar />
-          <CustomCursor />
-          <WhatsAppButton />
+          <PublicOverlays />
           <CompareBar />
           <MobileActionBar />
           <ExitIntentOffer />
-          <CookieConsent />
-          <LeadPopup />
-          <BackToTop />
 
           <PageTransition>
             <Suspense fallback={<div style={{ minHeight: '70vh', background: '#060f26' }} />}>
