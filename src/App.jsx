@@ -1,40 +1,40 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/common/Navbar'
 import Footer from './components/common/Footer'
 import Home from './pages/Home'
-import Properties from './pages/Properties'
-import PropertyDetail from './pages/PropertyDetail'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import AdminLogin from './pages/admin/AdminLogin'
-import AdminDashboard from './pages/admin/AdminDashboard'
-import AdminProperties from './pages/admin/AdminProperties'
-import AdminLeads from './pages/admin/AdminLeads'
+const Properties = lazy(() => import('./pages/Properties'))
+const PropertyDetail = lazy(() => import('./pages/PropertyDetail'))
+const About = lazy(() => import('./pages/About'))
+const Contact = lazy(() => import('./pages/Contact'))
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'))
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
+const AdminProperties = lazy(() => import('./pages/admin/AdminProperties'))
+const AdminLeads = lazy(() => import('./pages/admin/AdminLeads'))
 import AdminRoute from './components/admin/AdminRoute'
 import { AdminProvider } from './context/AdminContext'
-import Agents from './pages/Agent'
+const Agents = lazy(() => import('./pages/Agent'))
 import WhatsAppButton from './components/common/WhatsAppButton'
-import FAQPage from './pages/FaqPage'
-import NewsletterPage from './pages/NewsletterPage'
+const FAQPage = lazy(() => import('./pages/FaqPage'))
+const NewsletterPage = lazy(() => import('./pages/NewsletterPage'))
 import LeadPopup from './components/common/LeadPopup'
 import CustomCursor from './components/common/CustomCursor'
 import BackToTop from './components/common/BackToTop'
 import NotFound from './pages/NotFound'
 import PageLoader from './components/common/PageLoader'
-import LegalPage from './pages/LegalPage'
-import Favorites from './pages/Favorites'
-import MortgageCalculatorPage from './pages/MortgageCalculatorPage'
+const LegalPage = lazy(() => import('./pages/LegalPage'))
+const Favorites = lazy(() => import('./pages/Favorites'))
+const MortgageCalculatorPage = lazy(() => import('./pages/MortgageCalculatorPage'))
 import { FavoritesProvider } from './context/FavoritesProvider'
 import { CompareProvider } from './context/CompareProvider'
 import { CurrencyProvider } from './context/CurrencyProvider'
 import CompareBar from './components/common/CompareBar'
 import MobileActionBar from './components/common/MobileActionBar'
 import ExitIntentOffer from './components/common/ExitIntentOffer'
-import Compare from './pages/Compare'
-import InvestmentTools from './pages/InvestmentTools'
-import Areas from './pages/Areas'
-import AreaGuide from './pages/AreaGuide'
+const Compare = lazy(() => import('./pages/Compare'))
+const InvestmentTools = lazy(() => import('./pages/InvestmentTools'))
+const Areas = lazy(() => import('./pages/Areas'))
+const AreaGuide = lazy(() => import('./pages/AreaGuide'))
 import CookieConsent from './components/CookieConsent'
 import { warmUpApi } from './utils/propertiesApi'
 import { ToastProvider } from './components/common/ToastContext'
@@ -87,6 +87,7 @@ function App() {
           <BackToTop />
 
           <PageTransition>
+            <Suspense fallback={<div style={{ minHeight: '70vh', background: '#060f26' }} />}>
             <Routes>
               {/* Public routes */}
               <Route path="/"            element={<><Navbar /><Home /><Footer /></>} />
@@ -119,6 +120,7 @@ function App() {
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            </Suspense>
           </PageTransition>
 
         </AdminProvider>

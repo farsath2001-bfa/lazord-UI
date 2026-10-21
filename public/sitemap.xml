@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://lazord-ui.vercel.app/</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/properties</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/properties?type=Buy</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/properties?type=Rent</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/properties?type=Off%20Plan</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/areas</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/areas/downtown</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/areas/marina</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/areas/palm</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/areas/business-bay</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/areas/creek-harbour</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/areas/jvc</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/investment-tools</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/mortgage-calculator</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/about</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/agents</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/contact</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/faq</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/newsletter</loc></url>
+  <url><loc>https://lazord-ui.vercel.app/legal</loc></url>
+</urlset>
