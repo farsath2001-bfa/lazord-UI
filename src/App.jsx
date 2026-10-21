@@ -13,6 +13,7 @@ const AdminProperties = lazy(() => import('./pages/admin/AdminProperties'))
 const AdminLeads = lazy(() => import('./pages/admin/AdminLeads'))
 const AdminBlog = lazy(() => import('./pages/admin/AdminBlog'))
 const AdminAgents = lazy(() => import('./pages/admin/AdminAgents'))
+const AdminActivity = lazy(() => import('./pages/admin/AdminActivity'))
 import AdminRoute from './components/admin/AdminRoute'
 import { AdminProvider } from './context/AdminContext'
 const Agents = lazy(() => import('./pages/Agent'))
@@ -135,6 +136,7 @@ function App() {
               <Route path="/admin/leads"       element={<AdminRoute><AdminLeads /></AdminRoute>} />
               <Route path="/admin/blog"        element={<AdminRoute><AdminBlog /></AdminRoute>} />
               <Route path="/admin/agents"      element={<AdminRoute><AdminAgents /></AdminRoute>} />
+              <Route path="/admin/activity"    element={<AdminRoute><AdminActivity /></AdminRoute>} />
 
               {/* 404 */}
               <Route path="*" element={<NotFound />} />

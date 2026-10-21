@@ -201,6 +201,31 @@ const AdminDashboard = () => {
           ))}
         </div>
 
+        {/* Follow-ups due */}
+        {(() => {
+          const today = new Date().toISOString().slice(0, 10)
+          const due = allLeads
+            .filter(l => l.followUpAt && String(l.followUpAt).slice(0, 10) <= today && !['Closed', 'Lost'].includes(l.status))
+            .sort((a, b) => String(a.followUpAt).localeCompare(String(b.followUpAt)))
+          if (due.length === 0) return null
+          return (
+            <div className="dash-card dash-pad" style={{ marginBottom: '16px', borderColor: 'rgba(201,162,75,0.4)' }}>
+              <h2 className="dash-h2">📅 Follow-ups due ({due.length})</h2>
+              <div style={{ display: 'grid', gap: '8px' }}>
+                {due.slice(0, 6).map(l => {
+                  const d = String(l.followUpAt).slice(0, 10)
+                  return (
+                    <Link key={l._id} to="/admin/leads" style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', textDecoration: 'none', color: '#fff', fontSize: '0.88rem' }}>
+                      <span>{l.name}{l.assignedAgent?.name ? <span style={{ color: '#6f8db3' }}> · {l.assignedAgent.name}</span> : null}</span>
+                      <span style={{ color: d < today ? '#ff8a80' : '#e0bf6a', fontWeight: 700, whiteSpace: 'nowrap' }}>{d < today ? 'Overdue · ' : 'Today · '}{d}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })()}
+
         {/* Pipeline + sources */}
         <div className="dash-two">
           <div className="dash-card dash-pad">

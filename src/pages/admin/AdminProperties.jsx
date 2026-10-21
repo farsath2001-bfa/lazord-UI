@@ -3,6 +3,8 @@ import axios from 'axios'
 import AdminNavbar from '../../components/admin/AdminNavbar'
 import { useAdmin } from '../../context/AdminContext'
 import PropertyPDFButton from '../../components/common/PropertyPDFButton'
+import BulkBar from '../../components/admin/BulkBar'
+import GalleryOrder from '../../components/admin/GalleryOrder'
 
 const emptyForm = {
   title: '', type: 'Buy', category: 'Apartment', price: '',
@@ -27,6 +29,7 @@ const AdminProperties = () => {
   const [selectedEnquiry, setSelectedEnquiry] = useState(null)
   const [search, setSearch] = useState('')
   const [agents, setAgents] = useState([])
+  const [selected, setSelected] = useState([])
 
   const config = { headers: { Authorization: `Bearer ${token}` } }
 
@@ -150,6 +153,35 @@ const AdminProperties = () => {
     !search || p.title?.toLowerCase().includes(search.toLowerCase()) ||
     p.location?.toLowerCase().includes(search.toLowerCase())
   )
+
+  const allSelected = filteredProperties.length > 0 && filteredProperties.every(p => selected.includes(p._id))
+  const toggleSel = (id) => setSelected(s => (s.includes(id) ? s.filter(x => x !== id) : [...s, id]))
+  const toggleAll = () => setSelected(allSelected ? [] : filteredProperties.map(p => p._id))
+
+  const bulkApply = async (update, doneMsg) => {
+    try {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/properties/bulk`, { ids: selected, update }, config)
+      setProperties(prev => prev.map(p => (selected.includes(p._id) ? { ...p, ...update } : p)))
+      setMessage(`✅ ${doneMsg} (${selected.length} listings)`)
+      setSelected([])
+    } catch (err) {
+      setMessage('❌ Error: ' + (err.response?.data?.message || err.message))
+    }
+    setTimeout(() => setMessage(''), 3000)
+  }
+
+  const bulkDelete = async () => {
+    if (!window.confirm(`Delete ${selected.length} listings permanently?`)) return
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/properties/bulk-delete`, { ids: selected }, config)
+      setProperties(prev => prev.filter(p => !selected.includes(p._id)))
+      setMessage(`✅ ${selected.length} listings deleted`)
+      setSelected([])
+    } catch (err) {
+      setMessage('❌ Error: ' + (err.response?.data?.message || err.message))
+    }
+    setTimeout(() => setMessage(''), 3000)
+  }
 
   const inputStyle = {
     width: '100%', backgroundColor: '#060f26',
@@ -297,6 +329,7 @@ const AdminProperties = () => {
                     <div style={{ gridColumn: '1 / -1' }}>
                       <label style={labelStyle}>Gallery URLs (comma separated)</label>
                       <input style={inputStyle} placeholder="url1, url2, url3" value={form.gallery} onChange={e => setForm(p => ({ ...p, gallery: e.target.value }))} />
+                      <GalleryOrder main={form.image} gallery={form.gallery || ''} onChange={(next) => setForm(p => ({ ...p, ...next }))} />
                     </div>
                     <div style={{ gridColumn: '1 / -1' }}>
                       <label style={labelStyle}>Video / Virtual tour URL (YouTube, Vimeo, Matterport or .mp4)</label>
@@ -344,6 +377,10 @@ const AdminProperties = () => {
                 </div>
               </div>
 
+              {selected.length > 0 && (
+                <BulkBar count={selected.length} agents={agents} onApply={bulkApply} onDelete={bulkDelete} onClear={() => setSelected([])} />
+              )}
+
               {loading ? (
                 <div style={{ padding: '40px', textAlign: 'center', color: '#8aafd4' }}>Loading...</div>
               ) : filteredProperties.length === 0 ? (
@@ -384,6 +421,9 @@ const AdminProperties = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                       <thead>
                         <tr>
+                          <th className="adm-th" style={{ width: '36px' }}>
+                            <input type="checkbox" aria-label="Select all listings" checked={allSelected} onChange={toggleAll} style={{ accentColor: '#c9a24b', cursor: 'pointer' }} />
+                          </th>
                           {['Image', 'Title', 'Type', 'Price', 'Location', 'Status', 'Actions'].map(h => (
                             <th key={h} className="adm-th">{h}</th>
                           ))}
@@ -391,7 +431,10 @@ const AdminProperties = () => {
                       </thead>
                       <tbody>
                         {filteredProperties.map((p) => (
-                          <tr key={p._id} className="adm-row">
+                          <tr key={p._id} className={`adm-row${selected.includes(p._id) ? ' is-sel' : ''}`}>
+                            <td style={{ padding: '12px 0 12px 16px' }}>
+                              <input type="checkbox" aria-label={`Select ${p.title}`} checked={selected.includes(p._id)} onChange={() => toggleSel(p._id)} style={{ accentColor: '#c9a24b', cursor: 'pointer' }} />
+                            </td>
                             <td style={{ padding: '12px 16px' }}>
                               <img src={p.image} alt={p.title} style={{ width: '64px', height: '48px', objectFit: 'cover', borderRadius: '8px', border: '1px solid rgba(45,95,196,0.2)' }} />
                             </td>
