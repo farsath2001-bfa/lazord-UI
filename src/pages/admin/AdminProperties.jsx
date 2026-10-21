@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AdminNavbar from '../../components/admin/AdminNavbar'
-import { useAdmin } from '../../context/AdminContext'
+import { useAdmin } from '../../context/adminContextValue'
 import PropertyPDFButton from '../../components/common/PropertyPDFButton'
 import BulkBar from '../../components/admin/BulkBar'
 import GalleryOrder from '../../components/admin/GalleryOrder'
