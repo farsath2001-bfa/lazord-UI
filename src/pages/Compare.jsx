@@ -5,6 +5,7 @@ import SEO from '../components/SEO'
 import { useLocalize } from '../utils/useLocalize'
 import { useCompare } from '../hooks/useCompare'
 import { fetchProperties } from '../utils/propertiesApi'
+import { optimizeImg } from '../utils/img'
 
 const Compare = () => {
   const { t, tv, num, formatPrice } = useLocalize()
@@ -91,7 +92,7 @@ const Compare = () => {
                       {items.map(p => (
                         <th key={p._id} style={{ ...cell, borderTop: 'none', fontWeight: 400 }}>
                           <Link to={`/properties/${p._id}`} style={{ textDecoration: 'none' }}>
-                            {p.image && <img src={p.image} alt={p.title} loading="lazy" style={{ width: '100%', height: '130px', objectFit: 'cover', borderRadius: '10px', marginBottom: '10px' }} />}
+                            {p.image && <img src={optimizeImg(p.image, 500)} alt={p.title} loading="lazy" style={{ width: '100%', height: '130px', objectFit: 'cover', borderRadius: '10px', marginBottom: '10px' }} />}
                             <div style={{ color: '#ffffff', fontWeight: 700, fontSize: '0.95rem', lineHeight: 1.35 }}>{p.title}</div>
                           </Link>
                           <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap' }}>

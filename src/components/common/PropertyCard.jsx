@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import FavoriteButton from './FavoriteButton'
 import CompareButton from './CompareButton'
 import { useLocalize } from '../../utils/useLocalize'
+import { optimizeImg } from '../../utils/img'
 
 const tagColors = {
   'Featured':  { bg: '#2d5fc4', color: '#fff' },
@@ -45,8 +46,10 @@ const PropertyCard = ({ property }) => {
       {/* Image */}
       <div style={{ position: 'relative', overflow: 'hidden', height: '220px' }}>
         <img
-          src={image}
+          src={optimizeImg(image, 640)}
           alt={title}
+          loading="lazy"
+          decoding="async"
           style={{
             width: '100%',
             height: '100%',

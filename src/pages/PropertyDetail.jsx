@@ -10,6 +10,7 @@ import { fetchProperties } from '../utils/propertiesApi'
 import { useLocalize } from '../utils/useLocalize'
 import ViewingScheduler from '../components/common/ViewingScheduler'
 import PropertyAlert from '../components/common/PropertyAlert'
+import { optimizeImg } from '../utils/img'
 
 const PropertyMap = lazy(() => import('../components/common/PropertyMap'))
 
@@ -255,7 +256,7 @@ const PropertyDetail = () => {
 
             {/* Main Image */}
             <div style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', marginBottom: '12px', border: '1px solid rgba(45,95,196,0.2)' }}>
-              <img src={allImages[activeImg]} alt={property.title}
+              <img src={optimizeImg(allImages[activeImg], 1200)} alt={property.title}
                 onClick={() => setLightbox(true)}
                 style={{ width: '100%', height: 'clamp(260px, 45vw, 500px)', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }} />
               <button type="button" onClick={() => setLightbox(true)} aria-label={t('detail.viewFullscreen')}
@@ -303,7 +304,7 @@ const PropertyDetail = () => {
             {allImages.length > 1 && (
               <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '24px', paddingBottom: '4px' }}>
                 {allImages.map((img, i) => (
-                  <img key={i} src={img} alt={`view ${i + 1}`} onClick={() => setActiveImg(i)}
+                  <img key={i} src={optimizeImg(img, 240)} alt={`view ${i + 1}`} onClick={() => setActiveImg(i)}
                     style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '8px', cursor: 'pointer', flexShrink: 0, border: activeImg === i ? '2px solid #4a90d9' : '2px solid transparent', opacity: activeImg === i ? 1 : 0.6, transition: 'all 0.2s' }} />
                 ))}
               </div>
