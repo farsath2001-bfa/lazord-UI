@@ -17,7 +17,9 @@
     "areaGuides": "Area guides",
     "areaGuidesDesc": "Explore Dubai neighbourhoods",
     "tools": "Investment tools",
-    "toolsDesc": "Yield, payment plan & mortgage"
+    "toolsDesc": "Yield, payment plan & mortgage",
+    "insights": "Market Insights",
+    "insightsDesc": "Guides and Dubai market news"
   },
   "hero": {
     "badge": "Dubai's Premium Properties",
@@ -1006,5 +1008,26 @@
     "p6040": "60/40",
     "p5050": "50/50",
     "pPost": "Post-handover"
+  },
+  "blog": {
+    "seoTitle": "Dubai Property Market Insights & Guides",
+    "seoDesc": "Practical guides on buying, renting and investing in Dubai real estate, written by the Lazord Real Estate team.",
+    "badge": "Insights",
+    "title": "Dubai Property Insights",
+    "subtitle": "Straight answers on buying, renting and investing in Dubai.",
+    "read": "Read article",
+    "all": "All",
+    "error": "We could not load the articles right now. Please try again shortly.",
+    "empty": "No articles yet. Check back soon.",
+    "notFound": "Article not found",
+    "back": "All insights",
+    "minRead": "{{n}} min read",
+    "share": "Share this article:",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "ctaTitle": "Thinking about Dubai property?",
+    "ctaText": "Talk to a licensed advisor for free, no obligation.",
+    "ctaBtn": "Speak to an advisor",
+    "more": "Keep reading"
   }
 }

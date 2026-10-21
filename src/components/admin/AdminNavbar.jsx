@@ -8,6 +8,7 @@ const Icon = ({ name }) => {
     dashboard: <><rect x="3" y="3" width="7" height="9" rx="1.5" /><rect x="14" y="3" width="7" height="5" rx="1.5" /><rect x="14" y="12" width="7" height="9" rx="1.5" /><rect x="3" y="16" width="7" height="5" rx="1.5" /></>,
     properties: <><path d="M3 21V8l8-5 8 5v13" /><path d="M9 21v-6h4v6" /><path d="M7 11h.01M11 11h.01M15 11h.01" /></>,
     leads: <><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" /><path d="M16 4.5a3.5 3.5 0 010 7M18 14.5c2 .7 3.5 2.4 3.5 5.5" /></>,
+    blog: <><path d="M5 4h11l3 3v13H5z" /><path d="M8 10h8M8 14h8M8 18h5" /></>,
     site: <><path d="M14 4h6v6" /><path d="M20 4l-9 9" /><path d="M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" /></>,
     logout: <><path d="M9 4H5a1 1 0 00-1 1v14a1 1 0 001 1h4" /><path d="M16 8l4 4-4 4M20 12H9" /></>,
   }
@@ -22,6 +23,7 @@ const NAV = [
   { path: '/admin/dashboard', label: 'Dashboard', icon: 'dashboard' },
   { path: '/admin/properties', label: 'Properties', icon: 'properties' },
   { path: '/admin/leads', label: 'Leads', icon: 'leads' },
+  { path: '/admin/blog', label: 'Blog', icon: 'blog' },
 ]
 
 const AdminNavbar = () => {

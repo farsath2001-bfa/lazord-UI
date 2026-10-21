@@ -70,6 +70,7 @@ const Footer = () => {
     { label: t('footer.links.mortgage'), path: '/mortgage-calculator' },
     { label: t('nav.areaGuides'), path: '/areas' },
     { label: t('nav.tools'), path: '/investment-tools' },
+    { label: t('nav.insights'), path: '/blog' },
     { label: t('footer.legal') || 'Privacy & Terms', path: '/legal' },
   ]
 

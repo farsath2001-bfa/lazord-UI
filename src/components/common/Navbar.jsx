@@ -63,6 +63,7 @@ const Navbar = () => {
     { path: '/properties?type=Commercial', label: `🏢 ${t('nav.commercial')}`, desc: t('services.items.invest.desc') },
     { path: '/areas',             label: `📍 ${t('nav.areaGuides')}`, desc: t('nav.areaGuidesDesc') },
     { path: '/investment-tools',  label: `📈 ${t('nav.tools')}`,      desc: t('nav.toolsDesc') },
+    { path: '/blog',              label: `📰 ${t('nav.insights')}`,   desc: t('nav.insightsDesc') },
   ]
 
   // Pill-style active/hover state instead of a plain underline

@@ -11,6 +11,7 @@ const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const AdminProperties = lazy(() => import('./pages/admin/AdminProperties'))
 const AdminLeads = lazy(() => import('./pages/admin/AdminLeads'))
+const AdminBlog = lazy(() => import('./pages/admin/AdminBlog'))
 import AdminRoute from './components/admin/AdminRoute'
 import { AdminProvider } from './context/AdminContext'
 const Agents = lazy(() => import('./pages/Agent'))
@@ -35,6 +36,8 @@ const Compare = lazy(() => import('./pages/Compare'))
 const InvestmentTools = lazy(() => import('./pages/InvestmentTools'))
 const Areas = lazy(() => import('./pages/Areas'))
 const AreaGuide = lazy(() => import('./pages/AreaGuide'))
+const Blog = lazy(() => import('./pages/Blog'))
+const BlogPost = lazy(() => import('./pages/BlogPost'))
 import CookieConsent from './components/CookieConsent'
 import { warmUpApi } from './utils/propertiesApi'
 import { ToastProvider } from './components/common/ToastContext'
@@ -121,12 +124,15 @@ function App() {
               <Route path="/investment-tools" element={<><Navbar /><InvestmentTools /><Footer /></>} />
               <Route path="/areas"        element={<><Navbar /><Areas /><Footer /></>} />
               <Route path="/areas/:slug"  element={<><Navbar /><AreaGuide /><Footer /></>} />
+              <Route path="/blog"         element={<><Navbar /><Blog /><Footer /></>} />
+              <Route path="/blog/:slug"   element={<><Navbar /><BlogPost /><Footer /></>} />
 
               {/* Admin routes — no Navbar/Footer */}
               <Route path="/admin/login"       element={<AdminLogin />} />
               <Route path="/admin/dashboard"   element={<AdminRoute><AdminDashboard /></AdminRoute>} />
               <Route path="/admin/properties"  element={<AdminRoute><AdminProperties /></AdminRoute>} />
               <Route path="/admin/leads"       element={<AdminRoute><AdminLeads /></AdminRoute>} />
+              <Route path="/admin/blog"        element={<AdminRoute><AdminBlog /></AdminRoute>} />
 
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
