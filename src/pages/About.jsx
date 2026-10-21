@@ -435,6 +435,20 @@ const About = () => {
           </Col>
         </Row>
 
+        {/* Meet Lazord video */}
+        <div id="section-meet" style={sectionGap}>
+          <FadeLeft>
+            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+              <div style={badgeStyle}><span style={badgeTextStyle}>✦ {t('about.meet.badge')}</span></div>
+              <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: '300', marginBottom: '8px' }}>{t('about.meet.title')}</h2>
+              <p style={{ color: '#8aafd4', fontSize: '0.95rem', maxWidth: '560px', margin: '0 auto' }}>{t('about.meet.sub')}</p>
+            </div>
+            <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+              <StoryVideo video="/lazord-meet.mp4" poster="/lazord-meet-poster.jpg" alt={t('about.meet.title')} label={t('about.meet.watch')} />
+            </div>
+          </FadeLeft>
+        </div>
+
         {/* ── TIMELINE — Alternating Cards on desktop, slider on mobile ── */}
         <div id="section-journey" style={sectionGap}>
           <FadeUp>

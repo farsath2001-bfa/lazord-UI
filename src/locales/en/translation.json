@@ -455,6 +455,12 @@
       "desc": "Our team is ready to help you find, buy, rent or sell your property in Dubai.",
       "browse": "Browse Properties",
       "contact": "Contact Us"
+    },
+    "meet": {
+      "badge": "Meet Lazord",
+      "title": "A word from our team",
+      "sub": "Over 18 years of Dubai real estate experience, RERA licensed and DED certified.",
+      "watch": "Play message"
     }
   },
   "footer": {

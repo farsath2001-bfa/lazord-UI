@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const VIDEO = '/lazord-story.mp4'
-const POSTER = '/lazord-story-poster.jpg'
+const DEFAULT_VIDEO = '/lazord-story.mp4'
+const DEFAULT_POSTER = '/lazord-story-poster.jpg'
 
 // Click-to-play video card. The file is only downloaded once the visitor presses play.
-const StoryVideo = ({ children, alt }) => {
+const StoryVideo = ({ children, alt, video = DEFAULT_VIDEO, poster = DEFAULT_POSTER, label }) => {
   const { t } = useTranslation()
   const [playing, setPlaying] = useState(false)
 
@@ -13,13 +13,13 @@ const StoryVideo = ({ children, alt }) => {
     <div style={{ position: 'relative', aspectRatio: '16 / 9', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(45,95,196,0.25)', backgroundColor: '#060f26' }}>
       {playing ? (
         <video
-          src={VIDEO} poster={POSTER} controls autoPlay playsInline preload="auto"
+          src={video} poster={poster} controls autoPlay playsInline preload="auto"
           onEnded={() => setPlaying(false)}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
       ) : (
         <>
-          <img src={POSTER} alt={alt} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          <img src={poster} alt={alt} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(6,15,38,0.15) 40%, rgba(6,15,38,0.7) 100%)' }} />
           <button
             type="button" onClick={() => setPlaying(true)} aria-label={t('about.story.play')}
@@ -28,7 +28,7 @@ const StoryVideo = ({ children, alt }) => {
           >
             ▶
           </button>
-          <div style={{ position: 'absolute', bottom: '16px', insetInlineStart: '18px', color: '#fff', fontWeight: 600, fontSize: '0.9rem', letterSpacing: '0.5px' }}>{t('about.story.watch')}</div>
+          <div style={{ position: 'absolute', bottom: '16px', insetInlineStart: '18px', color: '#fff', fontWeight: 600, fontSize: '0.9rem', letterSpacing: '0.5px' }}>{label || t('about.story.watch')}</div>
           {children}
         </>
       )}
