@@ -145,84 +145,78 @@ const AdminLeads = () => {
         {/* Header */}
         <div className="leads-header">
           <div>
-            <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.3rem, 4vw, 1.8rem)', fontWeight: '700', margin: 0 }}>Leads</h1>
-            <p style={{ color: '#8aafd4', marginBottom: 0, marginTop: '4px', fontSize: '0.82rem' }}>Manage customer inquiries</p>
+            <div className="adm-eyebrow">✦ Customer enquiries</div>
+            <h1 className="adm-title">Leads</h1>
+            <p className="adm-sub">Manage and follow up every enquiry</p>
           </div>
           <div className="leads-export-btns">
-            <button onClick={() => exportToCSV(filtered, 'lazord-leads-filtered')} disabled={filtered.length === 0}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(39,174,96,0.15)', color: '#27ae60', border: '1px solid rgba(39,174,96,0.3)', borderRadius: '10px', padding: '9px 14px', fontSize: '0.82rem', fontWeight: '700', cursor: filtered.length === 0 ? 'not-allowed' : 'pointer', opacity: filtered.length === 0 ? 0.5 : 1, whiteSpace: 'nowrap' }}>
-              📥 Export Shown ({filtered.length})
+            <button className="adm-btn adm-btn-green" onClick={() => exportToCSV(filtered, 'lazord-leads-filtered')} disabled={filtered.length === 0}>
+              📥 Export shown ({filtered.length})
             </button>
-            <button onClick={() => exportToCSV(leads, 'lazord-leads-all')} disabled={leads.length === 0}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: 'rgba(45,95,196,0.15)', color: '#4a90d9', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '10px', padding: '9px 14px', fontSize: '0.82rem', fontWeight: '700', cursor: leads.length === 0 ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap' }}>
-              📥 Export All ({leads.length})
+            <button className="adm-btn adm-btn-blue" onClick={() => exportToCSV(leads, 'lazord-leads-all')} disabled={leads.length === 0}>
+              📥 Export all ({leads.length})
             </button>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="leads-stats-grid">
+        <div className="adm-stat-grid">
           {stats.map((stat, i) => (
-            <div key={i} style={{ backgroundColor: '#0d1f4e', border: `1px solid ${stat.color}30`, borderRadius: '12px', padding: '14px 16px', textAlign: 'center', transition: 'all 0.2s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = stat.color; e.currentTarget.style.transform = 'translateY(-2px)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = `${stat.color}30`; e.currentTarget.style.transform = 'translateY(0)' }}>
-              <div style={{ color: stat.color, fontSize: 'clamp(1.4rem, 4vw, 1.8rem)', fontWeight: '800', lineHeight: '1' }}>{stat.value}</div>
-              <div style={{ color: '#8aafd4', fontSize: '0.72rem', marginTop: '4px' }}>{stat.label}</div>
+            <div key={i} className="adm-stat" style={{ '--accent': stat.color }}>
+              <div className="adm-stat-val">{stat.value}</div>
+              <div className="adm-stat-label">{stat.label}</div>
             </div>
           ))}
         </div>
 
         {/* Bulk Delete */}
-        <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(231,76,60,0.2)', borderRadius: '14px', padding: '16px', marginBottom: '16px' }}>
-          <div style={{ marginBottom: '10px' }}>
-            <h3 style={{ color: '#ffffff', fontSize: '0.88rem', fontWeight: '700', margin: 0 }}>🗑️ Bulk Delete by Source</h3>
-            <p style={{ color: '#8aafd4', fontSize: '0.75rem', margin: '4px 0 0' }}>Monthly cleanup — export first as backup!</p>
+        <details className="adm-card adm-danger">
+          <summary>
+            <span>🗑️ Bulk delete by source <span style={{ color: '#8aafd4', fontWeight: 500, fontSize: '0.75rem' }}>— export a backup first</span></span>
+          </summary>
+          <div className="adm-danger-body">
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              {['WhatsApp', 'Phone', 'Website Popup', 'Contact Form', 'Property Inquiry', 'Walk In'].map(src => {
+                const count = leads.filter(l => l.source === src).length
+                const sc = sourceColor[src]
+                const isDeleting = deletingSource === src
+                return (
+                  <button key={src} className="adm-btn adm-btn-red" onClick={() => deleteAllBySource(src)} disabled={count === 0 || isDeleting}>
+                    <span>{sc?.icon}</span><span>{src}</span>
+                    <span style={{ backgroundColor: 'rgba(231,76,60,0.25)', borderRadius: '10px', padding: '1px 7px', fontSize: '0.7rem', fontWeight: '800' }}>
+                      {isDeleting ? '...' : count}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {['WhatsApp', 'Phone', 'Website Popup', 'Contact Form', 'Property Inquiry', 'Walk In'].map(src => {
-              const count = leads.filter(l => l.source === src).length
-              const sc = sourceColor[src]
-              const isDeleting = deletingSource === src
-              return (
-                <button key={src} onClick={() => deleteAllBySource(src)} disabled={count === 0 || isDeleting}
-                  style={{ display: 'flex', alignItems: 'center', gap: '5px', backgroundColor: count === 0 ? 'rgba(45,95,196,0.05)' : 'rgba(231,76,60,0.1)', color: count === 0 ? '#4a4a6a' : '#e74c3c', border: `1px solid ${count === 0 ? 'rgba(45,95,196,0.15)' : 'rgba(231,76,60,0.3)'}`, borderRadius: '8px', padding: '6px 12px', fontSize: '0.75rem', fontWeight: '600', cursor: count === 0 ? 'not-allowed' : 'pointer', opacity: count === 0 ? 0.5 : 1 }}>
-                  <span>{sc?.icon}</span><span>{src}</span>
-                  <span style={{ backgroundColor: 'rgba(231,76,60,0.2)', borderRadius: '10px', padding: '1px 6px', fontSize: '0.7rem', fontWeight: '800' }}>
-                    {isDeleting ? '...' : count}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
+        </details>
 
         {/* Status Filters */}
-        <div style={{ display: 'flex', gap: '6px', marginBottom: '8px', flexWrap: 'wrap' }}>
+        <div className="adm-chips">
           {statuses.map(s => (
-            <button key={s} onClick={() => setFilter(s)} style={{ padding: '5px 12px', borderRadius: '20px', border: filter === s ? '1.5px solid #4a90d9' : '1.5px solid rgba(45,95,196,0.3)', backgroundColor: filter === s ? '#2d5fc4' : 'transparent', color: filter === s ? '#fff' : '#8aafd4', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
+            <button key={s} className={`adm-chip${filter === s ? ' is-on' : ''}`} onClick={() => setFilter(s)}>
               {s} {s !== 'All' && `(${leads.filter(l => l.status === s).length})`}
             </button>
           ))}
         </div>
 
         {/* Source Filters */}
-        <div style={{ display: 'flex', gap: '6px', marginBottom: '16px', flexWrap: 'wrap' }}>
-          {sources.map(s => {
-            const src = sourceColor[s]
-            return (
-              <button key={s} onClick={() => setSourceFilter(s)} style={{ padding: '4px 10px', borderRadius: '20px', border: sourceFilter === s ? `1.5px solid ${src?.color || '#4a90d9'}` : '1.5px solid rgba(45,95,196,0.2)', backgroundColor: sourceFilter === s ? (src?.bg || 'rgba(45,95,196,0.2)') : 'transparent', color: sourceFilter === s ? (src?.color || '#4a90d9') : '#8aafd4', fontSize: '0.72rem', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
-                {src?.icon} {s} {s !== 'All' && `(${leads.filter(l => l.source === s).length})`}
-              </button>
-            )
-          })}
+        <div className="adm-chips" style={{ marginBottom: '20px' }}>
+          {sources.map(s => (
+            <button key={s} className={`adm-chip${sourceFilter === s ? ' is-on' : ''}`} onClick={() => setSourceFilter(s)}>
+              {sourceColor[s]?.icon} {s} {s !== 'All' && `(${leads.filter(l => l.source === s).length})`}
+            </button>
+          ))}
         </div>
 
         {/* Main Content */}
         <div className={`leads-grid ${selectedLead ? 'leads-grid-open' : ''}`}>
 
           {/* Table / Cards */}
-          <div className="no-print" style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
-            <div style={{ padding: '14px 16px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+          <div className="no-print adm-card">
+            <div className="adm-card-head">
               <h2 style={{ color: '#ffffff', fontSize: '0.92rem', fontWeight: '700', margin: 0 }}>
                 {filter === 'All' && sourceFilter === 'All' ? 'All Leads' : 'Filtered'} ({filtered.length})
               </h2>
@@ -257,7 +251,7 @@ const AdminLeads = () => {
                       style={{ padding: '14px 16px', borderBottom: '1px solid rgba(45,95,196,0.1)', cursor: 'pointer', backgroundColor: selectedLead?._id === lead._id ? 'rgba(45,95,196,0.15)' : 'transparent' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.9rem', flexShrink: 0 }}>
+                          <div className="adm-av" >
                             {lead.name?.charAt(0).toUpperCase()}
                           </div>
                           <div>
@@ -297,21 +291,19 @@ const AdminLeads = () => {
                 <div className="leads-table-desktop" style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
-                      <tr style={{ backgroundColor: 'rgba(45,95,196,0.1)' }}>
+                      <tr>
                         {['Lead', 'Contact', 'Source', 'Service', 'Status', 'Date', ''].map(h => (
-                          <th key={h} style={{ padding: '11px 16px', color: '#8aafd4', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'left', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
+                          <th key={h} className="adm-th">{h}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {filtered.map((lead, i) => (
+                      {filtered.map((lead) => (
                         <tr key={lead._id} onClick={() => setSelectedLead(selectedLead?._id === lead._id ? null : lead)}
-                          style={{ borderTop: '1px solid rgba(45,95,196,0.15)', backgroundColor: selectedLead?._id === lead._id ? 'rgba(45,95,196,0.15)' : i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)', cursor: 'pointer', transition: 'background 0.15s' }}
-                          onMouseEnter={e => { if (selectedLead?._id !== lead._id) e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)' }}
-                          onMouseLeave={e => { if (selectedLead?._id !== lead._id) e.currentTarget.style.backgroundColor = i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)' }}>
+                          className={`adm-row is-click${selectedLead?._id === lead._id ? ' is-sel' : ''}`}>
                           <td style={{ padding: '12px 16px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                              <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.82rem', flexShrink: 0 }}>
+                              <div className="adm-av" >
                                 {lead.name?.charAt(0).toUpperCase()}
                               </div>
                               <div>
@@ -357,7 +349,7 @@ const AdminLeads = () => {
 
           {/* Lead Detail Panel */}
           {selectedLead && (
-            <div className="lead-detail-panel">
+            <div className="lead-detail-panel adm-panel">
               <div className="no-print" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h3 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>📋 Lead Detail</h3>
                 <button onClick={() => setSelectedLead(null)} style={{ background: 'transparent', border: 'none', color: '#8aafd4', fontSize: '1.2rem', cursor: 'pointer' }}>✕</button>
@@ -370,7 +362,7 @@ const AdminLeads = () => {
                   <div style={{ fontSize: '0.85rem' }}>Customer Lead Profile</div>
                 </div>
 
-                <div style={{ width: '52px', height: '52px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '2px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', fontWeight: '800', color: '#4a90d9', marginBottom: '14px' }}>
+                <div className="adm-av lg" >
                   {selectedLead.name?.charAt(0).toUpperCase()}
                 </div>
                 <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.05rem', marginBottom: '4px' }}>{selectedLead.name}</div>
@@ -426,7 +418,7 @@ const AdminLeads = () => {
         .leads-grid-open { grid-template-columns: 1fr; }
         .leads-cards-mobile { display: block; }
         .leads-table-desktop { display: none; }
-        .lead-detail-panel { background-color: #0d1f4e; border: 1px solid rgba(45,95,196,0.3); border-radius: 16px; padding: 20px; }
+        
 
         @media (min-width: 640px) {
           .leads-container { padding: 20px 18px; }

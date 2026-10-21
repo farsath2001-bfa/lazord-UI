@@ -131,8 +131,8 @@ const AdminProperties = () => {
 
   const inputStyle = {
     width: '100%', backgroundColor: '#060f26',
-    border: '1px solid rgba(45,95,196,0.3)', borderRadius: '8px',
-    color: '#ffffff', padding: '10px 14px', fontSize: '0.88rem',
+    border: '1px solid rgba(74,144,217,0.28)', borderRadius: '10px',
+    color: '#ffffff', padding: '11px 14px', fontSize: '0.88rem',
     outline: 'none', boxSizing: 'border-box'
   }
   const labelStyle = {
@@ -148,36 +148,34 @@ const AdminProperties = () => {
         {/* Header */}
         <div className="ap-header">
           <div>
-            <h1 style={{ color: '#ffffff', fontSize: 'clamp(1.3rem, 4vw, 1.8rem)', fontWeight: '700', margin: 0 }}>Admin Panel</h1>
-            <p style={{ color: '#8aafd4', margin: '4px 0 0', fontSize: '0.82rem' }}>
-              {properties.length} properties · {enquiries.length} enquiries
-            </p>
+            <div className="adm-eyebrow">✦ Inventory</div>
+            <h1 className="adm-title">Properties</h1>
+            <p className="adm-sub">{properties.length} properties · {enquiries.length} enquiries</p>
           </div>
           {activeTab === 'properties' && (
-            <button onClick={() => { setShowForm(!showForm); setForm(emptyForm); setEditId(null) }}
-              style={{ backgroundColor: showForm ? 'rgba(231,76,60,0.2)' : '#2d5fc4', color: showForm ? '#e74c3c' : '#fff', border: showForm ? '1px solid rgba(231,76,60,0.4)' : 'none', borderRadius: '10px', padding: '10px 18px', fontSize: '0.88rem', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+            <button className={`adm-btn ${showForm ? 'adm-btn-red' : 'adm-btn-gold'}`}
+              onClick={() => { setShowForm(!showForm); setForm(emptyForm); setEditId(null) }}>
               {showForm ? '✕ Cancel' : '+ Add Property'}
             </button>
           )}
           {activeTab === 'enquiries' && (
-            <button onClick={fetchEnquiries}
-              style={{ backgroundColor: 'rgba(45,95,196,0.2)', color: '#4a90d9', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '10px', padding: '10px 18px', fontSize: '0.88rem', fontWeight: '700', cursor: 'pointer' }}>
-              🔄 Refresh
-            </button>
+            <button className="adm-btn adm-btn-blue" onClick={fetchEnquiries}>🔄 Refresh</button>
           )}
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '4px', marginBottom: '20px', backgroundColor: '#0d1f4e', borderRadius: '12px', padding: '6px', width: 'fit-content', border: '1px solid rgba(45,95,196,0.25)' }}>
+        <div className="adm-seg">
           {[
             { key: 'properties', label: '🏠 Properties', count: properties.length, badge: false },
             { key: 'enquiries',  label: '📩 Enquiries',  count: newEnquiriesCount, badge: true  },
           ].map(tab => (
-            <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-              style={{ backgroundColor: activeTab === tab.key ? '#2d5fc4' : 'transparent', color: activeTab === tab.key ? '#ffffff' : '#8aafd4', border: 'none', borderRadius: '8px', padding: '8px 16px', fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <button key={tab.key} className={activeTab === tab.key ? 'is-on' : ''} onClick={() => setActiveTab(tab.key)}>
               {tab.label}
               {tab.count > 0 && (
-                <span style={{ backgroundColor: tab.badge && activeTab !== tab.key ? '#e74c3c' : 'rgba(255,255,255,0.2)', color: '#fff', borderRadius: '20px', padding: '1px 8px', fontSize: '0.7rem', fontWeight: '800' }}>{tab.count}</span>
+                <span className={tab.badge && activeTab !== tab.key ? 'adm-badge' : ''}
+                  style={tab.badge && activeTab !== tab.key ? undefined : { backgroundColor: 'rgba(255,255,255,0.18)', color: '#fff', borderRadius: '20px', padding: '1px 8px', fontSize: '0.7rem', fontWeight: '800' }}>
+                  {tab.count}
+                </span>
               )}
             </button>
           ))}
@@ -195,12 +193,13 @@ const AdminProperties = () => {
           <>
             {/* Form */}
             {showForm && (
-              <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.3)', borderRadius: '16px', padding: '20px', marginBottom: '20px' }}>
+              <div className="adm-card" style={{ padding: '24px', marginBottom: '20px' }}>
                 <h2 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '700', marginBottom: '20px' }}>
                   {editId ? '✏️ Edit Property' : '➕ Add New Property'}
                 </h2>
                 <form onSubmit={handleSubmit}>
                   <div className="ap-form-grid">
+                    <div className="adm-form-section">Basics</div>
                     <div style={{ gridColumn: '1 / -1' }}>
                       <label style={labelStyle}>Title *</label>
                       <input required style={inputStyle} placeholder="Property title" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
@@ -208,7 +207,7 @@ const AdminProperties = () => {
                     <div>
                       <label style={labelStyle}>Type *</label>
                       <select required style={inputStyle} value={form.type} onChange={e => setForm(p => ({ ...p, type: e.target.value }))}>
-                        {['Buy', 'Rent', 'Off Plan'].map(t => <option key={t}>{t}</option>)}
+                        {['Buy', 'Rent', 'Off Plan', 'Sell', 'Commercial'].map(t => <option key={t}>{t}</option>)}
                       </select>
                     </div>
                     <div>
@@ -227,6 +226,7 @@ const AdminProperties = () => {
                         {['Available', 'Sold', 'Rented', 'Off Plan'].map(s => <option key={s}>{s}</option>)}
                       </select>
                     </div>
+                    <div className="adm-form-section">Location</div>
                     <div>
                       <label style={labelStyle}>Location *</label>
                       <input required style={inputStyle} placeholder="e.g. Downtown Dubai" value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))} />
@@ -235,6 +235,7 @@ const AdminProperties = () => {
                       <label style={labelStyle}>Community</label>
                       <input style={inputStyle} placeholder="e.g. Burj Khalifa District" value={form.community} onChange={e => setForm(p => ({ ...p, community: e.target.value }))} />
                     </div>
+                    <div className="adm-form-section">Details</div>
                     <div>
                       <label style={labelStyle}>Bedrooms</label>
                       <input type="number" style={inputStyle} value={form.bedrooms} onChange={e => setForm(p => ({ ...p, bedrooms: e.target.value }))} />
@@ -265,6 +266,7 @@ const AdminProperties = () => {
                       <label style={labelStyle}>ROI</label>
                       <input style={inputStyle} placeholder="e.g. 7.2%" value={form.roi} onChange={e => setForm(p => ({ ...p, roi: e.target.value }))} />
                     </div>
+                    <div className="adm-form-section">Media</div>
                     <div style={{ gridColumn: '1 / -1' }}>
                       <label style={labelStyle}>Main Image URL *</label>
                       <input required style={inputStyle} placeholder="https://i.postimg.cc/..." value={form.image} onChange={e => setForm(p => ({ ...p, image: e.target.value }))} />
@@ -278,6 +280,7 @@ const AdminProperties = () => {
                       <label style={labelStyle}>Video / Virtual tour URL (YouTube, Vimeo, Matterport or .mp4)</label>
                       <input style={inputStyle} placeholder="https://www.youtube.com/watch?v=..." value={form.videoUrl || ''} onChange={e => setForm(p => ({ ...p, videoUrl: e.target.value }))} />
                     </div>
+                    <div className="adm-form-section">Extras</div>
                     <div style={{ gridColumn: '1 / -1' }}>
                       <label style={labelStyle}>Amenities (comma separated)</label>
                       <input style={inputStyle} placeholder="Pool, Gym, Parking, Security" value={form.amenities} onChange={e => setForm(p => ({ ...p, amenities: e.target.value }))} />
@@ -287,12 +290,12 @@ const AdminProperties = () => {
                       <textarea rows={4} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Property description..." value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', gridColumn: '1 / -1' }}>
-                      <input type="checkbox" id="featured" checked={form.featured} onChange={e => setForm(p => ({ ...p, featured: e.target.checked }))} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+                      <input type="checkbox" id="featured" checked={form.featured} onChange={e => setForm(p => ({ ...p, featured: e.target.checked }))} style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#c9a24b' }} />
                       <label htmlFor="featured" style={{ color: '#8aafd4', fontSize: '0.88rem', cursor: 'pointer' }}>Mark as Featured</label>
                     </div>
                   </div>
                   <button type="submit" disabled={saving}
-                    style={{ marginTop: '20px', backgroundColor: saving ? '#1a3a7c' : '#2d5fc4', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '0.9rem', fontWeight: '700', cursor: saving ? 'not-allowed' : 'pointer', width: '100%' }}>
+                    className="adm-btn adm-btn-gold" style={{ marginTop: '22px', width: '100%', justifyContent: 'center', padding: '14px', fontSize: '0.92rem' }}>
                     {saving ? 'Saving...' : editId ? '✅ Update Property' : '✅ Add Property'}
                   </button>
                 </form>
@@ -300,8 +303,8 @@ const AdminProperties = () => {
             )}
 
             {/* Properties List */}
-            <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
-              <div style={{ padding: '14px 16px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+            <div className="adm-card">
+              <div className="adm-card-head">
                 <h2 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', margin: 0 }}>
                   All Properties ({filteredProperties.length}{search ? ` of ${properties.length}` : ''})
                 </h2>
@@ -351,17 +354,15 @@ const AdminProperties = () => {
                   <div className="ap-table-desktop" style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                       <thead>
-                        <tr style={{ backgroundColor: 'rgba(45,95,196,0.1)' }}>
+                        <tr>
                           {['Image', 'Title', 'Type', 'Price', 'Location', 'Status', 'Actions'].map(h => (
-                            <th key={h} style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'left', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
+                            <th key={h} className="adm-th">{h}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredProperties.map((p, i) => (
-                          <tr key={p._id} style={{ borderTop: '1px solid rgba(45,95,196,0.15)', backgroundColor: i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)', transition: 'background 0.15s' }}
-                            onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)'}
-                            onMouseLeave={e => e.currentTarget.style.backgroundColor = i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)'}>
+                        {filteredProperties.map((p) => (
+                          <tr key={p._id} className="adm-row">
                             <td style={{ padding: '12px 16px' }}>
                               <img src={p.image} alt={p.title} style={{ width: '64px', height: '48px', objectFit: 'cover', borderRadius: '8px', border: '1px solid rgba(45,95,196,0.2)' }} />
                             </td>
@@ -405,8 +406,8 @@ const AdminProperties = () => {
         {/* ENQUIRIES TAB */}
         {activeTab === 'enquiries' && (
           <div className={`ap-enquiries-grid ${selectedEnquiry ? 'ap-enquiries-open' : ''}`}>
-            <div style={{ backgroundColor: '#0d1f4e', border: '1px solid rgba(45,95,196,0.25)', borderRadius: '16px', overflow: 'hidden' }}>
-              <div style={{ padding: '14px 16px', borderBottom: '1px solid rgba(45,95,196,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <div className="adm-card">
+              <div className="adm-card-head">
                 <h2 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', margin: 0 }}>All Enquiries ({enquiries.length})</h2>
                 {newEnquiriesCount > 0 && (
                   <span style={{ backgroundColor: 'rgba(231,76,60,0.2)', color: '#e74c3c', border: '1px solid rgba(231,76,60,0.3)', borderRadius: '20px', padding: '3px 12px', fontSize: '0.78rem', fontWeight: '700' }}>
@@ -431,7 +432,7 @@ const AdminProperties = () => {
                         style={{ padding: '14px 16px', borderBottom: '1px solid rgba(45,95,196,0.1)', cursor: 'pointer', backgroundColor: selectedEnquiry?._id === e._id ? 'rgba(45,95,196,0.15)' : 'transparent' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.85rem', flexShrink: 0 }}>
+                            <div className="adm-av" >
                               {e.name?.charAt(0).toUpperCase()}
                             </div>
                             <div>
@@ -458,21 +459,19 @@ const AdminProperties = () => {
                   <div className="ap-table-desktop" style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                       <thead>
-                        <tr style={{ backgroundColor: 'rgba(45,95,196,0.1)' }}>
+                        <tr>
                           {['Name', 'Contact', 'Source', 'Property', 'Status', 'Date', 'Actions'].map(h => (
-                            <th key={h} style={{ padding: '12px 16px', color: '#8aafd4', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'left', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
+                            <th key={h} className="adm-th">{h}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {enquiries.map((e, i) => (
+                        {enquiries.map((e) => (
                           <tr key={e._id} onClick={() => setSelectedEnquiry(selectedEnquiry?._id === e._id ? null : e)}
-                            style={{ borderTop: '1px solid rgba(45,95,196,0.15)', backgroundColor: selectedEnquiry?._id === e._id ? 'rgba(45,95,196,0.15)' : i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)', cursor: 'pointer', transition: 'background 0.15s' }}
-                            onMouseEnter={el => { if (selectedEnquiry?._id !== e._id) el.currentTarget.style.backgroundColor = 'rgba(45,95,196,0.1)' }}
-                            onMouseLeave={el => { if (selectedEnquiry?._id !== e._id) el.currentTarget.style.backgroundColor = i % 2 === 0 ? 'transparent' : 'rgba(45,95,196,0.04)' }}>
+                            className={`adm-row is-click${selectedEnquiry?._id === e._id ? ' is-sel' : ''}`}>
                             <td style={{ padding: '12px 16px' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '1px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a90d9', fontWeight: '800', fontSize: '0.82rem', flexShrink: 0 }}>
+                                <div className="adm-av" >
                                   {e.name?.charAt(0).toUpperCase()}
                                 </div>
                                 <div>
@@ -515,12 +514,12 @@ const AdminProperties = () => {
 
             {/* Enquiry Detail Panel */}
             {selectedEnquiry && (
-              <div className="ap-detail-panel">
+              <div className="ap-detail-panel adm-panel">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                   <h3 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: '700', margin: 0 }}>📋 Enquiry Detail</h3>
                   <button onClick={() => setSelectedEnquiry(null)} style={{ background: 'transparent', border: 'none', color: '#8aafd4', fontSize: '1.2rem', cursor: 'pointer' }}>✕</button>
                 </div>
-                <div style={{ width: '52px', height: '52px', borderRadius: '50%', backgroundColor: 'rgba(45,95,196,0.3)', border: '2px solid rgba(74,144,217,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', fontWeight: '800', color: '#4a90d9', marginBottom: '14px' }}>
+                <div className="adm-av lg" >
                   {selectedEnquiry.name?.charAt(0).toUpperCase()}
                 </div>
                 <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '1.05rem', marginBottom: '4px' }}>{selectedEnquiry.name}</div>
@@ -571,7 +570,7 @@ const AdminProperties = () => {
         .ap-cards-mobile { display: block; }
         .ap-table-desktop { display: none; }
         .ap-enquiries-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-        .ap-detail-panel { background-color: #0d1f4e; border: 1px solid rgba(45,95,196,0.3); border-radius: 16px; padding: 20px; }
+        
 
         @media (min-width: 640px) {
           .ap-container { padding: 20px 18px; }
