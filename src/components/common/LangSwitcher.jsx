@@ -4,7 +4,13 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const LangSwitcher = ({ isMobile = false }) => {
+// Applies the language to the document (direction + lang attribute).
+const applyDocLanguage = (code) => {
+  document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr'
+  document.documentElement.lang = code
+}
+
+const LangSwitcher = () => {
   const [open, setOpen] = useState(false)
   const { i18n } = useTranslation()
   const currentLang = i18n.language === 'ar' ? 'AR' : 'EN'
@@ -12,8 +18,7 @@ const LangSwitcher = ({ isMobile = false }) => {
   const switchLanguage = (code) => {
     i18n.changeLanguage(code)
     localStorage.setItem('i18nextLng', code)
-    document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = code
+    applyDocLanguage(code)
     setOpen(false)
   }
 

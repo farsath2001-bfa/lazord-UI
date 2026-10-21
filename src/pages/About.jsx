@@ -149,12 +149,6 @@ const badgeTextStyle = {
   letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600'
 }
 const sectionGap = { marginBottom: '80px' }
-const cardStyle = {
-  backgroundColor: '#0d1f4e',
-  border: '1px solid rgba(45,95,196,0.25)',
-  borderRadius: '14px', padding: '28px 22px',
-  height: '100%', transition: 'all 0.25s ease'
-}
 
 const About = () => {
   const { t, isAr } = useLocalize()
@@ -269,7 +263,7 @@ const About = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
               >
-                {[['18+', t('about.side.years'), '🏆'], ['1,500+', t('about.side.properties'), '🏠'], ['40+', t('about.side.nationalities'), '🌍']].map(([num, label, icon], i) => (
+                {[['18+', t('about.side.years'), '🏆'], ['1,500+', t('about.side.properties'), '🏠'], ['40+', t('about.side.nationalities'), '🌍']].map(([num, label, icon]) => (
                   <motion.div
                     key={label}
                     whileHover={{ scale: 1.05, borderColor: '#4a90d9' }}

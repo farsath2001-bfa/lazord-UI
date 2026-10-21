@@ -1,7 +1,6 @@
-import { createContext, useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
+import { ToastContext } from './toastContextValue'
 import { AnimatePresence, motion } from 'framer-motion'
-
-export const ToastContext = createContext(null)
 
 // Wrap your app once with <ToastProvider> in App.jsx, e.g.:
 //

@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import AdminNavbar from '../../components/admin/AdminNavbar'
-import { useAdmin } from '../../context/AdminContext'
+import { useAdmin } from '../../context/adminContextValue'
 
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({

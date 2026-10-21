@@ -1,6 +1,5 @@
-import { createContext, useContext, useState } from 'react'
-
-const AdminContext = createContext()
+import { useState } from 'react'
+import { AdminContext } from './adminContextValue'
 
 export const AdminProvider = ({ children }) => {
   const [token, setToken] = useState(() => {
@@ -41,5 +40,3 @@ export const AdminProvider = ({ children }) => {
     </AdminContext.Provider>
   )
 }
-
-export const useAdmin = () => useContext(AdminContext)

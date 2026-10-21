@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import AdminNavbar from '../../components/admin/AdminNavbar'
-import { useAdmin } from '../../context/AdminContext'
+import { useAdmin } from '../../context/adminContextValue'
 import { useToast } from '../../components/common/useToast'
 
 const statusColor = {

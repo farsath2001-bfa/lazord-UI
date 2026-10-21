@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useAdmin } from '../../context/AdminContext'
+import { useAdmin } from '../../context/adminContextValue'
 import logo from '../../assets/image/lazordlogoo.png'
 
 const Icon = ({ name }) => {

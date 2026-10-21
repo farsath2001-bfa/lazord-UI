@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import logo from '../../assets/image/lazordlogoo.png'
 
 const PageLoader = ({ onComplete }) => {
   const [phase, setPhase] = useState('enter')
   const [lineWidth, setLineWidth] = useState(0)
+  const doneRef = useRef(onComplete)
+  useEffect(() => { doneRef.current = onComplete }, [onComplete])
 
   useEffect(() => {
     setTimeout(() => setPhase('visible'), 50)
     const lineTimer = setTimeout(() => setLineWidth(100), 100)
-    const holdTimer = setTimeout(() => setPhase('exit'), 3500)
-    const doneTimer = setTimeout(() => onComplete(), 4100)
+    const holdTimer = setTimeout(() => setPhase('exit'), 1800)
+    const doneTimer = setTimeout(() => doneRef.current(), 2300)
     return () => {
       clearTimeout(lineTimer)
       clearTimeout(holdTimer)

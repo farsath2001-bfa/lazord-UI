@@ -47,8 +47,19 @@ const AdminProperties = () => {
     finally { setEnquiriesLoading(false) }
   }
 
-  useEffect(() => { fetchProperties() }, [])
-  useEffect(() => { if (activeTab === 'enquiries') fetchEnquiries() }, [activeTab, token])
+  useEffect(() => {
+    let cancelled = false
+    axios.get(`${import.meta.env.VITE_API_URL}/api/properties`)
+      .then(res => { if (!cancelled) setProperties(res.data.data) })
+      .catch(err => console.error(err))
+      .finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [])
+
+  const switchTab = (key) => {
+    setActiveTab(key)
+    if (key === 'enquiries') fetchEnquiries()
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -169,7 +180,7 @@ const AdminProperties = () => {
             { key: 'properties', label: '🏠 Properties', count: properties.length, badge: false },
             { key: 'enquiries',  label: '📩 Enquiries',  count: newEnquiriesCount, badge: true  },
           ].map(tab => (
-            <button key={tab.key} className={activeTab === tab.key ? 'is-on' : ''} onClick={() => setActiveTab(tab.key)}>
+            <button key={tab.key} className={activeTab === tab.key ? 'is-on' : ''} onClick={() => switchTab(tab.key)}>
               {tab.label}
               {tab.count > 0 && (
                 <span className={tab.badge && activeTab !== tab.key ? 'adm-badge' : ''}

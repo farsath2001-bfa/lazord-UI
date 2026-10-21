@@ -8,8 +8,6 @@ import {
   RiBarChart2Line,
   RiFileShield2Line,
   RiEarthLine,
-  RiCustomerService2Line,
-  RiSpeedLine,
   RiTrophyLine,
   RiBuilding2Line,
   RiGlobalLine,

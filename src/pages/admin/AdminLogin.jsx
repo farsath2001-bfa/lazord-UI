@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAdmin } from '../../context/AdminContext'
+import { useAdmin } from '../../context/adminContextValue'
 import logo from '../../assets/image/lazordlogoo.png'
 
 const REMEMBER_KEY = 'lazord_admin_email'
